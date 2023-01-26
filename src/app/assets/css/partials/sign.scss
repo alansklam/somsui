@@ -1,0 +1,61 @@
+.sign {
+    min-width: 500px;
+    background: #fff;
+    .tab {
+        background: #fff;
+        text-align: center;
+        padding: 23px;
+        border: 1px #FFBE3D solid;
+        color: #FFBE3D;
+        width: 50%;
+    }
+    .active {
+        background: #FFBE3D;
+        color: #fff;
+    }
+}
+
+.forgot-password-tab {
+    text-align: center;
+    padding: 23px;
+    color: #FFBE3D;
+    font-size: 25px;
+}
+
+.forgot-password-msg {
+    display: flex;
+    justify-content: center;
+    max-width: 400px;
+    margin-top: 20px;
+
+    span {
+        text-align: justify;
+        font-size: 16px;
+    }
+}
+
+.auth-login {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+@media screen and (max-width: 900px) {
+    .sign {
+        min-width: 400px;
+    }
+    .auth-login {
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .sign {
+        min-width: 300px;
+    }
+
+    .auth-login {
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+}

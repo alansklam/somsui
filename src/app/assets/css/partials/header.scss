@@ -1,0 +1,145 @@
+.header {
+    background: #F5F5F5;
+    height: 120px;
+    .content {
+        height: 120px;
+        // padding: 10px 17px 10px 17px;
+        display: flex;
+        justify-content: space-between;
+        max-width: 1440px;        
+    }
+    .header-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;    
+    }
+    .arrowStepper {
+        display: none;
+    }
+    .language {
+        padding: 10px 0px;
+    }
+    .link {
+        cursor: pointer;
+    }
+
+}
+.main-content {
+    display: flex;
+    max-width: 1440px;
+    padding: 38px 60px;
+    height: 100%;
+    background-color: white;
+}
+.main-content-clinet {
+    display: flex;
+    max-width: 1440px;
+    padding: 40px 40px;
+    height: 100%;
+    background-color: white;
+}
+.width-logo {
+    width: 25%;
+}
+.width-link {
+    width: 25%;
+}
+.padding-link {
+    padding-right: 20px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .header {
+        height: 120px;
+        position: relative;
+        .header-container {
+            position: absolute;
+            top: 140px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .stepper {
+            margin-top: 25px;
+        }
+        .arrowStepper {
+            display: none;
+            .arrowLeft{
+                position: absolute;
+                background-color: #FFBE3D;
+                color: #F5F5F5;
+                border-color: #F5F5F5;
+                left: 30px;
+                // width: 48px;
+                // height: 48px;
+            }
+            .arrowRight{
+                position: absolute;
+                background-color: #FFBE3D;
+                color: #F5F5F5;
+                border-color: #F5F5F5;
+                right: 30px;
+                // width: 48px;
+                // height: 48px;
+            }
+        }
+    }
+    .main-content {
+        margin-top: 50px;
+    }
+    .width-logo {
+        width: 50%;
+    }
+    .width-link {
+        width: 50%;
+    }
+    .padding-link {
+        padding-right: 20px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .header {
+        height: 120px;
+        
+        .header-container {
+            position: absolute;
+            top: 140px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .stepper {
+            display: none;
+        }
+        .arrowStepper{
+            padding: 0 30px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .content-garbage {
+            height: 0px;
+            background: #fff;
+        }
+    }
+
+    .main-content {
+        display: flex;
+        margin-top: 50px;
+        padding: 30px 30px;
+        height: 100%;
+    }
+
+    .main-content-clinet {
+        padding: 30px 30px;
+    }
+
+    .width-logo {
+        width: 50%;
+    }
+    .width-link {
+        width: 50%;
+    }
+    .padding-link {
+        padding-right: 0px;
+    }
+}
