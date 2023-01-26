@@ -3,7 +3,11 @@
     font-family: "Poppins";   /*Can be any text*/
     src: local('Poppins-Regular'), url('../../fonts/Poppins-Regular.ttf') format('truetype');
   }
-  
+
+body {
+    color: black;
+}
+
 .text-header {
     font-family: "Poppins";
     font-style: normal;
