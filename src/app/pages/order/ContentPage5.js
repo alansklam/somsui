@@ -43,16 +43,20 @@ export default function ContentPage5(props) {
                 payConfirm({ code: paymentCode })
                     .then((res) => {
                         if (res.data.success === true) {
+                            setIsLoading(false);
                             clearInterval(payConfirmTimer);
                             props.onChangeStep();
                         }
                     })
                     .catch((err) => {
+                        setIsLoading(false);
                         console.log('error', err);
                     })
             }, 3000);
             setTimeout(() => {
                 clearInterval(payConfirmTimer);
+                setIsLoading(false);
+                onNotification({ title: "error", message: "Expired time.", visible: true, status: Math.floor(Math.random() * 100000) });
             }, 300000);
         } else {
             clearInterval();
@@ -105,13 +109,12 @@ export default function ContentPage5(props) {
                     setPaymentCode("");
                     console.log("responseError", res.data);
                     onNotification({ title: "warning", message: "No connect.", visible: true, status: Math.floor(Math.random() * 100000) });
+                    setIsLoading(false);
                 }
             }).catch((err) => {
                 console.log("errors_message", err);
                 onNotification({ title: "error", message: err.data.message, visible: true, status: Math.floor(Math.random() * 100000) });
-            }).finally(() => {
-                setIsLoading(false);
-            });
+            })
         }
     }
 

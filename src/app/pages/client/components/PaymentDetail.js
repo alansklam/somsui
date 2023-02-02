@@ -29,15 +29,19 @@ export const PaymentDetail = (props) => {
         payConfirm({ code: paymentCode })
           .then((res) => {
             if (res.data.success === true) {
+              setIsLoading(false);
               clearInterval(payConfirmTimer);
               setPayStatus(true);
             }
           })
           .catch((err) => {
+            setIsLoading(false);
             console.log('error', err);
           })
       }, 3000);
       setTimeout(() => {
+        setIsLoading(false);
+        showNotification({ title: "warning", message: "No connect.", visible: true, status: Math.floor(Math.random() * 100000) });
         clearInterval(payConfirmTimer);
       }, 300000);
     } else {
@@ -96,11 +100,10 @@ export const PaymentDetail = (props) => {
           showNotification({ title: "warning", message: "No connect.", visible: true, status: Math.floor(Math.random() * 100000) });
         }
       }).catch((err) => {
+        setIsLoading(false);
         console.log("errors_message", err);
         showNotification({ title: "error", message: err.data.message, visible: true, status: Math.floor(Math.random() * 100000) });
-      }).finally(() => {
-        setIsLoading(false);
-      });
+      })
     }
   };
 
