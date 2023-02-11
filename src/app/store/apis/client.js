@@ -71,3 +71,11 @@ export function outstandPayApi(params) {
     }
   });
 }
+
+export function extendDateApi(params) {
+  return axios.post('client/extend-date', params, {
+    headers: {
+      'content-type': 'text/json'
+    }
+  });
+}

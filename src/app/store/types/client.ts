@@ -3,6 +3,7 @@ export interface ClientState {
   orders: any[];
   products: any[];
   currentOrder: any;
+  extendDate: string;
   loading: boolean;
   error: null | string;
   page: number;
@@ -18,6 +19,7 @@ export enum ClientActionTypes {
   UPDATE_ORDER = 'UPDATE_ORDER',
   GET_PRODUCTS = 'GET_PRODUCTS',
   FETCH_CURRENT_ORDER = 'FETCH_CURRENT_ORDER',
+  SET_EXTEND_DATE = 'SET_EXTEND_DATE',
 }
 interface FetchDataAction {
   type: ClientActionTypes.FETCH_DATA;
@@ -46,6 +48,10 @@ interface FetchCurrentOrder {
   type: ClientActionTypes.FETCH_CURRENT_ORDER;
   payload: any;
 }
+interface setStoreExtendDate {
+  type: ClientActionTypes.SET_EXTEND_DATE;
+  payload: any;
+}
 
 export type ClientAction =
   FetchDataAction
@@ -55,3 +61,4 @@ export type ClientAction =
   | UpdateOrder
   | GetProducts
   | FetchCurrentOrder
+  | setStoreExtendDate

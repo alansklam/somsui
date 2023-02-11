@@ -69,6 +69,10 @@ a {
     padding-left: 40px;
 }
 
+.extend-btn-padding {
+    padding-left: 20px;
+}
+
 @media screen and (max-width: 1200px) {
     .sidebar-client {
         width: 25%;
@@ -109,7 +113,7 @@ a {
     }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 600px) {
     .sidebar-client {
         width: 100%;
     }
@@ -117,5 +121,10 @@ a {
     .content-client {
         width: 100%;
         padding-left: 0px;
+    }
+
+    .extend-btn-padding {
+        padding-left: 0px;
+        padding-top: 30px;
     }
 }

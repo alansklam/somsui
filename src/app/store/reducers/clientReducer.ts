@@ -5,6 +5,7 @@ const initialState: ClientState = {
     orders: [],
     products: [],
     currentOrder: {},
+    extendDate: "",
     page: 1,
     total: 0,
     error: null,
@@ -36,6 +37,8 @@ export const clientReducer = (state = initialState, action: ClientAction): Clien
             return {...state, loading: false, products: action.payload}
         case ClientActionTypes.FETCH_CURRENT_ORDER:
             return {...state, loading: false, currentOrder: action.payload}
+        case ClientActionTypes.SET_EXTEND_DATE:
+            return {...state, loading: false, extendDate: action.payload}
         default:
             return state
     }

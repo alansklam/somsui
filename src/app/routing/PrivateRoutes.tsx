@@ -11,6 +11,7 @@ import ClientPortal from '../pages/client/ClientPortal'
 import AccountEdit from '../pages/client/AccountEdit'
 import OrderDetail from '../pages/client/OrderDetail'
 import { OutstandPayment } from '../pages/client/OutstandPayment'
+import { ExtendStorage } from '../pages/client/ExtendStorage'
 
 const PrivateRoutes = () => {
 
@@ -25,6 +26,7 @@ const PrivateRoutes = () => {
         <Route path="client/account" element={<AccountEdit />} />
         <Route path='client/order/:id' element={<OrderDetail />} />
         <Route path='client/order/outstand-payment/:id' element={<OutstandPayment />} />
+        <Route path='client/order/extend/:id' element={<ExtendStorage />} />
         <Route path='client/*' element={<Navigate to='dashboard' />} />
         {/* Page Not Found */}
         <Route path='*' element={<Navigate to='/error/404' />} />

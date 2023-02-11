@@ -26,6 +26,7 @@ type updateOrderInfo = {
     checkin_time_other: string,
     checkout_time_other: string,
 }
+type extendDate = string;
 
 export const updateAccount = (param: account) => {
   return async (dispatch: Dispatch<ClientAction>) => {
@@ -138,5 +139,14 @@ export const fetchCurrentOrder = (params: userId) => {
                 payload: [],
             })
         }
+    }
+}
+
+export const setStoreExtendDate = (param: extendDate) => {
+    return async (dispatch: Dispatch<ClientAction>) => {
+        dispatch({
+            type: ClientActionTypes.SET_EXTEND_DATE,
+            payload: param,
+        })
     }
 }
