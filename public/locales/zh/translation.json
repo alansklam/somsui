@@ -77,7 +77,7 @@
   "common.no-select-item": "需要選擇最少一個項目。",
   "common.no-update-account-success": "賬號更新成功",
   "common.no-update-order-success": "訂單更新成功",
-  "order-detail.no-title": "訂單 {{order}} 於 {{date}} 訂購，訂單狀態為 {{orderState}}。",
+  "oder-detail.no-title": "訂單 {{order}} 於 {{date}} 訂購，訂單狀態為 {{orderState}}。",
   "customer-extend.no-title": "訂單 {{order}} 存儲到期日期為 {{date}}，當前月費為 ${{monthlyFee}}。",
   "common.wd-edit": "編輯",
   "common.wd-change": "修改",
