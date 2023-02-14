@@ -496,12 +496,12 @@ export const OrderDetailEdit = (props) => {
               <div className='row flex align-items-center'>
                 <div className='col-sm-6 col-12'>
                   <DesktopDatePicker
-                    label={t('common.wd-empty-box-return-date')}
+                    label={t('common.wd-storage-expiration-date')}
                     inputFormat='DD/MM/YYYY'
                     value={extendDate}
                     minDate={order?.storage_expired_date}
                     onChange={handleExtendDateChange}
-                    disabled={!permitEdit.permitExtend}
+                    disabled
                     renderInput={(params) => (
                       <CssTextField
                         label={t('common.wd-laden-return-date')}

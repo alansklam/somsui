@@ -1,6 +1,7 @@
-import {TodoAction, TodoActionTypes, TodoState} from "../types/order";
+import {OrderAction, OrderActionTypes, OrderState} from "../types/order";
 
-const initialState: TodoState = {
+const initialState: OrderState = {
+    paymentMethod: [],
     todos: [],
     page: 1,
     error: null,
@@ -8,16 +9,12 @@ const initialState: TodoState = {
     loading: false
 }
 
-export const orderReducer = (state = initialState, action: TodoAction): TodoState => {
+export const orderReducer = (state = initialState, action: OrderAction): OrderState => {
     switch (action.type) {
-        case TodoActionTypes.FETCH_TODOS:
+        case OrderActionTypes.FETCH_DATA:
             return {...state, loading: true}
-        case TodoActionTypes.FETCH_TODOS_SUCCESS:
-            return {...state, loading: false, todos: action.payload}
-        case TodoActionTypes.FETCH_TODOS_ERROR:
-            return {...state, loading: false, error: action.payload}
-        case TodoActionTypes.SET_TODO_PAGE:
-            return {...state, page: action.payload}
+        case OrderActionTypes.GET_PAYMENT_METHOD:
+            return {...state, loading: false, paymentMethod: action.payload}
         default:
             return state
     }

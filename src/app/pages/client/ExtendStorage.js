@@ -1,8 +1,6 @@
 import {useState, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
 import {useParams, Link} from 'react-router-dom'
-import {useSelector} from 'react-redux/es/exports'
-import {useDispatch} from 'react-redux'
 import {Grid, Slider, RadioGroup} from '@mui/material'
 import CustomColorRadio from '../../components/custom-components/RadioButton'
 import CssFormControlLabel from '../../components/custom-components/FormControlLabel'
@@ -18,6 +16,8 @@ import {payConfirm} from '../../store/apis/ordering'
 import {extendDateApi} from '../../store/apis/client'
 import ContentPage6 from '../order/ContentPage6'
 import {ShowNotification} from '../../components/notification'
+import {getPaymentMethod} from '../../store/actions/order'
+import {useDispatch, useSelector} from 'react-redux'
 
 export const ExtendStorage = () => {
   const {id} = useParams()
@@ -37,6 +37,7 @@ export const ExtendStorage = () => {
 
   const [initial, setInitial] = useState(false)
   const [duration, setDuration] = useState(1)
+  const paymentMethod = useSelector((state) => state.order.paymentMethod)
 
   useEffect(() => {
     setInitial(true)
@@ -46,6 +47,7 @@ export const ExtendStorage = () => {
     if (initial) {
       setLang(JSON.parse(localStorage.getItem('ubox-lang')))
       dispatch(fetchCurrentOrder({id: id}))
+      dispatch(getPaymentMethod())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial])
@@ -89,7 +91,7 @@ export const ExtendStorage = () => {
   }
 
   const getTotalOutstandingFee = () => {
-    let total = parseInt(order?.balance) + parseInt(order?.product_total_fee) * duration
+    let total = parseFloat(order?.balance) + parseFloat(order?.product_total_fee) * duration
     total = total.toFixed(2)
     setTotalFee(total)
   }
@@ -405,32 +407,49 @@ export const ExtendStorage = () => {
                     value={paymentType}
                     onChange={handleRadioChange}
                   >
-                    <CssFormControlLabel
-                      value={PaymentType.CREDITCARD}
-                      control={<CustomColorRadio />}
-                      label={t('common.wd-credit-card')}
-                    />
-                    <Grid item xs={12} sm={12} md={12}>
-                      <div className='flex items-center'>
-                        {paymentType === PaymentType.CREDITCARD && (
-                          <div className='h-[20px] w-[100%] my-[10px]'>
-                            <Elements stripe={getStripe()}>
-                              <PaymentForm onCallbackHandler={onCallbackFunc} />
-                            </Elements>
-                          </div>
-                        )}
-                      </div>
-                    </Grid>
-                    <CssFormControlLabel
-                      value={PaymentType.WECHATPAY}
-                      control={<CustomColorRadio />}
-                      label={t('common.wd-wechat-pay')}
-                    />
-                    <CssFormControlLabel
-                      value={PaymentType.ALIPAY}
-                      control={<CustomColorRadio />}
-                      label={t('common.wd-alipay')}
-                    />
+                    {paymentMethod.map((element) => {
+                      switch (element.id) {
+                        case PaymentType.CREDITCARD:
+                          return (
+                            <>
+                              <CssFormControlLabel
+                                value={PaymentType.CREDITCARD}
+                                control={<CustomColorRadio />}
+                                label={t('common.wd-credit-card')}
+                              />
+                              <Grid item xs={12} sm={12} md={12}>
+                                <div className='flex items-center'>
+                                  {paymentType === PaymentType.CREDITCARD && (
+                                    <div className='h-[20px] w-[100%] my-[10px]'>
+                                      <Elements stripe={getStripe()}>
+                                        <PaymentForm onCallbackHandler={onCallbackFunc} />
+                                      </Elements>
+                                    </div>
+                                  )}
+                                </div>
+                              </Grid>
+                            </>
+                          )
+                        case PaymentType.WECHATPAY:
+                          return (
+                            <CssFormControlLabel
+                              value={PaymentType.WECHATPAY}
+                              control={<CustomColorRadio />}
+                              label={t('common.wd-wechat-pay')}
+                            />
+                          )
+                        case PaymentType.ALIPAY:
+                          return (
+                            <CssFormControlLabel
+                              value={PaymentType.ALIPAY}
+                              control={<CustomColorRadio />}
+                              label={t('common.wd-alipay')}
+                            />
+                          )
+                        default:
+                          return <></>
+                      }
+                    })}
                   </RadioGroup>
                   <div className='flex item-center my-[30px] w-[100%]'>
                     <span

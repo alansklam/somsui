@@ -1,6 +1,7 @@
 import {Dispatch} from "redux";
 import axios from "axios";
-import {TodoAction, TodoActionTypes} from "../types/order";
+import {TodoAction, TodoActionTypes, OrderAction, OrderActionTypes} from "../types/order";
+import { getPaymentMethodApi } from "../apis/ordering";
 
 export const fetchTodos = (page = 1, limit = 10) => {
     return async (dispatch: Dispatch<TodoAction>) => {
@@ -22,4 +23,23 @@ export const fetchTodos = (page = 1, limit = 10) => {
 }
 export function setTodoPage(page: number): TodoAction {
     return {type: TodoActionTypes.SET_TODO_PAGE, payload: page}
+}
+
+export const getPaymentMethod = () => {
+    return async(dispatch: Dispatch<OrderAction>) => {
+        try {
+            // dispatch({type: OrderActionTypes.FETCH_DATA})
+            const response = getPaymentMethodApi();
+            const payloadData = (await response).data;
+            dispatch({
+                type: OrderActionTypes.GET_PAYMENT_METHOD,
+                payload: payloadData,
+            })
+        } catch {
+            dispatch({
+                type: OrderActionTypes.GET_PAYMENT_METHOD,
+                payload: [],
+            })
+        }
+    }
 }

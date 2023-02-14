@@ -10,6 +10,8 @@ import {orderSubmit} from '../../store/apis/ordering'
 import LoadingSpinner from '../../components/loading-spinner'
 import {payConfirm} from '../../store/apis/ordering'
 import {PaymentType} from '../../constants/payment-type'
+import {getPaymentMethod} from '../../store/actions/order'
+import {useDispatch, useSelector} from 'react-redux'
 
 export default function ContentPage5(props) {
   const {onNotification, cartInfo, setCartInfo, stuffInfo, accountInfo, order, setOrder} = props
@@ -18,6 +20,9 @@ export default function ContentPage5(props) {
   const {t} = useTranslation()
   const [paymentCode, setPaymentCode] = useState('')
   const [lang, setLang] = useState('')
+  const [initial, setInitial] = useState(false)
+  const dispatch = useDispatch()
+  const paymentMethod = useSelector((state) => state.order.paymentMethod)
 
   const __carts = cartInfo
   const __duration = cartInfo.storage_month
@@ -40,7 +45,15 @@ export default function ContentPage5(props) {
 
   useEffect(() => {
     setLang(JSON.parse(localStorage.getItem('ubox-lang')))
+    setInitial(true)
   }, [])
+
+  useEffect(() => {
+    if (initial) {
+      dispatch(getPaymentMethod())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initial])
 
   useEffect(() => {
     if (paymentCode !== undefined && paymentCode !== '') {
@@ -227,49 +240,65 @@ export default function ContentPage5(props) {
                   value={paymentType}
                   onChange={handleRadioChange}
                 >
-                  <CssFormControlLabel
-                    value={PaymentType.CREDITCARD}
-                    control={<CustomColorRadio />}
-                    label={t('common.wd-credit-card')}
-                  />
-                  <CssFormControlLabel
-                    value={PaymentType.WECHATPAY}
-                    control={<CustomColorRadio />}
-                    label={t('common.wd-wechat-pay')}
-                  />
-                  <CssFormControlLabel
-                    value={PaymentType.ALIPAY}
-                    control={<CustomColorRadio />}
-                    label={t('common.wd-alipay')}
-                  />
-                  <CssFormControlLabel
-                    value={PaymentType.CASH}
-                    control={<CustomColorRadio />}
-                    label={t('common.wd-cash/atm')}
-                  />
+                  {paymentMethod.map((element) => {
+                    switch (element.id) {
+                      case PaymentType.CREDITCARD:
+                        return (
+                          <CssFormControlLabel
+                            value={PaymentType.CREDITCARD}
+                            control={<CustomColorRadio />}
+                            label={t('common.wd-credit-card')}
+                          />
+                        )
+                      case PaymentType.WECHATPAY:
+                        return (
+                          <CssFormControlLabel
+                            value={PaymentType.WECHATPAY}
+                            control={<CustomColorRadio />}
+                            label={t('common.wd-wechat-pay')}
+                          />
+                        )
+                      case PaymentType.ALIPAY:
+                        return (
+                          <CssFormControlLabel
+                            value={PaymentType.ALIPAY}
+                            control={<CustomColorRadio />}
+                            label={t('common.wd-alipay')}
+                          />
+                        )
+                      case PaymentType.CASH:
+                        return (
+                          <CssFormControlLabel
+                            value={PaymentType.CASH}
+                            control={<CustomColorRadio />}
+                            label={t('common.wd-cash/atm')}
+                          />
+                        )
+                      default:
+                        return <></>
+                    }
+                  })}
                 </RadioGroup>
               </Grid>
-              <Grid item xs={12} sm={12} md={12}>
-                <div className='flex items-center'>
-                  {paymentType === PaymentType.CREDITCARD && (
-                    <div className='h-[20px] w-[100%]'>
-                      <Elements stripe={getStripe()}>
-                        <PaymentForm onCallbackHandler={onCallbackFunc} />
-                      </Elements>
-                    </div>
-                  )}
-                  {paymentType === PaymentType.WECHATPAY && (
-                    <div className='w-[100%] mt-[30px] flex item-center'>
-                      {/* <img src="/images/qr-code.png" alt="qr-code" width={290} height={290} /> */}
-                    </div>
-                  )}
-                  {paymentType === PaymentType.ALIPAY && (
-                    <div className='w-[100%] mt-[30px] flex item-center'>
-                      {/* <img src="/images/qr-code.png" alt="qr-code" width={290} height={290} /> */}
-                    </div>
-                  )}
-                </div>
-              </Grid>
+              {paymentMethod.map((element) => {
+                if (element.id === PaymentType.CREDITCARD) {
+                  return (
+                    <Grid item xs={12} sm={12} md={12}>
+                      <div className='flex items-center'>
+                        {paymentType === PaymentType.CREDITCARD && (
+                          <div className='h-[20px] w-[100%]'>
+                            <Elements stripe={getStripe()}>
+                              <PaymentForm onCallbackHandler={onCallbackFunc} />
+                            </Elements>
+                          </div>
+                        )}
+                      </div>
+                    </Grid>
+                  )
+                } else {
+                  return <></>
+                }
+              })}
             </Grid>
           </div>
         </div>

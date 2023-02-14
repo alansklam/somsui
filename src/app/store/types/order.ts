@@ -1,9 +1,23 @@
-export interface TodoState {
+export interface OrderState {
+    paymentMethod: any;
     todos: any[];
     loading: boolean;
     error: null | string;
     page: number;
     limit: number;
+}
+
+export enum OrderActionTypes {
+    FETCH_DATA = 'FETCH_DATA',
+    GET_PAYMENT_METHOD = 'GET_PAYMENT_METHOD',
+}
+
+interface FetchData {
+    type: OrderActionTypes.FETCH_DATA,
+}
+interface GetPaymentMethod {
+    type: OrderActionTypes.GET_PAYMENT_METHOD,
+    payload: any;
 }
 
 export enum TodoActionTypes {
@@ -33,3 +47,7 @@ export type TodoAction =
     | FetchTodoErrorAction
     | FetchTodoSuccessAction
     | SetTodoPage
+
+export type OrderAction = 
+    GetPaymentMethod
+    | FetchData
