@@ -38,6 +38,7 @@ export const ExtendStorage = () => {
   const [initial, setInitial] = useState(false)
   const [duration, setDuration] = useState(1)
   const paymentMethod = useSelector((state) => state.order.paymentMethod)
+  const __lang = JSON.parse(localStorage.getItem('ubox-lang'))
 
   useEffect(() => {
     setInitial(true)
@@ -257,13 +258,13 @@ export const ExtendStorage = () => {
           setPayStatus(true)
         } else if (res.data.code === 'error') {
           console.log('responseError', res.data)
-          setPaymentCode(res.data.payment_code)
           showNotification({
             title: 'warning',
             message: res.data.message,
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setPayStatus(false)
         }
       })
       .catch((err) => {
@@ -407,15 +408,17 @@ export const ExtendStorage = () => {
                     value={paymentType}
                     onChange={handleRadioChange}
                   >
-                    {paymentMethod.map((element) => {
+                    {paymentMethod.map((element, index) => {
                       switch (element.id) {
                         case PaymentType.CREDITCARD:
                           return (
-                            <>
+                            <div key={index}>
                               <CssFormControlLabel
                                 value={PaymentType.CREDITCARD}
                                 control={<CustomColorRadio />}
-                                label={t('common.wd-credit-card')}
+                                label={
+                                  __lang === 'en' ? element?.description : element?.description_cn
+                                }
                               />
                               <Grid item xs={12} sm={12} md={12}>
                                 <div className='flex items-center'>
@@ -428,14 +431,17 @@ export const ExtendStorage = () => {
                                   )}
                                 </div>
                               </Grid>
-                            </>
+                            </div>
                           )
                         case PaymentType.WECHATPAY:
                           return (
                             <CssFormControlLabel
                               value={PaymentType.WECHATPAY}
                               control={<CustomColorRadio />}
-                              label={t('common.wd-wechat-pay')}
+                              label={
+                                __lang === 'en' ? element?.description : element?.description_cn
+                              }
+                              key={index}
                             />
                           )
                         case PaymentType.ALIPAY:
@@ -443,7 +449,10 @@ export const ExtendStorage = () => {
                             <CssFormControlLabel
                               value={PaymentType.ALIPAY}
                               control={<CustomColorRadio />}
-                              label={t('common.wd-alipay')}
+                              label={
+                                __lang === 'en' ? element?.description : element?.description_cn
+                              }
+                              key={index}
                             />
                           )
                         default:

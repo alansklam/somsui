@@ -28,6 +28,7 @@ export const PaymentDetail = (props) => {
   const [initial, setInitial] = useState(false)
   const dispatch = useDispatch()
   const paymentMethod = useSelector((state) => state.order.paymentMethod)
+  const __lang = JSON.parse(localStorage.getItem('ubox-lang'))
 
   useEffect(() => {
     setLang(JSON.parse(localStorage.getItem('ubox-lang')))
@@ -66,7 +67,6 @@ export const PaymentDetail = (props) => {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
-          clearInterval(payConfirmTimer)
         }
       }, 60000)
     } else {
@@ -167,13 +167,13 @@ export const PaymentDetail = (props) => {
           setPayStatus(true)
         } else if (res.data.code === 'error') {
           console.log('responseError', res.data)
-          setPaymentCode(res.data.payment_code)
           showNotification({
             title: 'warning',
             message: res.data.message,
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setPayStatus(false)
         }
       })
       .catch((err) => {
@@ -229,22 +229,38 @@ export const PaymentDetail = (props) => {
                   value={paymentType}
                   onChange={handleRadioChange}
                 >
-                  {paymentMethod.map((element) => {
+                  {paymentMethod.map((element, index) => {
                     switch (element.id) {
                       case PaymentType.CREDITCARD:
                         return (
-                          <CssFormControlLabel
-                            value={PaymentType.CREDITCARD}
-                            control={<CustomColorRadio />}
-                            label={t('common.wd-credit-card')}
-                          />
+                          <div>
+                            <CssFormControlLabel
+                              value={PaymentType.CREDITCARD}
+                              control={<CustomColorRadio />}
+                              label={
+                                __lang === 'en' ? element?.description : element?.description_cn
+                              }
+                            />
+                            <Grid item xs={12} sm={12} md={12}>
+                              <div className='flex items-center'>
+                                {paymentType === PaymentType.CREDITCARD && (
+                                  <div className='h-[20px] w-[100%] my-[10px]'>
+                                    <Elements stripe={getStripe()}>
+                                      <PaymentForm onCallbackHandler={onCallbackFunc} />
+                                    </Elements>
+                                  </div>
+                                )}
+                              </div>
+                            </Grid>
+                          </div>
                         )
                       case PaymentType.WECHATPAY:
                         return (
                           <CssFormControlLabel
                             value={PaymentType.WECHATPAY}
                             control={<CustomColorRadio />}
-                            label={t('common.wd-wechat-pay')}
+                            label={__lang === 'en' ? element?.description : element?.description_cn}
+                            key={index}
                           />
                         )
                       case PaymentType.ALIPAY:
@@ -252,7 +268,8 @@ export const PaymentDetail = (props) => {
                           <CssFormControlLabel
                             value={PaymentType.ALIPAY}
                             control={<CustomColorRadio />}
-                            label={t('common.wd-alipay')}
+                            label={__lang === 'en' ? element?.description : element?.description_cn}
+                            key={index}
                           />
                         )
                       case PaymentType.CASH:
@@ -260,7 +277,8 @@ export const PaymentDetail = (props) => {
                           <CssFormControlLabel
                             value={PaymentType.CASH}
                             control={<CustomColorRadio />}
-                            label={t('common.wd-cash/atm')}
+                            label={__lang === 'en' ? element?.description : element?.description_cn}
+                            key={index}
                           />
                         )
                       default:
@@ -269,25 +287,6 @@ export const PaymentDetail = (props) => {
                   })}
                 </RadioGroup>
               </Grid>
-              {paymentMethod.map((element) => {
-                if (element.id === PaymentType.CREDITCARD) {
-                  return (
-                    <Grid item xs={12} sm={12} md={12}>
-                      <div className='flex items-center'>
-                        {paymentType === PaymentType.CREDITCARD && (
-                          <div className='h-[20px] w-[100%]'>
-                            <Elements stripe={getStripe()}>
-                              <PaymentForm onCallbackHandler={onCallbackFunc} />
-                            </Elements>
-                          </div>
-                        )}
-                      </div>
-                    </Grid>
-                  )
-                } else {
-                  return <></>
-                }
-              })}
             </Grid>
           </div>
           <div className='flex item-center mt-[60px]'>
