@@ -7,8 +7,8 @@ import { usePaymentsListView } from '../core/PaymentsListViewProvider';
 import { PaymentsPagination } from '../components/pagination/PaymentsPagination';
 import { fetchPayments } from '../../../../store/actions/admin';
 
-const PaymentsTable = () => {
-
+const PaymentsTable = (props: any) => {
+  const {paymentRemarkId} = props;
   const dispatch = useDispatch();
   const { orderId, data, setSelected, isAllSelected, pagination, filterData } = usePaymentsListView();
   const [listData, setListData] = useState(Array(0));
@@ -27,6 +27,7 @@ const PaymentsTable = () => {
     dispatch(fetchPayments({
       filterData,
       orderId,
+      paymentRemarkId,
       ...pagination,
       sort: __sort,
       orderBy: order,

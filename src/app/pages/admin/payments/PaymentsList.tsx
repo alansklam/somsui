@@ -9,15 +9,15 @@ import { PaymentsDeleteModal } from "./modals/delete-modal/PaymentsDeleteModal";
 import { PaymentsClientEditModal } from "./modals/edit-modal/PaymentsClientEditModal";
 import { LoadingSpinner } from "../components/spinner/LoadingSpinner";
 
-const PaymentsListPage = () => {
-
+const PaymentsListPage = (props: any) => {
+  const {paymentRemarkId} = props;
   const { itemIdForUpdate, itemIdForDelete, clientIdForUpdate, isLoading } = usePaymentsListView();
 
   return (
     <div style={{marginTop: '-30px'}}>
       <KTCard>
         <PaymentsListHeader />
-        <PaymentsTable />
+        <PaymentsTable paymentRemarkId={paymentRemarkId}/>
       </KTCard>
       {itemIdForUpdate !== undefined && <PaymentsAddModal /> }
       {itemIdForDelete !== undefined && <PaymentsDeleteModal /> }
@@ -27,13 +27,15 @@ const PaymentsListPage = () => {
   )
 }
 
-export const PaymentsList = () => {
-
+export const PaymentsList = (props: any) => {
+  const {paymentRemarkId} = props;
   return(
     <>
       <PageTitle>{'Payments List'}</PageTitle>
-      <PaymentsListViewProvider>
-        <PaymentsListPage />
+      <PaymentsListViewProvider
+        paymentRemarkId={paymentRemarkId}
+      >
+        <PaymentsListPage paymentRemarkId={paymentRemarkId} />
       </PaymentsListViewProvider>
     </>
   )

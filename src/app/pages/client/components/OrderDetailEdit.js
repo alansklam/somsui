@@ -276,10 +276,6 @@ export const OrderDetailEdit = (props) => {
     }
   }
 
-  const setRetrievalHandler = () => {
-    if (!permitEdit.permitRetrieval) return
-  }
-
   return (
     <ThemeProvider theme={defaultMaterialTheme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -461,14 +457,14 @@ export const OrderDetailEdit = (props) => {
                 </div>
                 <div className='col-sm-6 col-12'>
                   <div className='flex extend-btn-padding'>
-                    <span
-                      onClick={setRetrievalHandler}
+                    <Link
+                      to={permitEdit.permitRetrieval ? '/client/order/retrieval/' + id : '#'}
                       className={
                         permitEdit.permitRetrieval ? 'custom-btn hand' : 'custom-btn disabled-btn'
                       }
                     >
                       {t('common.wd-retrieval-now')}
-                    </span>
+                    </Link>
                   </div>
                 </div>
               </div>

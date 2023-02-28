@@ -1,22 +1,21 @@
 import {useState, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Grid, RadioGroup} from '@mui/material'
-import CustomColorRadio from '../../../components/custom-components/RadioButton'
-import CssFormControlLabel from '../../../components/custom-components/FormControlLabel'
 import {loadStripe} from '@stripe/stripe-js'
 import {Elements} from '@stripe/react-stripe-js'
+import CustomColorRadio from '../../../components/custom-components/RadioButton'
+import CssFormControlLabel from '../../../components/custom-components/FormControlLabel'
 import PaymentForm from '../../../components/payment'
 import LoadingSpinner from '../../../components/loading-spinner'
 import {payConfirm} from '../../../store/apis/ordering'
 import {ShowNotification} from '../../../components/notification'
-import {outstandPayApi} from '../../../store/apis/client'
-import ContentPage6 from '../../order/ContentPage6'
 import {PaymentType} from '../../../constants/payment-type'
-import {useDispatch, useSelector} from 'react-redux'
 import {getPaymentMethod} from '../../../store/actions/order'
+import {retrievalPayApi} from '../../../store/apis/client'
 
-export const PaymentDetail = (props) => {
-  const {orderId} = props
+export default function PaymentMethod(props) {
+  const {orderId, cartInfo, retrievalOrder} = props
   const [isLoading, setIsLoading] = useState(false)
   const [paymentType, setPaymentType] = useState(PaymentType.CREDITCARD)
   const {t} = useTranslation()
@@ -29,6 +28,7 @@ export const PaymentDetail = (props) => {
   const dispatch = useDispatch()
   const paymentMethod = useSelector((state) => state.order.paymentMethod)
   const __lang = JSON.parse(localStorage.getItem('ubox-lang'))
+  const user = JSON.parse(localStorage.getItem('ubox-user'))
 
   useEffect(() => {
     setLang(JSON.parse(localStorage.getItem('ubox-lang')))
@@ -51,6 +51,21 @@ export const PaymentDetail = (props) => {
               setIsLoading(false)
               clearInterval(payConfirmTimer)
               setPayStatus(true)
+              if (res.data.payment_status === 'PAID') {
+                showNotification({
+                  title: 'success',
+                  message: 'Total fee was paid fully',
+                  visible: true,
+                  status: Math.floor(Math.random() * 100000),
+                })
+              } else {
+                showNotification({
+                  title: 'warning',
+                  message: 'Total fee was not paid fully',
+                  visible: true,
+                  status: Math.floor(Math.random() * 100000),
+                })
+              }
             }
           })
           .catch((err) => {
@@ -60,13 +75,15 @@ export const PaymentDetail = (props) => {
       }, 3000)
       setTimeout(() => {
         if (isLoading) {
+          // console.log('isloading', isLoading)
+          // showNotification({
+          //   title: 'warning',
+          //   message: 'No connect.',
+          //   visible: true,
+          //   status: Math.floor(Math.random() * 100000),
+          // })
+          clearInterval()
           setIsLoading(false)
-          showNotification({
-            title: 'warning',
-            message: 'No connect.',
-            visible: true,
-            status: Math.floor(Math.random() * 100000),
-          })
         }
       }, 60000)
     } else {
@@ -109,18 +126,22 @@ export const PaymentDetail = (props) => {
       orderSubmitHandler(stripeToken)
     } else {
       setIsLoading(true)
-      outstandPayApi({
+      retrievalPayApi({
         stripeToken: '',
+        client_id: user.id,
         order_id: orderId,
+        order_code: order.code ? order.code : null,
         payment_code: paymentCode,
         payment_type: paymentType,
+        cart_info: cartInfo,
+        retrieval_order: retrievalOrder,
         lang: lang,
       })
         .then((res) => {
           if (res.data.success === true) {
             openCheckoutUrl(res.data.data)
             setPaymentCode(res.data.code)
-            setOrder(res.data.order)
+            setOrder(res.data.retrieval_order)
           } else {
             setPaymentCode('')
             console.log('responseError', res.data)
@@ -148,11 +169,15 @@ export const PaymentDetail = (props) => {
 
   const orderSubmitHandler = (stripeToken) => {
     setPaymentCode('')
-    outstandPayApi({
+    retrievalPayApi({
       stripeToken: stripeToken,
+      client_id: user.id,
       order_id: orderId,
+      order_code: order.code ? order.code : null,
       payment_code: paymentCode,
       payment_type: paymentType,
+      cart_info: cartInfo,
+      retrieval_order: retrievalOrder,
       lang: lang,
     })
       .then((res) => {
@@ -163,7 +188,7 @@ export const PaymentDetail = (props) => {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
-          setOrder(res.data.order)
+          setOrder(res.data.retrieval_order)
           setPayStatus(true)
         } else if (res.data.code === 'error') {
           console.log('responseError', res.data)
@@ -213,89 +238,76 @@ export const PaymentDetail = (props) => {
 
   return (
     <>
-      {payStatus ? (
-        <ContentPage6 order={order} />
-      ) : (
-        <div>
-          <div className='text-normal text-black py-[0px]'>
-            <span className='text-header text-black'>{t('page5.qu-which-payment')}</span>
-          </div>
-          <div className='mt-[33px]'>
-            <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} md={12}>
-                <RadioGroup
-                  aria-labelledby='payment-type-radio-buttons-group'
-                  name='radio-buttons-group'
-                  value={paymentType}
-                  onChange={handleRadioChange}
-                >
-                  {paymentMethod.map((element, index) => {
-                    switch (element.id) {
-                      case PaymentType.CREDITCARD:
-                        return (
-                          <div key={index}>
-                            <CssFormControlLabel
-                              value={PaymentType.CREDITCARD}
-                              control={<CustomColorRadio />}
-                              label={
-                                __lang === 'en' ? element?.description : element?.description_cn
-                              }
-                            />
-                            <Grid item xs={12} sm={12} md={12}>
-                              <div className='flex items-center'>
-                                {paymentType === PaymentType.CREDITCARD && (
-                                  <div className='h-[20px] w-[100%] my-[10px]'>
-                                    <Elements stripe={getStripe()}>
-                                      <PaymentForm onCallbackHandler={onCallbackFunc} />
-                                    </Elements>
-                                  </div>
-                                )}
-                              </div>
-                            </Grid>
-                          </div>
-                        )
-                      case PaymentType.WECHATPAY:
-                        return (
+      <div>
+        <div className='text-normal text-black py-[0px]'>
+          <span className='text-header text-black'>{t('page5.qu-which-payment')}</span>
+        </div>
+        <div className='mt-[33px]'>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={12} md={12}>
+              <RadioGroup
+                aria-labelledby='payment-type-radio-buttons-group'
+                name='radio-buttons-group'
+                value={paymentType}
+                onChange={handleRadioChange}
+              >
+                {paymentMethod.map((element, index) => {
+                  switch (element.id) {
+                    case PaymentType.CREDITCARD:
+                      return (
+                        <div key={index}>
                           <CssFormControlLabel
-                            value={PaymentType.WECHATPAY}
+                            value={PaymentType.CREDITCARD}
                             control={<CustomColorRadio />}
                             label={__lang === 'en' ? element?.description : element?.description_cn}
-                            key={index}
                           />
-                        )
-                      case PaymentType.ALIPAY:
-                        return (
-                          <CssFormControlLabel
-                            value={PaymentType.ALIPAY}
-                            control={<CustomColorRadio />}
-                            label={__lang === 'en' ? element?.description : element?.description_cn}
-                            key={index}
-                          />
-                        )
-                      case PaymentType.CASH:
-                        return (
-                          <CssFormControlLabel
-                            value={PaymentType.CASH}
-                            control={<CustomColorRadio />}
-                            label={__lang === 'en' ? element?.description : element?.description_cn}
-                            key={index}
-                          />
-                        )
-                      default:
-                        return <></>
-                    }
-                  })}
-                </RadioGroup>
-              </Grid>
+                          <Grid item xs={12} sm={12} md={12}>
+                            <div className='flex items-center'>
+                              {paymentType === PaymentType.CREDITCARD && (
+                                <div className='h-[20px] w-[100%] my-[10px]'>
+                                  <Elements stripe={getStripe()}>
+                                    <PaymentForm onCallbackHandler={onCallbackFunc} />
+                                  </Elements>
+                                </div>
+                              )}
+                            </div>
+                          </Grid>
+                        </div>
+                      )
+                    case PaymentType.WECHATPAY:
+                      return (
+                        <CssFormControlLabel
+                          value={PaymentType.WECHATPAY}
+                          control={<CustomColorRadio />}
+                          label={__lang === 'en' ? element?.description : element?.description_cn}
+                          key={index}
+                        />
+                      )
+                    case PaymentType.ALIPAY:
+                      return (
+                        <CssFormControlLabel
+                          value={PaymentType.ALIPAY}
+                          control={<CustomColorRadio />}
+                          label={__lang === 'en' ? element?.description : element?.description_cn}
+                          key={index}
+                        />
+                      )
+                    default:
+                      return <div key={index}></div>
+                  }
+                })}
+              </RadioGroup>
             </Grid>
-          </div>
-          <div className='flex item-center mt-[60px]'>
+          </Grid>
+        </div>
+        {!payStatus && (
+          <div className='flex item-center my-[30px]'>
             <span className='custom-btn hand' onClick={onNextHandler}>
-              {t('common.wd-next')}
+              {t('customer-retrieval.wd-retrieve-my-items')}
             </span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <ShowNotification
         title={notify.title}
         message={notify.message}

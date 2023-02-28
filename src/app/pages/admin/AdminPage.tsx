@@ -35,6 +35,8 @@ export const AdminPage = () => {
               <Route path='/storage-periods' element={<StoragePeriodsList />} />
               <Route path='/promotions' element={<PromotionsList />} />
               <Route path='/payments' element={<PaymentsList />} />
+              <Route path='/payments/normal' element={<PaymentsList paymentRemarkId={1} />} />
+              <Route path='/payments/retrieval' element={<PaymentsList paymentRemarkId={3} />} />
               <Route path='/payments/:orderId' element={<PaymentsList />} />
               <Route path='/orders/:uid' element={<OrdersList />} />
               <Route path='/orders/:uid/:clientName' element={<OrdersList />} />

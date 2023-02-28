@@ -109,8 +109,7 @@ const calculateIsAllDataSelected = (__data: any[], __selected: any[]) => {
 }
 
 
-const PaymentsListViewProvider:FC<WithChildren> = ({children}) => {
-
+const PaymentsListViewProvider:FC<WithChildren> = ({children, paymentRemarkId}) => {
   const dispatch = useDispatch();
   const {orderId} = useParams();
   const [selected, setSelected] = useState(Array(0));
@@ -130,6 +129,7 @@ const PaymentsListViewProvider:FC<WithChildren> = ({children}) => {
     dispatch(fetchPayments({
       filterData,
       orderId,
+      paymentRemarkId,
       total: 10,
       perPage: 10,
       page: 1,
@@ -137,7 +137,7 @@ const PaymentsListViewProvider:FC<WithChildren> = ({children}) => {
       sort: undefined,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [orderId, paymentRemarkId]);
 
   useEffect(() => {
     setPagination({
@@ -151,6 +151,7 @@ const PaymentsListViewProvider:FC<WithChildren> = ({children}) => {
     dispatch(fetchPayments({
       filterData,
       orderId,
+      paymentRemarkId,
       ...pagination,
     }));
   }

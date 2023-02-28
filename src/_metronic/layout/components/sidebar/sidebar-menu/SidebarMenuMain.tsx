@@ -27,12 +27,15 @@ const SidebarMenuMain = () => {
         title={'Customer list'}
         fontIcon='bi-app-indicator'
       />
-      <SidebarMenuItem
+      <SidebarMenuItemWithSub
         to='/admin/payments'
         icon='/media/icons/duotune/general/gen051.svg'
         title='Payment History'
         fontIcon='bi-layers'
-      />
+      >
+        <SidebarMenuItem to='/admin/payments/normal' title='Normal Payment' hasBullet={true} />
+        <SidebarMenuItem to='/admin/payments/retrieval' title='Retrieval Payment' hasBullet={true} />
+      </SidebarMenuItemWithSub>
       <SidebarMenuItem
         to='/admin/storage-periods'
         icon='/media/icons/duotune/general/gen022.svg'
