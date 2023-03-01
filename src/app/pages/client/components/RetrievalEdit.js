@@ -36,10 +36,6 @@ export default function RetrievalEdit(props) {
       let __storage_month = dayjs() - dayjs(order.emptyout_date_other)
       __storage_month = dayjs(__storage_month).format('MM')
 
-      let __qrCode = ''
-      order.items.forEach((item, index) => {
-        __qrCode = __qrCode + ' ' + item.item.qr_code
-      })
       setRetrievalOrder({
         ...retrievalOrder,
         storage_month: parseInt(__storage_month),
@@ -49,7 +45,7 @@ export default function RetrievalEdit(props) {
         empty_box_return_time: getTime(0),
         retrieval_address: order.emptyout_location_other,
         special_instruction: order.special_instruction,
-        qr_code: __qrCode,
+        qr_code: order.remark_qrcode,
       })
     }
   }, [order])
@@ -197,11 +193,7 @@ export default function RetrievalEdit(props) {
 
   const getInitQty = (item) => {
     let quantity = 0
-    order.items.forEach((element) => {
-      if (item.id === element.item_id) {
-        quantity = element.item_qty
-      }
-    })
+
     return quantity
   }
 
@@ -432,31 +424,37 @@ export default function RetrievalEdit(props) {
               </Grid>
             </Grid>
           </div>
-          <div className='row align-items-center item-center pr-[20px]'>
+          <div className='row align-items-center justify-around pr-[20px]'>
             {products?.store_items &&
               order.items &&
-              products?.store_items.map((item, index) => {
-                return (
+              order.items.map((item, index) =>
+                item.item_qty === 0 ? (
+                  <div key={index}></div>
+                ) : (
                   <div
                     className='col-md-3 col-sm-6 col-6 flex-col align-items-center mt-[25px] min-w-[120px]'
                     key={index}
                   >
                     <div className='mr-[0px] image-area'>
-                      <img src={item.uri} alt='material' style={{width: '90px', height: '90px'}} />
+                      <img
+                        src={item.item.uri}
+                        alt='material'
+                        style={{width: '90px', height: '90px'}}
+                      />
                     </div>
                     <div className='min-w-[120px] py-[20px]' style={{zIndex: '100'}}>
                       <Quantity
-                        value={getInitQty(item)}
-                        maxValue={getInitQty(item)}
+                        value={item.item_qty}
+                        maxValue={item.item_qty}
                         disable={allReturn}
-                        item={item}
+                        item={item.item}
                         key={index}
                         onChangeHandler={onCartHandler}
                       />
                     </div>
                   </div>
                 )
-              })}
+              )}
           </div>
           <div>
             <Grid item xs={12} sm={12} md={12} className='pr-[16px]'>
@@ -466,8 +464,13 @@ export default function RetrievalEdit(props) {
                   id='retrivalQrCode'
                   label={t('customer-retrieval.an-which-item-retrieval')}
                   variant='standard'
-                  value={retrievalOrder?.qr_code ? retrievalOrder?.qr_code : ''}
-                  readOnly
+                  value={retrievalOrder?.qr_code}
+                  onChange={(e) => {
+                    setRetrievalOrder({
+                      ...retrievalOrder,
+                      qr_code: e.target.value,
+                    })
+                  }}
                 />
               </div>
             </Grid>

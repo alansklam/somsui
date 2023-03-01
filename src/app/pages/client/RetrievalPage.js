@@ -32,6 +32,7 @@ export default function RetrievalPage(props) {
     delivery_items: [],
     per_delivery_fee: 0,
     min_delivery_fee: 0,
+    min_delivery_state: false,
     delivery_fee: 0,
     floors: 0,
     per_floor_fee: 0,
@@ -81,8 +82,8 @@ export default function RetrievalPage(props) {
     let __delivery_items = cartInfo.delivery_items
     let __delivery_fee = 0
     let __total_fee = 0
-    let __min_delivery_fee = 0
-    let __per_delivery_fee = parseInt(products.delivery_service[0].price)
+    let __min_delivery_state = false
+    let __min_delivery_fee = parseInt(products.min_delivery_service.price)
 
     if (item.category === 'box') {
       __delivery_items[item.id] = {...item, count: value}
@@ -93,13 +94,11 @@ export default function RetrievalPage(props) {
         __delivery_fee +
         Number.parseFloat(__delivery_items[iter].delivery_fee).valueOf() *
           __delivery_items[iter].count
-      __min_delivery_fee = __min_delivery_fee + __per_delivery_fee
     })
     if (__delivery_fee < __min_delivery_fee) {
       __delivery_fee = __min_delivery_fee
+      __min_delivery_state = true
     }
-    console.log('delivery_fee', __delivery_fee)
-    console.log('min_delivery_fee', __min_delivery_fee)
 
     __delivery_fee = Math.round(__delivery_fee * 100) / 100
     __total_fee = __total_fee + __delivery_fee
@@ -107,9 +106,10 @@ export default function RetrievalPage(props) {
     setCartInfo({
       ...cartInfo,
       payment_type: 3,
-      per_delivery_fee: parseInt(products.delivery_service[0].price),
-      per_floor_fee: parseInt(products.floor_service[0].price),
+      per_delivery_fee: parseInt(products.delivery_service.price),
+      per_floor_fee: parseInt(products.floor_service.price),
       min_delivery_fee: __min_delivery_fee,
+      min_delivery_state: __min_delivery_state,
       delivery_items: __delivery_items,
       delivery_fee: __delivery_fee,
       total_fee: __total_fee,
@@ -129,7 +129,7 @@ export default function RetrievalPage(props) {
           <span>
             {t('customer-retrieval.no-title', {
               order: order.code ? order.code : '',
-              date: dateFormat(order.created_at ? order.created_at : '', 2),
+              date: dateFormat(order.storage_expired_date ? order.storage_expired_date : '', 2),
             })}
           </span>
         </div>

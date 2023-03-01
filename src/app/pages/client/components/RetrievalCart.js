@@ -103,7 +103,7 @@ export default function RetrievalCart(props) {
           </span>
           <span className='text-header text-black'>${cartInfo ? cartInfo.total_fee : 0}</span>
         </div>
-        {cartInfo.retrieval_next_day && (
+        {cartInfo.min_delivery_state && (
           <div className='flex justify-end mt-[20px]'>
             <span className='text-normal text-red'>
               {t('customer-retrieval.wd-minmum-retrieval-fee', {fee: cartInfo.min_delivery_fee})}
