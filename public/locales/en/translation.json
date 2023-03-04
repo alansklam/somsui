@@ -1,6 +1,6 @@
 {
   "page1.qu-how-long": "How long are you storing?",
-  "page1.an-how-long": "The longer you store, the more you save. You're currently benefitting from a 20% off.",
+  "page1.an-how-long": "The longer you store, the more you save. You're currently benefitting from a 25% off.",
   "page1.qu-what-store": "What are you storing?",
   "page2.qu-would-packing": "Would you like packing materials?",
   "page2.an-would-packing": "We’ll send you enough to pack everything you want to store.",
@@ -133,7 +133,7 @@
   "common.wd-enter-code": "Please input code",
   "common.wd-credit-card": "Credit Card",
   "common.wd-wechat-pay": "Wechat Pay",
-  "common.wd-alipay": "Alipay",
+  "common.wd-alipay": "Alipay HK",
   "common.wd-cash/atm": "Cash/ATM",
   "common.wd-pay-now": "Pay Now",
   "customer-extend.wd-before-extension": "Before extension",
