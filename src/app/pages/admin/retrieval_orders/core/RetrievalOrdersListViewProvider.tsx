@@ -33,15 +33,11 @@ type ListViewContextProps = {
   data: {
     id: number;
     code: string,
-    emptyout_location_other: string,
-    emptyout_date_other: string,
-    emptyout_time_other: string,
-    checkin_location_other: string,
-    checkin_date_other: string,
-    checkin_time_other: string,
     checkout_location_other: string,
     checkout_date_other: string,
     checkout_time_other: string,
+    empty_return_date_other: string,
+    empty_return_time_other: string,
     paid_fee: string,
     special_instruction: string,
     payment_status_id: number,
@@ -59,8 +55,8 @@ type ListViewContextProps = {
   setItemIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
   clientIdForUpdate: undefined | null | number;
   setClientIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  orderIdForUpdate: undefined | null | number;
-  setOrderIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
+  retrievalOrderIdForUpdate: undefined | null | number;
+  setRetrievalOrderIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
   itemIdForDelete: undefined | null | number | any[];
   setItemIdForDelete: Dispatch<SetStateAction<undefined | null | number | any[]>>;
   pagination: pagination;
@@ -104,8 +100,8 @@ const initialListView = {
   setItemIdForUpdate: () => {},
   clientIdForUpdate: undefined,
   setClientIdForUpdate: () => {},
-  orderIdForUpdate: undefined,
-  setOrderIdForUpdate: () => {},
+  retrievalOrderIdForUpdate: undefined,
+  setRetrievalOrderIdForUpdate: () => {},
   itemIdForDelete: undefined,
   setItemIdForDelete: () => {},
   pagination: {
@@ -165,7 +161,7 @@ const RetrievalOrdersListViewProvider:FC<WithChildren> = ({children}) => {
   const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(initialListView.itemIdForUpdate);
   const [itemIdForDelete, setItemIdForDelete] = useState<undefined | null | number | any[]>(initialListView.itemIdForUpdate);
   const [clientIdForUpdate, setClientIdForUpdate] = useState<undefined | null | number>(initialListView.clientIdForUpdate);
-  const [orderIdForUpdate, setOrderIdForUpdate] = useState<undefined | null | number>(initialListView.orderIdForUpdate);
+  const [retrievalOrderIdForUpdate, setRetrievalOrderIdForUpdate] = useState<undefined | null | number>(initialListView.retrievalOrderIdForUpdate);
   const [pagination, setPagination] = useState<pagination>(initialListView.pagination);
   const isLoading = useSelector((state:RootState) => state.admin.loading);
   const data = useSelector((state:RootState) => state.admin.retrievalOrders);
@@ -214,8 +210,8 @@ const RetrievalOrdersListViewProvider:FC<WithChildren> = ({children}) => {
         setItemIdForUpdate,
         clientIdForUpdate,
         setClientIdForUpdate,
-        orderIdForUpdate,
-        setOrderIdForUpdate,
+        retrievalOrderIdForUpdate,
+        setRetrievalOrderIdForUpdate,
         itemIdForDelete,
         setItemIdForDelete,
         pagination,

@@ -274,7 +274,7 @@ export function fetchRetrievalOrdersApi(params) {
 
 export function editRetrievalOrderApi(params) {
   return axios.post(
-    `/admin/editOrder`,
+    `/admin/editRetrievalOrder`,
     {...params},
     {
       headers: {
@@ -286,7 +286,7 @@ export function editRetrievalOrderApi(params) {
 
 export function deleteRetrievalOrderApi(params) {
   return axios.post(
-    `/admin/deleteOrder`,
+    `/admin/deleteRetrievalOrder`,
     {...params},
     {
       headers: {

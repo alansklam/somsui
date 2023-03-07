@@ -10,7 +10,7 @@ import { RetrievalOrdersClientEditModal } from "./modals/edit-modal/RetrievalOrd
 
 const RetrievalOrdersListPage = () => {
 
-  const { itemIdForUpdate, itemIdForDelete, clientIdForUpdate, isLoading } = useRetrievalOrdersListView();
+  const { retrievalOrderIdForUpdate, itemIdForDelete, clientIdForUpdate, isLoading } = useRetrievalOrdersListView();
 
   return (
     <div style={{marginTop: '-30px'}}>
@@ -20,7 +20,7 @@ const RetrievalOrdersListPage = () => {
       </KTCard>
 
       {clientIdForUpdate !== undefined && <RetrievalOrdersClientEditModal /> }
-      {itemIdForUpdate !== undefined && <RetrievalOrdersAddModal /> }
+      {retrievalOrderIdForUpdate !== undefined && <RetrievalOrdersAddModal /> }
       {itemIdForDelete !== undefined && <RetrievalOrdersDeleteModal /> }
       {isLoading && <LoadingSpinner />}
     </div>

@@ -7,7 +7,7 @@ import { RetrievalOrdersAddModalFormWrapper } from './RetrievalOrdersAddModalFor
 
 export const RetrievalOrdersAddModal = () => {
 
-  const { setItemIdForUpdate } = useRetrievalOrdersListView();
+  const { setRetrievalOrderIdForUpdate } = useRetrievalOrdersListView();
 
   useEffect(() => {
     document.body.classList.add('modal-open')
@@ -38,7 +38,7 @@ export const RetrievalOrdersAddModal = () => {
               <div
                 className='btn btn-icon btn-sm btn-active-icon-primary'
                 data-kt-users-modal-action='close'
-                onClick={() => setItemIdForUpdate(undefined)}
+                onClick={() => setRetrievalOrderIdForUpdate(undefined)}
                 style={{cursor: 'pointer'}}
               >
                 <KTSVG path='/media/icons/duotune/arrows/arr061.svg' className='svg-icon-1' />

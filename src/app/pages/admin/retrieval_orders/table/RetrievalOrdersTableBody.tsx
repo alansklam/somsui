@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export const RetrievalOrdersTableBody = (props: any) => {
 
   const {listData, setListData} = props;
-  const { setClientIdForUpdate } = useRetrievalOrdersListView();
+  const { setClientIdForUpdate, setRetrievalOrderIdForUpdate } = useRetrievalOrdersListView();
 
   const selectHandler = (index:number, state:boolean) => {
     let __data = listData[index];
@@ -91,6 +91,7 @@ export const RetrievalOrdersTableBody = (props: any) => {
                   <span 
                     className='text-blue fw-bold d-block fs-6'
                     style={{cursor: 'pointer'}}
+                    onClick={() => {setRetrievalOrderIdForUpdate(index)}}
                   >
                     {data.code}
                   </span>

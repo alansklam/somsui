@@ -65,7 +65,7 @@ const Header = (props) => {
               ' flex align-items-center justify-content-end'
             }
           >
-            <div className='flex flex-column align-content-around min-w-[260px]'>
+            <div className='flex flex-column align-content-around min-w-[200px]'>
               <div className='flex justify-content-between align-items-center'>
                 <div className='pl-[20px] py-[10px] min-w-[160] flex align-items-center'>
                   <a
@@ -74,7 +74,13 @@ const Header = (props) => {
                     rel='noreferrer'
                     className='text-header text-yellow contact pr-[10px]'
                   >
-                    {t('common.wd-home')}
+                    <img
+                      src='/images/home-35px.png'
+                      className='link'
+                      alt='uBox Logo'
+                      width={40}
+                      height={40}
+                    />
                   </a>
                   <a
                     href='https://wa.me/85296566509'
@@ -82,7 +88,13 @@ const Header = (props) => {
                     rel='noreferrer'
                     className='text-header text-yellow contact pr-[10px]'
                   >
-                    {t('common.wd-whatsapp')}
+                    <img
+                      src='/images/whatsapp-35.png'
+                      className='link'
+                      alt='uBox Logo'
+                      width={40}
+                      height={40}
+                    />
                   </a>
                 </div>
                 <div className='language my-auto flex [90px]'>

@@ -12,14 +12,12 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 export const RetrievalOrdersAddModalFormWrapper = () => {
 
   // const dispatch = useDispatch();
-  const { itemIdForUpdate, setItemIdForUpdate, data, fetchOrdersFunc } = useRetrievalOrdersListView();
+  const { retrievalOrderIdForUpdate, setRetrievalOrderIdForUpdate, data, fetchOrdersFunc } = useRetrievalOrdersListView();
   const products = useSelector((state:RootState) => state.admin.products);
   const paymentMethod = useSelector((state:RootState) => state.admin.ref.paymentMethod);
   const paymentStatus = useSelector((state:RootState) => state.admin.ref.paymentStatus);
-  const orderStatus = useSelector((state:RootState) => state.admin.ref.orderStatus);
   const [paymentMethodId, setPaymentMethodId] = useState("");
   const [paymentStatusId, setPaymentStatusId] = useState("");
-  const [orderStatusId, setOrderStatusId] = useState("");
   const [lumpSum, setLumpSum] = useState("");
   const [storageMonth, setStorageMonth] = useState("");
   const [price, setPrice] = useState({
@@ -42,22 +40,21 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
     let __packageBox = "";
     let __paymentStatusId = "";
     let __paymentMethodId = "";
-    let __orderStatusId = "";
     let __lumpSum = "";
     let __storageMonth = "";
 
-    if(data.length > 0 && itemIdForUpdate !== undefined && itemIdForUpdate !== null) {
-      let items = data[itemIdForUpdate].items;
+    if(data.length > 0 && retrievalOrderIdForUpdate !== undefined && retrievalOrderIdForUpdate !== null) {
+      let items = data[retrievalOrderIdForUpdate].items;
       if(items && items.length > 0) {
         items.forEach((item) => {
           if(item.item_id === 2) {
-            __documentBox = item.item_price;
+            __documentBox = item.item_delivery_fee;
           } else if(item.item_id === 4) {
-            __oversizeBox = item.item_price;
+            __oversizeBox = item.item_delivery_fee;
           } else if(item.item_id === 9) {
-            __wardrobeBox = item.item_price;
+            __wardrobeBox = item.item_delivery_fee;
           } else if(item.item_id === 10) {
-            __packageBox = item.item_price;
+            __packageBox = item.item_delivery_fee;
           }
         })
       };
@@ -95,37 +92,18 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
       }
       setQuantity({...__quantity});
 
-      __paymentStatusId = data[itemIdForUpdate].payment_status_id.toString();
-      __paymentMethodId = data[itemIdForUpdate].payment_type_id.toString();
-      __orderStatusId = data[itemIdForUpdate].order_status_id.toString();
-      __lumpSum = data[itemIdForUpdate].total_fee;
-      __storageMonth = data[itemIdForUpdate].storage_month;
+      __paymentMethodId = data[retrievalOrderIdForUpdate].payment_type_id.toString();
+      __lumpSum = data[retrievalOrderIdForUpdate].total_fee;
+      __storageMonth = data[retrievalOrderIdForUpdate].storage_month;
     };
     setLumpSum(__lumpSum);
     setPaymentMethodId(__paymentMethodId);
     setPaymentStatusId(__paymentStatusId);
-    setOrderStatusId(__orderStatusId);
     setStorageMonth(__storageMonth);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, itemIdForUpdate]);
+  }, [data, retrievalOrderIdForUpdate]);
 
   const profileDetailsSchema = Yup.object().shape({
-    emptyout_location_other: Yup.string()
-              .required('Name is required')
-              .min(3, 'Name 3 symbols')
-              .max(50, 'Name 50 symbols'),
-    emptyout_date_other: Yup.date()
-              .required('Date is required'),
-    emptyout_time_other: Yup.string()
-              .required('Time is required'),
-    checkin_location_other: Yup.string()
-              .required('Name is required')
-              .min(3, 'Name 3 symbols')
-              .max(50, 'Name 50 symbols'),
-    checkin_date_other: Yup.date()
-              .required('Date is required'),
-    checkin_time_other: Yup.string()
-              .required('Time is required'),
     checkout_location_other: Yup.string()
               .required('Name is required')
               .min(3, 'Name 3 symbols')
@@ -138,30 +116,22 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
               .required('This field is required.'),
   });
 
-  const initialValues = (itemIdForUpdate == null) ? {
-    emptyout_location_other: "",
-    emptyout_date_other: "",
-    emptyout_time_other: "",
-    checkin_location_other: "",
-    checkin_date_other: "",
-    checkin_time_other: "",
+  const initialValues = (retrievalOrderIdForUpdate == null) ? {
     checkout_location_other: "",
     checkout_date_other: "",
     checkout_time_other: "",
+    empty_return_date_other: "",
+    empty_return_time_other: "",
     special_instruction: "",
     paid_fee: "",
   } : {
-    emptyout_location_other: data[itemIdForUpdate].emptyout_location_other !== null ? data[itemIdForUpdate].emptyout_location_other : "",
-    emptyout_date_other: data[itemIdForUpdate].emptyout_date_other !== null ? data[itemIdForUpdate].emptyout_date_other : "",
-    emptyout_time_other: data[itemIdForUpdate].emptyout_time_other !== null ? data[itemIdForUpdate].emptyout_time_other : "",
-    checkin_location_other: data[itemIdForUpdate].checkin_location_other !== null ? data[itemIdForUpdate].checkin_location_other : "",
-    checkin_date_other: data[itemIdForUpdate].checkin_date_other !== null ? data[itemIdForUpdate].checkin_date_other : "",
-    checkin_time_other: data[itemIdForUpdate].checkin_time_other !== null ? data[itemIdForUpdate].checkin_time_other : "",
-    checkout_location_other: data[itemIdForUpdate].checkout_location_other !== null ? data[itemIdForUpdate].checkout_location_other : "",
-    checkout_date_other: data[itemIdForUpdate].checkout_date_other !== null ? data[itemIdForUpdate].checkout_date_other : "",
-    checkout_time_other: data[itemIdForUpdate].checkout_time_other !== null ? data[itemIdForUpdate].checkout_time_other : "",
-    special_instruction: data[itemIdForUpdate].special_instruction !== null ? data[itemIdForUpdate].special_instruction : "",
-    paid_fee: data[itemIdForUpdate].paid_fee !== null ? data[itemIdForUpdate].paid_fee : "",
+    checkout_location_other: data[retrievalOrderIdForUpdate].checkout_location_other !== null ? data[retrievalOrderIdForUpdate].checkout_location_other : "",
+    checkout_date_other: data[retrievalOrderIdForUpdate].checkout_date_other !== null ? data[retrievalOrderIdForUpdate].checkout_date_other : "",
+    checkout_time_other: data[retrievalOrderIdForUpdate].checkout_time_other !== null ? data[retrievalOrderIdForUpdate].checkout_time_other : "",
+    empty_return_date_other: data[retrievalOrderIdForUpdate].empty_return_date_other !== null ? data[retrievalOrderIdForUpdate].empty_return_date_other : "",
+    empty_return_time_other: data[retrievalOrderIdForUpdate].empty_return_time_other !== null ? data[retrievalOrderIdForUpdate].empty_return_time_other : "",
+    special_instruction: data[retrievalOrderIdForUpdate].special_instruction !== null ? data[retrievalOrderIdForUpdate].special_instruction : "",
+    paid_fee: data[retrievalOrderIdForUpdate].paid_fee !== null ? data[retrievalOrderIdForUpdate].paid_fee : "",
   }
 
   const [loading, setLoading] = useState(false)
@@ -170,14 +140,12 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
       setLoading(true);
-      (itemIdForUpdate == null) ? 
+      (retrievalOrderIdForUpdate == null) ? 
       editRetrievalOrderApi({
         data: {...values,
           quantity,
           price,
           payment_type_id: paymentMethodId,
-          payment_status_id: paymentStatusId,
-          order_status_id: orderStatusId,
           storage_month: storageMonth,
           total_fee: lumpSum,
         }, 
@@ -185,7 +153,7 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
       })
         .then((res) => {
           setLoading(false);
-          setItemIdForUpdate(undefined);
+          setRetrievalOrderIdForUpdate(undefined);
           fetchOrdersFunc();
         })
         .catch((err) => {
@@ -196,16 +164,14 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
           quantity,
           price,
           payment_type_id: paymentMethodId,
-          payment_status_id: paymentStatusId,
-          order_status_id: orderStatusId,
           storage_month: storageMonth,
           total_fee: lumpSum,
         }, 
-        id: data[itemIdForUpdate].id 
+        id: data[retrievalOrderIdForUpdate].id 
       })
         .then((res) => {
           setLoading(false);
-          setItemIdForUpdate(undefined);
+          setRetrievalOrderIdForUpdate(undefined);
           fetchOrdersFunc();
         })
         .catch((err) => {
@@ -215,28 +181,22 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
   });
 
   useEffect(() => {
-    let __subTotalFee = 0;
-    if(quantity.documentBox !== "0" && !isNaN(parseInt(price.documentBox))) {
-      __subTotalFee += parseInt(price.documentBox) * parseInt(quantity.documentBox);
-    }
-    if(quantity.oversizeBox !== "0" && !isNaN(parseInt(price.oversizeBox))) {
-      __subTotalFee += parseInt(price.oversizeBox) * parseInt(quantity.oversizeBox);
-    }
-    if(quantity.packageBox !== "0" && !isNaN(parseInt(price.packageBox))) {
-      __subTotalFee += parseInt(price.packageBox) * parseInt(quantity.packageBox);
-    }
-    if(quantity.wardrobeBox !== "0" && !isNaN(parseInt(price.wardrobeBox))) {
-      __subTotalFee += parseInt(price.wardrobeBox) * parseInt(quantity.wardrobeBox);
-    }
-    let __months = parseInt(storageMonth);
-    if(formik.values.checkin_date_other && formik.values.checkout_date_other) {
-      let __checkin = new Date(formik.values.checkin_date_other);
-      let __checkout = new Date(formik.values.checkout_date_other);
-      __months = Math.ceil((__checkout.getTime() - __checkin.getTime()) / (1000 * 3600 * 24 * 30));
-      setStorageMonth(__months.toString());
-    };
-    let __totalFee = __subTotalFee * __months;
-    setLumpSum(__totalFee.toString());
+    // let __subTotalFee = 0;
+    // if(quantity.documentBox !== "0" && !isNaN(parseInt(price.documentBox))) {
+    //   __subTotalFee += parseInt(price.documentBox) * parseInt(quantity.documentBox);
+    // }
+    // if(quantity.oversizeBox !== "0" && !isNaN(parseInt(price.oversizeBox))) {
+    //   __subTotalFee += parseInt(price.oversizeBox) * parseInt(quantity.oversizeBox);
+    // }
+    // if(quantity.packageBox !== "0" && !isNaN(parseInt(price.packageBox))) {
+    //   __subTotalFee += parseInt(price.packageBox) * parseInt(quantity.packageBox);
+    // }
+    // if(quantity.wardrobeBox !== "0" && !isNaN(parseInt(price.wardrobeBox))) {
+    //   __subTotalFee += parseInt(price.wardrobeBox) * parseInt(quantity.wardrobeBox);
+    // }
+    // let __months = parseInt(storageMonth);
+    // let __totalFee = __subTotalFee * __months;
+    // setLumpSum(__totalFee.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price, quantity, formik.values]);
 
@@ -258,7 +218,7 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
                         disabled
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Code'
-                        value={(itemIdForUpdate === undefined || itemIdForUpdate == null ) ? "" : data[itemIdForUpdate].code}
+                        value={(retrievalOrderIdForUpdate === undefined || retrievalOrderIdForUpdate == null ) ? "" : data[retrievalOrderIdForUpdate].code}
                       />
                     </div>
                   </div>
@@ -271,122 +231,8 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
                         disabled
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Name'
-                        value={(itemIdForUpdate === undefined || itemIdForUpdate == null ) ? "" : data[itemIdForUpdate].client.name}
+                        value={(retrievalOrderIdForUpdate === undefined || retrievalOrderIdForUpdate == null ) ? "" : data[retrievalOrderIdForUpdate].client.name}
                       />
-                    </div>
-                  </div>
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Empty box location</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Empty box location'
-                        {...formik.getFieldProps('emptyout_location_other')}
-                      />
-                      {formik.touched.emptyout_location_other && formik.errors.emptyout_location_other && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.emptyout_location_other}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Empty box date</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='date'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Empty box date'
-                        {...formik.getFieldProps('emptyout_date_other')}
-                      />
-                      {formik.touched.emptyout_date_other && formik.errors.emptyout_date_other && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.emptyout_date_other}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Empty box time</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='string'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Empty box time'
-                        {...formik.getFieldProps('emptyout_time_other')}
-                      />
-                      {formik.touched.emptyout_time_other && formik.errors.emptyout_time_other && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.emptyout_time_other}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Storage location</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Storage location'
-                        {...formik.getFieldProps('checkin_location_other')}
-                      />
-                      {formik.touched.checkin_location_other && formik.errors.checkin_location_other && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.checkin_location_other}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Storage date</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='date'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Storage date'
-                        {...formik.getFieldProps('checkin_date_other')}
-                      />
-                      {formik.touched.checkin_date_other && formik.errors.checkin_date_other && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.checkin_date_other}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Storage time</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Storage time'
-                        {...formik.getFieldProps('checkin_time_other')}
-                      />
-                      {formik.touched.checkin_time_other && formik.errors.checkin_time_other && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.checkin_time_other}</div>
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -448,6 +294,44 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
                   </div>
 
                   <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className='required'>Empty Box return date</span>
+                    </label>
+                    <div className='col-lg-8 fv-row'>
+                      <input
+                        type='date'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholder='Empty Box return date'
+                        {...formik.getFieldProps('empty_return_date_other')}
+                      />
+                      {formik.touched.empty_return_date_other && formik.errors.empty_return_date_other && (
+                        <div className='fv-plugins-message-container'>
+                          <div className='fv-help-block'>{formik.errors.empty_return_date_other}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className='required'>Empty Box return time</span>
+                    </label>
+                    <div className='col-lg-8 fv-row'>
+                      <input
+                        type='text'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholder='Empty Box return time'
+                        {...formik.getFieldProps('empty_return_time_other')}
+                      />
+                      {formik.touched.empty_return_time_other && formik.errors.empty_return_time_other && (
+                        <div className='fv-plugins-message-container'>
+                          <div className='fv-help-block'>{formik.errors.empty_return_time_other}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>Special requirement</label>
                     <div className='col-lg-8 fv-row'>
                       <input
@@ -458,26 +342,6 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
                       />
                     </div>
                   </div> 
-
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Order status</span>
-                    </label>
-                    <div className='col-lg-8 fv-row'>
-                      <select 
-                        className='form-select form-select-solid'
-                        value={orderStatusId}
-                        onChange={(e) => {setOrderStatusId(e.target.value)}}
-                      >
-                        <option>Select order status</option>
-                        {
-                          orderStatus && orderStatus.length > 0 &&
-                          orderStatus.map((element: any, index: number) => 
-                          <option value={element.id} key={index}>{element.description}</option>)
-                        }
-                      </select>
-                    </div>
-                  </div>
                 </div>
 
                 <div className='col-lg-6' style={{paddingLeft: '30px'}}>
@@ -736,10 +600,10 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
                     <div className='col-lg-8 fv-row'>
                       <input
                         type='string'
-                        disabled
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Lump sum'
-                        value={lumpSum + ".00"}
+                        value={lumpSum}
+                        onChange={(e) => {setLumpSum(e.target.value)}}
                       />
                     </div>
                   </div>
