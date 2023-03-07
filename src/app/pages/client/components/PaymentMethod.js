@@ -15,12 +15,11 @@ import {getPaymentMethod} from '../../../store/actions/order'
 import {retrievalPayApi} from '../../../store/apis/client'
 
 export default function PaymentMethod(props) {
-  const {orderId, cartInfo, retrievalOrder} = props
+  const {orderId, cartInfo, retrievalOrder, confirmOrder, setComfirmOrder, setOrderState} = props
   const [isLoading, setIsLoading] = useState(false)
   const [paymentType, setPaymentType] = useState(PaymentType.CREDITCARD)
   const {t} = useTranslation()
   const [paymentCode, setPaymentCode] = useState('')
-  const [order, setOrder] = useState({})
   const [payStatus, setPayStatus] = useState(false)
   const [notify, setNotify] = useState({title: '', message: '', visible: false, status: 0})
   const [lang, setLang] = useState('')
@@ -52,6 +51,7 @@ export default function PaymentMethod(props) {
               clearInterval(payConfirmTimer)
               setPayStatus(true)
               if (res.data.payment_status === 'PAID') {
+                setOrderState(true)
                 showNotification({
                   title: 'success',
                   message: 'Total fee was paid fully',
@@ -130,7 +130,7 @@ export default function PaymentMethod(props) {
         stripeToken: '',
         client_id: user.id,
         order_id: orderId,
-        order_code: order.code ? order.code : null,
+        order_code: confirmOrder.code ? confirmOrder.code : null,
         payment_code: paymentCode,
         payment_type: paymentType,
         cart_info: cartInfo,
@@ -141,7 +141,7 @@ export default function PaymentMethod(props) {
           if (res.data.success === true) {
             openCheckoutUrl(res.data.data)
             setPaymentCode(res.data.code)
-            setOrder(res.data.retrieval_order)
+            setComfirmOrder(res.data.retrieval_order)
           } else {
             setPaymentCode('')
             console.log('responseError', res.data)
@@ -173,7 +173,7 @@ export default function PaymentMethod(props) {
       stripeToken: stripeToken,
       client_id: user.id,
       order_id: orderId,
-      order_code: order.code ? order.code : null,
+      order_code: confirmOrder.code ? confirmOrder.code : null,
       payment_code: paymentCode,
       payment_type: paymentType,
       cart_info: cartInfo,
@@ -188,7 +188,8 @@ export default function PaymentMethod(props) {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
-          setOrder(res.data.retrieval_order)
+          setComfirmOrder(res.data.retrieval_order)
+          setOrderState(true)
           setPayStatus(true)
         } else if (res.data.code === 'error') {
           console.log('responseError', res.data)

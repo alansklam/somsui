@@ -60,6 +60,12 @@ const SidebarMenuMain = () => {
         <SidebarMenuItem to='/admin/orders/7' title='HKBU' hasBullet={true} />
         <SidebarMenuItem to='/admin/orders/0' title='ubox Group' hasBullet={true} />
       </SidebarMenuItemWithSub>
+      <SidebarMenuItem
+        to='/admin/retrieval-order'
+        icon='/media/icons/duotune/general/gen040.svg'
+        title='Retrieval Orders List'
+        fontIcon='bi-app-indicator'
+      />
     </>
   )
 }

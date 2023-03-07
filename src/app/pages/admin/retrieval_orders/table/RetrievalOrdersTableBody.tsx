@@ -1,12 +1,12 @@
-import { useOrdersListView } from "../core/OrdersListViewProvider";
+import { useRetrievalOrdersListView } from "../core/RetrievalOrdersListViewProvider";
 import { Link } from "react-router-dom";
-import { sendInvoiceApi } from "../../../../store/apis/admin";
-import { notification } from "antd";
+// import { sendInvoiceApi } from "../../../../store/apis/admin";
+// import { notification } from "antd";
 
-export const OrdersTableBody = (props: any) => {
+export const RetrievalOrdersTableBody = (props: any) => {
 
   const {listData, setListData} = props;
-  const { setItemIdForUpdate, setClientIdForUpdate } = useOrdersListView();
+  const { setClientIdForUpdate } = useRetrievalOrdersListView();
 
   const selectHandler = (index:number, state:boolean) => {
     let __data = listData[index];
@@ -17,25 +17,25 @@ export const OrdersTableBody = (props: any) => {
       ...listData.slice(index + 1),
     ]);
   }
-  const onSendInvoiceHandler = (id: number) => {
-    sendInvoiceApi({id: id})
-      .then(() => {
-        notification.success({
-          message: 'Success',
-          description: 'Send Invoice successfully',
-          placement: 'topRight',
-          duration: 2,
-        });
-      })
-      .catch(() => {
-        notification.error({
-          message: 'Error',
-          description: 'Send Invoice is failed',
-          placement: 'topRight',
-          duration: 2,
-        });
-      })
-  }
+  // const onSendInvoiceHandler = (id: number) => {
+  //   sendInvoiceApi({id: id})
+  //     .then(() => {
+  //       notification.success({
+  //         message: 'Success',
+  //         description: 'Send Invoice successfully',
+  //         placement: 'topRight',
+  //         duration: 2,
+  //       });
+  //     })
+  //     .catch(() => {
+  //       notification.error({
+  //         message: 'Error',
+  //         description: 'Send Invoice is failed',
+  //         placement: 'topRight',
+  //         duration: 2,
+  //       });
+  //     })
+  // }
 
   return (
     <>
@@ -91,19 +91,18 @@ export const OrdersTableBody = (props: any) => {
                   <span 
                     className='text-blue fw-bold d-block fs-6'
                     style={{cursor: 'pointer'}}
-                    onClick={() => {setItemIdForUpdate(index)}}
                   >
-                    {data?.code}
+                    {data.code}
                   </span>
               </td>
               <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
-                    {data?.paperBoxes}
+                    {data.paperBoxes}
                   </span>
               </td>
               <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
-                    {data?.wardrobe}
+                    {data.wardrobe}
                   </span>
               </td>
               <td className='text-center'>
@@ -126,24 +125,19 @@ export const OrdersTableBody = (props: any) => {
                     {data.vacuumBags}
                   </span>
               </td>
-              <td className='text-center'>
+              {/* <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
                     {data.storage_month}
                   </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.emptyout_date_other}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.checkin_date_other}
-                  </span>
-              </td>
+              </td> */}
               <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
                     {data.checkout_date_other}
+                  </span>
+              </td>
+              <td className='text-center'>
+                  <span className='text-dark fw-bold d-block fs-6'>
+                    {data.empty_return_date_other}
                   </span>
               </td>
               <td className='text-center'>
@@ -175,12 +169,12 @@ export const OrdersTableBody = (props: any) => {
                     {data.balance}
                   </Link>
               </td>
-              <td className='text-center'>
+              {/* <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
                     {data.status.code}
                   </span>
-              </td>
-              <td>
+              </td> */}
+              {/* <td>
                 <div className='d-flex justify-content-end flex-shrink-0'>
                   {
                     parseInt(data.balance) !== 0 && 
@@ -192,7 +186,7 @@ export const OrdersTableBody = (props: any) => {
                     </button>
                   }
                 </div>
-              </td>
+              </td> */}
             </tr>
           )
         }) :

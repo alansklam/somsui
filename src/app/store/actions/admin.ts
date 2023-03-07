@@ -6,6 +6,7 @@ import { fetchPeriodsApi,
     fetchPromotionsApi, 
     fetchPaymentsApi, 
     fetchOrdersApi,
+    fetchRetrievalOrdersApi,
     fetchProductsApi,
     fetchRefApi
 } from "../apis/admin";
@@ -132,6 +133,22 @@ export const fetchOrders = (params: any):any => {
         } catch (e) {
             dispatch({
                 type: AdminActionTypes.FETCH_ORDERS,
+                payload: []
+            })
+        }
+    }
+}
+
+export const fetchRetrievalOrders = (params: any):any => {
+    return async (dispatch: Dispatch<AdminAction>) => {
+        try {
+            dispatch({type: AdminActionTypes.FETCH_DATA_ADMIN})
+            const response = fetchRetrievalOrdersApi(params);
+            const payloadData = (await response).data;
+            dispatch({type: AdminActionTypes.FETCH_RETRIEVAL_ORDERS, payload: payloadData})
+        } catch (e) {
+            dispatch({
+                type: AdminActionTypes.FETCH_RETRIEVAL_ORDERS,
                 payload: []
             })
         }

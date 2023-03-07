@@ -1,26 +1,19 @@
 import {useState, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
-import {useDispatch, useSelector} from 'react-redux'
 import dayjs from 'dayjs'
 import {createTheme, Grid, MenuItem, ThemeProvider, RadioGroup} from '@mui/material'
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker'
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
-// import {updateOrder} from '../../../store/actions/client'
-// import LoadingSpinner from '../../../components/loading-spinner'
-// import {ShowNotification} from '../../../components/notification'
-// import {Link} from 'react-router-dom'
-// import {setStoreExtendDate} from '../../../store/actions/client'
 import CssFormControlLabel from '../../../components/custom-components/FormControlLabel'
 import CustomColorRadio from '../../../components/custom-components/RadioButton'
 import CssTextField from '../../../components/custom-components/TextField'
-import NumberInput from '../../../components/quantity/NumberInput'
 import Quantity from '../../../components/quantity'
 
 export default function RetrievalEdit(props) {
   const {order, products, retrievalOrder, setRetrievalOrder, cartInfo, setCartInfo, onCartHandler} =
     props
-  const {t, i18n} = useTranslation()
+  const {t} = useTranslation()
 
   const [retrievalDate, setRetrievalDate] = useState(dayjs())
   const [retrievalTimeIndex, setRetrievalTimeIndex] = useState(0)
@@ -29,7 +22,6 @@ export default function RetrievalEdit(props) {
   const [isSameDay, setIsSameDay] = useState(1)
   const [needWalk, setNeedWalk] = useState(0)
   const [allReturn, setAllReturn] = useState(1)
-  const [floors, setFloors] = useState(0)
 
   useEffect(() => {
     if (order.emptyout_date_other) {
@@ -48,6 +40,7 @@ export default function RetrievalEdit(props) {
         qr_code: order.remark_qrcode,
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
 
   const handleRetrievalDateChange = (newValue) => {
@@ -154,19 +147,6 @@ export default function RetrievalEdit(props) {
     },
   ]
 
-  const getTimeIndex = (time) => {
-    switch (time) {
-      case '09:00 - 12:00':
-        return 0
-      case '13:00 - 15:00':
-        return 1
-      case '15:00 - 18:00':
-        return 2
-      default:
-        return 0
-    }
-  }
-
   const getTime = (index) => {
     switch (index) {
       case 0:
@@ -190,12 +170,6 @@ export default function RetrievalEdit(props) {
       primary: customColor,
     },
   })
-
-  const getInitQty = (item) => {
-    let quantity = 0
-
-    return quantity
-  }
 
   return (
     <>
@@ -323,7 +297,7 @@ export default function RetrievalEdit(props) {
                 id='retrievalAddress'
                 label={t('customer-retrieval.wd-retrieval-address')}
                 variant='standard'
-                value={retrievalOrder?.retrieval_address ? retrievalOrder?.retrieval_address : ''}
+                value={retrievalOrder.retrieval_address ? retrievalOrder.retrieval_address : ''}
                 onChange={(e) => {
                   setRetrievalOrder({
                     ...retrievalOrder,
@@ -393,7 +367,7 @@ export default function RetrievalEdit(props) {
                   label={t('customer-retrieval.wd-special-instruction')}
                   variant='standard'
                   value={
-                    retrievalOrder?.special_instruction ? retrievalOrder?.special_instruction : ''
+                    retrievalOrder.special_instruction ? retrievalOrder.special_instruction : ''
                   }
                   onChange={(e) => {
                     setRetrievalOrder({
@@ -464,7 +438,7 @@ export default function RetrievalEdit(props) {
                   id='retrivalQrCode'
                   label={t('customer-retrieval.an-which-item-retrieval')}
                   variant='standard'
-                  value={retrievalOrder?.qr_code}
+                  value={retrievalOrder.qr_code ? retrievalOrder.qr_code : ''}
                   onChange={(e) => {
                     setRetrievalOrder({
                       ...retrievalOrder,

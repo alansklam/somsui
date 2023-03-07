@@ -1,15 +1,8 @@
-import {useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
-import {PlusOutlined} from '@ant-design/icons'
-import {Button, Input} from 'antd'
 
 export default function RetrievalCart(props) {
   const {cartInfo, retrievalOrder} = props
   const {t, i18n} = useTranslation()
-
-  useEffect(() => {
-    console.log('cartInfo', cartInfo)
-  }, [cartInfo])
 
   return (
     <div className='cart-container'>

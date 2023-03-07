@@ -8,6 +8,7 @@ import { PromotionsList } from './promotions/PromotionsList'
 import { PaymentsList } from './payments/PaymentsList'
 import { OrdersList } from './orders/OrdersList'
 import { AdminAuth } from './auth/AdminAuth'
+import { RetrievalOrdersList } from './retrieval_orders/RetrievalOrdersList'
 
 const useAuth = () => {
   const adminAuth: any = localStorage.getItem("admin-user");
@@ -40,6 +41,7 @@ export const AdminPage = () => {
               <Route path='/payments/:orderId' element={<PaymentsList />} />
               <Route path='/orders/:uid' element={<OrdersList />} />
               <Route path='/orders/:uid/:clientName' element={<OrdersList />} />
+              <Route path='/retrieval-order' element={<RetrievalOrdersList />} />
             </Route>
             <Route path='/*' element={<ErrorsPage />} />
           </>

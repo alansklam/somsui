@@ -9,6 +9,7 @@ const initialState: AdminState = {
     promotions: [],
     payments: [],
     orders: [],
+    retrievalOrders: [],
     pagination: {},
     error: null,
     loading: false
@@ -48,6 +49,11 @@ export const adminReducer = (state = initialState, action: AdminAction): AdminSt
         case AdminActionTypes.FETCH_ORDERS:
             return {...state, loading: false,
                 orders: action.payload.data,
+                pagination: action.payload.pagination
+            }
+        case AdminActionTypes.FETCH_RETRIEVAL_ORDERS:
+            return {...state, loading: false,
+                retrievalOrders: action.payload.data,
                 pagination: action.payload.pagination
             }
         default:

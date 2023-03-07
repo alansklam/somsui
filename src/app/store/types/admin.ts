@@ -7,6 +7,7 @@ export interface AdminState {
   promotions: any[],
   payments: any[],
   orders: any[],
+  retrievalOrders: any[],
   pagination: any,
   loading: boolean;
   error: null | string;
@@ -21,6 +22,7 @@ export enum AdminActionTypes {
   FETCH_PROMOTIONS = 'FETCH_PROMOTIONS',
   FETCH_PAYMENTS = 'FETCH_PAYMENTS',
   FETCH_ORDERS = 'FETCH_ORDERS',
+  FETCH_RETRIEVAL_ORDERS = 'FETCH_RETRIEVAL_ORDERS',
   FETCH_REF = 'FETCH_REF',
 }
 interface FetchDataAdminAction {
@@ -58,6 +60,10 @@ interface fetchOrders {
   type: AdminActionTypes.FETCH_ORDERS;
   payload: any;
 }
+interface fetchRetrievalOrders {
+  type: AdminActionTypes.FETCH_RETRIEVAL_ORDERS;
+  payload: any;
+}
 
 
 export type AdminAction =
@@ -69,4 +75,5 @@ export type AdminAction =
   | fetchPromotions
   | fetchPayments
   | fetchOrders
+  | fetchRetrievalOrders
   | FetchRef
