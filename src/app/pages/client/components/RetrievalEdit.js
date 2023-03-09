@@ -47,7 +47,7 @@ export default function RetrievalEdit(props) {
     let __storage_month = dayjs(newValue) - dayjs(order.emptyout_date_other)
     __storage_month = dayjs(__storage_month).format('MM')
     setRetrievalDate(newValue)
-    if (isSameDay) {
+    if (isSameDay === 1) {
       setRetrievalOrder({
         ...retrievalOrder,
         retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
@@ -56,11 +56,24 @@ export default function RetrievalEdit(props) {
       })
       setEmptyBoxRetrunDate(newValue)
     } else {
-      setRetrievalOrder({
-        ...retrievalOrder,
-        retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
-        storage_month: parseInt(__storage_month),
-      })
+      if (
+        dayjs(newValue) > dayjs(emptyBoxRetrunDate) ||
+        dayjs(newValue).add(14, 'day') < dayjs(emptyBoxRetrunDate)
+      ) {
+        setRetrievalOrder({
+          ...retrievalOrder,
+          retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
+          empty_box_return_date: dayjs(newValue).format('YYYY-MM-DD'),
+          storage_month: parseInt(__storage_month),
+        })
+        setEmptyBoxRetrunDate(newValue)
+      } else {
+        setRetrievalOrder({
+          ...retrievalOrder,
+          retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
+          storage_month: parseInt(__storage_month),
+        })
+      }
     }
   }
   const handleRetrievalTimeChange = (e) => {
@@ -252,7 +265,11 @@ export default function RetrievalEdit(props) {
                     label={t('common.wd-empty-box-return-date')}
                     inputFormat='DD/MM/YYYY'
                     minDate={retrievalDate}
-                    maxDate={order?.storage_expired_date}
+                    maxDate={
+                      dayjs(order?.storage_expired_date) < dayjs(retrievalDate).add(14, 'day')
+                        ? order?.storage_expired_date
+                        : dayjs(retrievalDate).add(14, 'day')
+                    }
                     value={emptyBoxRetrunDate}
                     onChange={handleEmptyBoxReturnDateChange}
                     renderInput={(params) => (
@@ -402,7 +419,7 @@ export default function RetrievalEdit(props) {
             {products?.store_items &&
               order.items &&
               order.items.map((item, index) =>
-                item.item_qty === 0 ? (
+                item.item_qty === 0 || item.item_category === 'bag' ? (
                   <div key={index}></div>
                 ) : (
                   <div

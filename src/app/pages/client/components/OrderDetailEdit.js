@@ -60,6 +60,7 @@ export const OrderDetailEdit = (props) => {
       setLadenReturnTimeIndex(getTimeIndex(order?.checkin_time_other))
       setTentativeDate(order?.checkout_date_other)
       setTentativeTimeIndex(getTimeIndex(order?.checkout_time_other))
+      setRetrievalDate(order?.checkout_date_other)
       setExtendDate(order?.storage_expired_date)
       setAddress(order.emptyout_location_other)
 
@@ -96,13 +97,22 @@ export const OrderDetailEdit = (props) => {
         break
       case 14:
       case 16:
-      case 20:
         __permitEdit = {
           ...__permitEdit,
           permitDelivery: false,
           permitLadenReturn: false,
           permitTentative: true,
           permitRetrieval: true,
+          permitExtend: true,
+        }
+        break
+      case 20:
+        __permitEdit = {
+          ...__permitEdit,
+          permitDelivery: false,
+          permitLadenReturn: false,
+          permitTentative: true,
+          permitRetrieval: false,
           permitExtend: true,
         }
         break
@@ -132,7 +142,6 @@ export const OrderDetailEdit = (props) => {
       default:
         break
     }
-
     setPermitEdit(__permitEdit)
   }
 
