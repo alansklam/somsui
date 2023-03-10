@@ -77,13 +77,13 @@ const Header = (props) => {
                     <img
                       src='/images/home-35px.png'
                       className='link'
-                      alt='uBox Logo'
+                      alt='ubox homepage'
                       width={40}
                       height={40}
                     />
                   </a>
                   <a
-                    href='https://wa.me/85296566509'
+                    href='https://wa.me/85261945500'
                     target='_blank'
                     rel='noreferrer'
                     className='text-header text-yellow contact pr-[10px]'
@@ -91,7 +91,7 @@ const Header = (props) => {
                     <img
                       src='/images/whatsapp-35.png'
                       className='link'
-                      alt='uBox Logo'
+                      alt='ubox Logo'
                       width={40}
                       height={40}
                     />
