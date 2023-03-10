@@ -44,12 +44,8 @@ export default function RetrievalEdit(props) {
   }, [order])
 
   const getQrcode = () => {
-    let __qr_code = ''
-    order.items.forEach((item, index) => {
-      if (item.item_qty !== 0 || item.item_category === 'bag') {
-        __qr_code = __qr_code + item.item.qr_code + ' '
-      }
-    })
+    let __qr_code = order?.remark_qrcode
+    __qr_code = __qr_code.replace(/\n/g, ' ')
     return __qr_code
   }
 
