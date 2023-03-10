@@ -103,11 +103,6 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
-                    {data?.wardrobe}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
                     {data.standardBoxes}
                   </span>
               </td>
@@ -118,7 +113,7 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
-                    {data.walkup}
+                    {data?.wardrobe}
                   </span>
               </td>
               <td className='text-center'>
@@ -129,6 +124,11 @@ export const OrdersTableBody = (props: any) => {
               <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
                     {data.storage_month}
+                  </span>
+              </td>
+              <td className='text-center'>
+                  <span className='text-dark fw-bold d-block fs-6'>
+                    {data.walkup}
                   </span>
               </td>
               <td className='text-center'>

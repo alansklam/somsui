@@ -140,20 +140,11 @@ const RetrievalOrdersTable = () => {
                 </th>
                 <th className='min-w-75px text-center'>
                   <div 
-                    className={pagination.orderBy ==="wardrobe" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("wardrobe")}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Storage box
-                  </div>
-                </th>
-                <th className='min-w-75px text-center'>
-                  <div 
                     className={pagination.orderBy ==="standardBoxes" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
                     onClick={() => onSortHandler("standardBoxes")}
                     style={{cursor: 'pointer'}}
                   >
-                    Large object
+                    Storage Box
                   </div>
                 </th>
                 <th className='min-w-75px text-center'>
@@ -167,8 +158,8 @@ const RetrievalOrdersTable = () => {
                 </th>
                 <th className='min-w-75px text-center'>
                   <div 
-                    className={pagination.orderBy ==="walkup" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("walkup")}
+                    className={pagination.orderBy ==="wardrobe" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
+                    onClick={() => onSortHandler("wardrobe")}
                     style={{cursor: 'pointer'}}
                   >
                     Hanging suitcase
@@ -192,6 +183,15 @@ const RetrievalOrdersTable = () => {
                     Storage period(month)
                   </div>
                 </th> */}
+                <th className='min-w-75px text-center'>
+                  <div 
+                    className={pagination.orderBy ==="walkup" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
+                    onClick={() => onSortHandler("walkup")}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Walk up
+                  </div>
+                </th>
                 <th className='min-w-125px text-center'>
                   <div 
                     className={pagination.orderBy ==="checkout_date_other" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 

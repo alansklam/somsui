@@ -37,11 +37,21 @@ export default function RetrievalEdit(props) {
         empty_box_return_time: getTime(0),
         retrieval_address: order.emptyout_location_other,
         special_instruction: order.special_instruction,
-        qr_code: order.remark_qrcode,
+        qr_code: getQrcode(),
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
+
+  const getQrcode = () => {
+    let __qr_code = ''
+    order.items.forEach((item, index) => {
+      if (item.item_qty !== 0 || item.item_category === 'bag') {
+        __qr_code = __qr_code + item.item.qr_code + ' '
+      }
+    })
+    return __qr_code
+  }
 
   const handleRetrievalDateChange = (newValue) => {
     let __storage_month = dayjs(newValue) - dayjs(order.emptyout_date_other)
@@ -141,9 +151,9 @@ export default function RetrievalEdit(props) {
       })
     }
   }
-  const handleIsAllReturnRadioChange = (e) => {
-    setAllReturn(Number(e.target.value))
-  }
+  // const handleIsAllReturnRadioChange = (e) => {
+  //   setAllReturn(Number(e.target.value))
+  // }
 
   const timelist = [
     {
@@ -396,7 +406,7 @@ export default function RetrievalEdit(props) {
               </div>
             </Grid>
           </div>
-          <div className='mt-[25px]'>
+          {/* <div className='mt-[25px]'>
             <Grid container>
               <Grid item xs={12} sm={8} md={8} className='align-items-center'>
                 <span className='text-normal'>{t('customer-retrieval.an-want-all-items')}</span>
@@ -414,8 +424,8 @@ export default function RetrievalEdit(props) {
                 </RadioGroup>
               </Grid>
             </Grid>
-          </div>
-          <div className='row align-items-center justify-around pr-[20px]'>
+          </div> */}
+          <div className='row align-items-center justify-around pr-[20px] pt-[20px]'>
             {products?.store_items &&
               order.items &&
               order.items.map((item, index) =>

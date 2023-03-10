@@ -1,21 +1,16 @@
-import { useRetrievalOrdersListView } from "../core/RetrievalOrdersListViewProvider";
-import { Link } from "react-router-dom";
+import {useRetrievalOrdersListView} from '../core/RetrievalOrdersListViewProvider'
+import {Link} from 'react-router-dom'
 // import { sendInvoiceApi } from "../../../../store/apis/admin";
 // import { notification } from "antd";
 
 export const RetrievalOrdersTableBody = (props: any) => {
+  const {listData, setListData} = props
+  const {setClientIdForUpdate, setRetrievalOrderIdForUpdate} = useRetrievalOrdersListView()
 
-  const {listData, setListData} = props;
-  const { setClientIdForUpdate, setRetrievalOrderIdForUpdate } = useRetrievalOrdersListView();
-
-  const selectHandler = (index:number, state:boolean) => {
-    let __data = listData[index];
-    __data.checked = state;
-    setListData([
-      ...listData.slice(0, index),
-      __data,
-      ...listData.slice(index + 1),
-    ]);
+  const selectHandler = (index: number, state: boolean) => {
+    let __data = listData[index]
+    __data.checked = state
+    setListData([...listData.slice(0, index), __data, ...listData.slice(index + 1)])
   }
   // const onSendInvoiceHandler = (id: number) => {
   //   sendInvoiceApi({id: id})
@@ -39,92 +34,72 @@ export const RetrievalOrdersTableBody = (props: any) => {
 
   return (
     <>
-      {
-        listData.length > 0 ?
-        listData.map((data: any, index:number) => {
+      {listData.length > 0 ? (
+        listData.map((data: any, index: number) => {
           return (
             <tr key={index}>
               <td>
                 <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                  <input 
-                    className='form-check-input widget-9-check' 
-                    type='checkbox' 
-                    checked={data.checked ? data.checked : false} 
+                  <input
+                    className='form-check-input widget-9-check'
+                    type='checkbox'
+                    checked={data.checked ? data.checked : false}
                     onChange={(e) => {
-                      selectHandler(index, e.target.checked);
+                      selectHandler(index, e.target.checked)
                     }}
                   />
                 </div>
               </td>
               <td>
                 <div className='d-flex align-items-center'>
-                  <span 
+                  <span
                     className='text-blue fw-bold fs-6'
                     style={{cursor: 'pointer'}}
-                    onClick={() => {setClientIdForUpdate(index)}}
+                    onClick={() => {
+                      setClientIdForUpdate(index)
+                    }}
                   >
                     {data.client?.name}
                   </span>
                 </div>
               </td>
               <td>
-                <span className='text-dark fw-bold d-block fs-6'>
-                  {data.client?.email}
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.email}</span>
+              </td>
+              <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.contact}</span>
+              </td>
+              <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.wechat}</span>
+              </td>
+              <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
+              </td>
+              <td className='text-center'>
+                <span
+                  className='text-blue fw-bold d-block fs-6'
+                  style={{cursor: 'pointer'}}
+                  onClick={() => {
+                    setRetrievalOrderIdForUpdate(index)
+                  }}
+                >
+                  {data.code}
                 </span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.client?.contact}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.paperBoxes}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.client?.wechat}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.standardBoxes}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.client?.student_id}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.oversizeItems}</span>
               </td>
               <td className='text-center'>
-                  <span 
-                    className='text-blue fw-bold d-block fs-6'
-                    style={{cursor: 'pointer'}}
-                    onClick={() => {setRetrievalOrderIdForUpdate(index)}}
-                  >
-                    {data.code}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.wardrobe}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.paperBoxes}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.wardrobe}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.standardBoxes}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.oversizeItems}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.walkup}
-                  </span>
-              </td>
-              <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.vacuumBags}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.vacuumBags}</span>
               </td>
               {/* <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
@@ -132,43 +107,36 @@ export const RetrievalOrdersTableBody = (props: any) => {
                   </span>
               </td> */}
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.checkout_date_other}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.walkup}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.empty_return_date_other}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.checkout_date_other}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.client?.address1}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {data.empty_return_date_other}
+                </span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.special_instruction}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.address1}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.total_fee}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.special_instruction}</span>
               </td>
               <td className='text-center'>
-                  <span className='text-dark fw-bold d-block fs-6'>
-                    {data.paid_fee}
-                  </span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.total_fee}</span>
               </td>
               <td className='text-center'>
-                  <Link 
-                    to={'/admin/payments/' + data.id}
-                    className='text-blue fw-bold d-block fs-6'
-                    style={{cursor: 'pointer'}}
-                  >
-                    {data.balance}
-                  </Link>
+                <span className='text-dark fw-bold d-block fs-6'>{data.paid_fee}</span>
+              </td>
+              <td className='text-center'>
+                <Link
+                  to={'/admin/payments/' + data.id}
+                  className='text-blue fw-bold d-block fs-6'
+                  style={{cursor: 'pointer'}}
+                >
+                  {data.balance}
+                </Link>
               </td>
               {/* <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
@@ -190,12 +158,12 @@ export const RetrievalOrdersTableBody = (props: any) => {
               </td> */}
             </tr>
           )
-        }) :
+        })
+      ) : (
         <tr>
-           <></>
+          <></>
         </tr>
-      }
-       
+      )}
     </>
   )
 }

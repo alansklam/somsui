@@ -63,7 +63,6 @@ export const OrderDetailEdit = (props) => {
       setRetrievalDate(order?.checkout_date_other)
       setExtendDate(order?.storage_expired_date)
       setAddress(order.emptyout_location_other)
-
       getPermitEdit()
       dispatch(setStoreExtendDate(order?.storage_expired_date))
     }
@@ -101,21 +100,12 @@ export const OrderDetailEdit = (props) => {
           ...__permitEdit,
           permitDelivery: false,
           permitLadenReturn: false,
-          permitTentative: true,
+          permitTentative: false,
           permitRetrieval: true,
           permitExtend: true,
         }
         break
       case 20:
-        __permitEdit = {
-          ...__permitEdit,
-          permitDelivery: false,
-          permitLadenReturn: false,
-          permitTentative: true,
-          permitRetrieval: false,
-          permitExtend: true,
-        }
-        break
       case 24:
       case 25:
         __permitEdit = {
@@ -123,8 +113,8 @@ export const OrderDetailEdit = (props) => {
           permitDelivery: false,
           permitLadenReturn: false,
           permitTentative: false,
-          permitRetrieval: true,
-          permitExtend: true,
+          permitRetrieval: false,
+          permitExtend: false,
         }
         break
       case 28:
@@ -295,6 +285,7 @@ export const OrderDetailEdit = (props) => {
                 label={t('common.wd-empty-box-delivery')}
                 inputFormat='DD/MM/YYYY'
                 minDate={order?.emptyout_date_other}
+                maxDate={order?.storage_expired_date}
                 value={deliveryDate}
                 onChange={handleDeliveryDateChange}
                 disabled={!permitEdit.permitDelivery}
@@ -448,7 +439,11 @@ export const OrderDetailEdit = (props) => {
                     label={t('common.wd-retrieval-date')}
                     inputFormat='DD/MM/YYYY'
                     value={retrievalDate}
-                    minDate={dayjs()}
+                    minDate={
+                      dayjs() > dayjs(order?.emptyout_date_other)
+                        ? dayjs()
+                        : dayjs(order?.emptyout_date_other)
+                    }
                     onChange={handleRetrievalDateChange}
                     disabled={!permitEdit.permitRetrieval}
                     renderInput={(params) => (
