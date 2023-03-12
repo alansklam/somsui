@@ -433,7 +433,6 @@ export default function RetrievalEdit(props) {
                   disabled={true}
                 >
                   <CssFormControlLabel value={1} control={<CustomColorRadio />} label='Yes' />
-                  <CssFormControlLabel value={0} control={<CustomColorRadio />} label='No' />
                 </RadioGroup>
               </Grid>
             </Grid>
