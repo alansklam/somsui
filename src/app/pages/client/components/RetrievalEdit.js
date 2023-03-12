@@ -21,12 +21,29 @@ export default function RetrievalEdit(props) {
   const [emptyBoxReturnTimeIndex, setEmptyBoxReturnTimeIndex] = useState(0)
   const [isSameDay, setIsSameDay] = useState(1)
   const [needWalk, setNeedWalk] = useState(0)
-  const [allReturn, setAllReturn] = useState(1)
+  const allReturn = 1
 
   useEffect(() => {
     if (order.emptyout_date_other) {
       let __storage_month = dayjs() - dayjs(order.emptyout_date_other)
       __storage_month = dayjs(__storage_month).format('MM')
+
+      if (dayjs() <= dayjs(order?.checkin_date_other)) {
+        setRetrievalDate(order?.checkin_date_other)
+        setEmptyBoxRetrunDate(order?.checkin_date_other)
+
+        setRetrievalOrder({
+          ...retrievalOrder,
+          storage_month: parseInt(__storage_month),
+          retrieval_date: dayjs(order?.checkin_date_other).format('YYYY-MM-DD'),
+          retrieval_time: getTime(0),
+          empty_box_return_date: dayjs(order?.checkin_date_other).format('YYYY-MM-DD'),
+          empty_box_return_time: getTime(0),
+          retrieval_address: order.emptyout_location_other,
+          special_instruction: order.special_instruction,
+          qr_code: getQrcode(),
+        })
+      }
 
       setRetrievalOrder({
         ...retrievalOrder,
@@ -44,7 +61,7 @@ export default function RetrievalEdit(props) {
   }, [order])
 
   const getQrcode = () => {
-    let __qr_code = order?.remark_qrcode
+    let __qr_code = order?.remark_qrcode ? order?.remark_qrcode : ''
     __qr_code = __qr_code.replace(/\n/g, ' ')
     return __qr_code
   }
@@ -402,7 +419,7 @@ export default function RetrievalEdit(props) {
               </div>
             </Grid>
           </div>
-          {/* <div className='mt-[25px]'>
+          <div className='mt-[25px]'>
             <Grid container>
               <Grid item xs={12} sm={8} md={8} className='align-items-center'>
                 <span className='text-normal'>{t('customer-retrieval.an-want-all-items')}</span>
@@ -413,14 +430,14 @@ export default function RetrievalEdit(props) {
                   aria-labelledby='demo-radio-buttons-group-label'
                   name='radio-buttons-group'
                   value={allReturn}
-                  onChange={handleIsAllReturnRadioChange}
+                  disabled={true}
                 >
                   <CssFormControlLabel value={1} control={<CustomColorRadio />} label='Yes' />
                   <CssFormControlLabel value={0} control={<CustomColorRadio />} label='No' />
                 </RadioGroup>
               </Grid>
             </Grid>
-          </div> */}
+          </div>
           <div className='row align-items-center justify-around pr-[20px] pt-[20px]'>
             {products?.store_items &&
               order.items &&
@@ -462,12 +479,13 @@ export default function RetrievalEdit(props) {
                   label={t('customer-retrieval.an-which-item-retrieval')}
                   variant='standard'
                   value={retrievalOrder.qr_code ? retrievalOrder.qr_code : ''}
-                  onChange={(e) => {
-                    setRetrievalOrder({
-                      ...retrievalOrder,
-                      qr_code: e.target.value,
-                    })
-                  }}
+                  readOnly
+                  // onChange={(e) => {
+                  //   setRetrievalOrder({
+                  //     ...retrievalOrder,
+                  //     qr_code: e.target.value,
+                  //   })
+                  // }}
                 />
               </div>
             </Grid>
