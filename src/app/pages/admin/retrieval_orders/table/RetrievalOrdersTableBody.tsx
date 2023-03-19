@@ -98,9 +98,9 @@ export const RetrievalOrdersTableBody = (props: any) => {
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.wardrobe}</span>
               </td>
-              <td className='text-center'>
+              {/* <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.vacuumBags}</span>
-              </td>
+              </td> */}
               {/* <td className='text-center'>
                   <span className='text-dark fw-bold d-block fs-6'>
                     {data.storage_month}
@@ -118,7 +118,9 @@ export const RetrievalOrdersTableBody = (props: any) => {
                 </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.client?.address1}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {data.checkout_location_other}
+                </span>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.special_instruction}</span>
