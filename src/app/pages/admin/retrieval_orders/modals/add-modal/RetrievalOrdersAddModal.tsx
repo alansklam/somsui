@@ -1,13 +1,12 @@
 import {useEffect} from 'react'
 // import {UserEditModalHeader} from './UserEditModalHeader'
 // import {UserEditModalFormWrapper} from './UserEditModalFormWrapper'
-import { KTSVG } from '../../../../../../_metronic/helpers'
-import { useRetrievalOrdersListView } from '../../core/RetrievalOrdersListViewProvider'
-import { RetrievalOrdersAddModalFormWrapper } from './RetrievalOrdersAddModalFormWrapper'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import {useRetrievalOrdersListView} from '../../core/RetrievalOrdersListViewProvider'
+import {RetrievalOrdersAddModalFormWrapper} from './RetrievalOrdersAddModalFormWrapper'
 
 export const RetrievalOrdersAddModal = () => {
-
-  const { setRetrievalOrderIdForUpdate } = useRetrievalOrdersListView();
+  const {setRetrievalOrderIdForUpdate} = useRetrievalOrdersListView()
 
   useEffect(() => {
     document.body.classList.add('modal-open')
@@ -31,7 +30,7 @@ export const RetrievalOrdersAddModal = () => {
           <div className='modal-content'>
             <div className='modal-header'>
               {/* begin::Modal title */}
-              <h2 className='fw-bolder fs-1 px-7'>Order</h2>
+              <h2 className='fw-bolder fs-1 px-7'>Retrieval Order</h2>
               {/* end::Modal title */}
 
               {/* begin::Close */}

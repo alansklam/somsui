@@ -1,28 +1,26 @@
 import {useState, useEffect} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
-import { useRetrievalOrdersListView } from '../../core/RetrievalOrdersListViewProvider'
-import { deleteRetrievalOrderApi } from '../../../../../store/apis/admin'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import {useRetrievalOrdersListView} from '../../core/RetrievalOrdersListViewProvider'
+import {deleteRetrievalOrderApi} from '../../../../../store/apis/admin'
 
 export const RetrievalOrdersDeleteModal = () => {
-
-  const { itemIdForDelete, setItemIdForDelete, fetchOrdersFunc } = useRetrievalOrdersListView();
-  const [loading, setLoading] = useState(false);
+  const {itemIdForDelete, setItemIdForDelete, fetchOrdersFunc} = useRetrievalOrdersListView()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     document.body.classList.add('modal-open')
     return () => {
       document.body.classList.remove('modal-open')
     }
-  }, []);
+  }, [])
 
   const onDeleteHandler = () => {
-    setLoading(true);
-    deleteRetrievalOrderApi({id: itemIdForDelete})
-      .then((res) => {
-        setLoading(false);
-        setItemIdForDelete(undefined);
-        fetchOrdersFunc();
-      })
+    setLoading(true)
+    deleteRetrievalOrderApi({id: itemIdForDelete}).then((res) => {
+      setLoading(false)
+      setItemIdForDelete(undefined)
+      fetchOrdersFunc()
+    })
   }
 
   return (
@@ -40,7 +38,7 @@ export const RetrievalOrdersDeleteModal = () => {
           <div className='modal-content'>
             <div className='modal-header'>
               {/* begin::Modal title */}
-              <h2 className='fw-bolder fs-1'>Delete Storage Period</h2>
+              <h2 className='fw-bolder fs-1'>Delete Retrieval Order</h2>
               {/* end::Modal title */}
 
               {/* begin::Close */}
@@ -58,9 +56,7 @@ export const RetrievalOrdersDeleteModal = () => {
             <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
               <p className='fw-bolder fs-1 text-center mb-15'>Confrim delete?</p>
               <div className='d-flex justify-content-around'>
-                <button className='btn btn-danger'
-                  onClick={onDeleteHandler}
-                >
+                <button className='btn btn-danger' onClick={onDeleteHandler}>
                   {!loading && 'Delete'}
                   {loading && (
                     <span className='indicator-progress' style={{display: 'block'}}>
@@ -69,7 +65,7 @@ export const RetrievalOrdersDeleteModal = () => {
                     </span>
                   )}
                 </button>
-                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)} >
+                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)}>
                   Cancle
                 </button>
               </div>

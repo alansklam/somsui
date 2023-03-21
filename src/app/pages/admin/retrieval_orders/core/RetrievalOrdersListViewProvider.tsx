@@ -59,6 +59,7 @@ type ListViewContextProps = {
     items: any[]
     walkup: number
     order: any
+    floor: string
   }[]
   selected: any[]
   setSelected: Dispatch<SetStateAction<any[]>>

@@ -39,6 +39,7 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
     paperBox: '0',
   })
   const [walkup, setWalkup] = useState(0)
+  const [floorFee, setFloorFee] = useState('')
 
   useEffect(() => {
     let __documentBox = ''
@@ -56,6 +57,7 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
       oversizeItems: '0',
       wardrobe: '0',
     }
+    let __floor_fee = '0'
 
     if (
       data.length > 0 &&
@@ -122,12 +124,14 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
       __lumpSum = data[retrievalOrderIdForUpdate].total_fee
       __storageMonth = data[retrievalOrderIdForUpdate].storage_month
       __walkup = data[retrievalOrderIdForUpdate].walkup
+      __floor_fee = data[retrievalOrderIdForUpdate].floor
     }
     setLumpSum(__lumpSum)
     setPaymentMethodId(__paymentMethodId)
     setPaymentStatusId(__paymentStatusId)
     setStorageMonth(__storageMonth)
     setWalkup(__walkup)
+    setFloorFee(__floor_fee)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, retrievalOrderIdForUpdate])
 
@@ -234,24 +238,28 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
   })
 
   useEffect(() => {
-    // let __subTotalFee = 0;
-    // if(quantity.documentBox !== "0" && !isNaN(parseInt(price.documentBox))) {
-    //   __subTotalFee += parseInt(price.documentBox) * parseInt(quantity.documentBox);
-    // }
-    // if(quantity.oversizeBox !== "0" && !isNaN(parseInt(price.oversizeBox))) {
-    //   __subTotalFee += parseInt(price.oversizeBox) * parseInt(quantity.oversizeBox);
-    // }
-    // if(quantity.paperBox !== "0" && !isNaN(parseInt(price.paperBox))) {
-    //   __subTotalFee += parseInt(price.paperBox) * parseInt(quantity.paperBox);
-    // }
-    // if(quantity.wardrobeBox !== "0" && !isNaN(parseInt(price.wardrobeBox))) {
-    //   __subTotalFee += parseInt(price.wardrobeBox) * parseInt(quantity.wardrobeBox);
-    // }
+    let __subTotalFee = 0
+    if (quantity.documentBox !== '0' && !isNaN(parseInt(price.documentBox))) {
+      __subTotalFee += parseInt(price.documentBox) * parseInt(quantity.documentBox)
+    }
+    if (quantity.oversizeBox !== '0' && !isNaN(parseInt(price.oversizeBox))) {
+      __subTotalFee += parseInt(price.oversizeBox) * parseInt(quantity.oversizeBox)
+    }
+    if (quantity.paperBox !== '0' && !isNaN(parseInt(price.paperBox))) {
+      __subTotalFee += parseInt(price.paperBox) * parseInt(quantity.paperBox)
+    }
+    if (quantity.wardrobeBox !== '0' && !isNaN(parseInt(price.wardrobeBox))) {
+      __subTotalFee += parseInt(price.wardrobeBox) * parseInt(quantity.wardrobeBox)
+    }
+    if (walkup !== 0 && !isNaN(walkup)) {
+      __subTotalFee += walkup * parseInt(floorFee)
+    }
     // let __months = parseInt(storageMonth);
-    // let __totalFee = __subTotalFee * __months;
-    // setLumpSum(__totalFee.toString());
+    let __totalFee = __subTotalFee
+    if (__totalFee < 116) __totalFee = 116
+    setLumpSum(__totalFee.toString())
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [price, quantity, formik.values])
+  }, [price, quantity, formik.values, walkup])
 
   return (
     <>
@@ -497,7 +505,7 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
 
                   {initQuantity.documentBox !== '0' && (
                     <div className='row mb-6'>
-                      <label className='col-lg-12 col-form-label fw-bold fs-6 mb-2'>
+                      <label className='col-lg-12 col-form-label required fw-bold fs-6 mb-2'>
                         {products[1].name} original price HKD {products[1].price}
                       </label>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>Quantity</label>
@@ -560,7 +568,7 @@ export const RetrievalOrdersAddModalFormWrapper = () => {
 
                   {initQuantity.oversizeBox !== '0' && (
                     <div className='row mb-6'>
-                      <label className='col-lg-12 col-form-label fw-bold fs-6 mb-2'>
+                      <label className='col-lg-12 col-form-label required fw-bold fs-6 mb-2'>
                         {products[2].name} original price HKD {products[2].price}
                       </label>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>Quantity</label>
