@@ -535,11 +535,7 @@ export default function ContentPage3(props) {
                       />
                     )}
                   />
-                  <div className='py-2 text-normal'>
-                    {
-                      'Please note that the tentaive retireval date provided is an estivated timeframe and not a guaranteed delivery date. To order your retrieval service, kindly access the client portal.'
-                    }
-                  </div>
+                  <div className='py-2 text-normal'>{t('common.wd-tentative-retrieval-note')}</div>
                 </Grid>
                 {/* <Grid item xs={12} sm={6} md={6}>
                     <CssTextField

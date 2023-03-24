@@ -300,11 +300,7 @@ export default function ContentPage5(props) {
                 </RadioGroup>
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={9}>
-                <div className='text-lg'>
-                  {
-                    'For a successful payment process while using WeChat Pay & Alipay, you have to disable any pop-up blockers on your browser beforehand. This will  allow you to be redirected to the payment page, where you can scan the QR code for payment.'
-                  }
-                </div>
+                <div className='text-lg'>{t('common.wd-checkout-note')}</div>
               </Grid>
             </Grid>
           </div>

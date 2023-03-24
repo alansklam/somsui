@@ -1,8 +1,10 @@
 import {Button} from 'antd'
 import {ArrowLeftOutlined, ArrowRightOutlined} from '@ant-design/icons'
+import {useTranslation} from 'react-i18next'
 
 const Stepper = (props) => {
   const {step, logged, stepChange} = props
+  const {t} = useTranslation()
 
   const min = (a, b) => {
     if (a > b) return b
@@ -52,7 +54,7 @@ const Stepper = (props) => {
               >
                 <div className='inner-circle m-auto'></div>
               </div>
-              <span className='py-2 font-medium'>Storage</span>
+              <span className='py-2 font-medium'>{t('stepper.wd-storage')}</span>
             </div>
             <div className='flex items-center flex-col'>
               <div
@@ -63,7 +65,7 @@ const Stepper = (props) => {
               >
                 <div className='inner-circle m-auto'></div>
               </div>
-              <span className='py-2 font-medium'>Materials</span>
+              <span className='py-2 font-medium'>{t('stepper.wd-materials')}</span>
             </div>
             <div className='flex flex-col items-center'>
               <div
@@ -74,7 +76,7 @@ const Stepper = (props) => {
               >
                 <div className='inner-circle m-auto'></div>
               </div>
-              <span className='py-2 font-medium'>Address</span>
+              <span className='py-2 font-medium'>{t('stepper.wd-address')}</span>
             </div>
             <div className='flex flex-col items-center'>
               <div
@@ -85,7 +87,7 @@ const Stepper = (props) => {
               >
                 <div className='inner-circle m-auto'></div>
               </div>
-              <span className='py-2 font-medium'>Instructions</span>
+              <span className='py-2 font-medium'>{t('stepper.wd-instructions')}</span>
             </div>
             <div className='flex flex-col items-center'>
               <div
@@ -96,7 +98,7 @@ const Stepper = (props) => {
               >
                 <div className='inner-circle m-auto'></div>
               </div>
-              <span className='py-2 font-medium'>Checkout</span>
+              <span className='py-2 font-medium'>{t('stepper.wd-checkout')}</span>
             </div>
           </div>
         </div>

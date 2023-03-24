@@ -164,19 +164,23 @@ export default function CartPage(props) {
                 setShowMessage(!showMessage)
               }}
             >
-              Return charges apply
+              {t('cart.wd-return-charge-apply')}
             </span>
           </div>
           {showMessage && (
-            <div className='text-sm my-6 pl-6 intro-y'>
-              {'Single item delivered locally to ground floor  HKD$29/items'}
-            </div>
+            <div className='text-sm my-6 pl-6 intro-y'>{t('cart.wd-delivery-floor-fee')}</div>
           )}
-
           <div className='mt-2'>
             <span className='text-normal'>
-              Delivery fees are charged when you order your stuff back, find{' '}
-              <span className='text-blue cursor-pointer'>out more here</span>
+              {t('cart.wd-delivery-fee')}
+              <a
+                href='https://www.ubox.com.hk/faq-billing-box-storage/'
+                target='_blank'
+                rel='noreferrer'
+                className='text-blue cursor-pointer'
+              >
+                {t('cart.wd-delivery-detail-link')}
+              </a>
             </span>
           </div>
         </div>
