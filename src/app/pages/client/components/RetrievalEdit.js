@@ -171,15 +171,11 @@ export default function RetrievalEdit(props) {
   const timelist = [
     {
       value: 0,
-      label: '09:00 - 12:00',
+      label: '09:00 - 13:00',
     },
     {
       value: 1,
-      label: '13:00 - 15:00',
-    },
-    {
-      value: 2,
-      label: '15:00 - 18:00',
+      label: '13:00 - 18:00',
     },
   ]
 
@@ -188,11 +184,9 @@ export default function RetrievalEdit(props) {
       case 0:
         return '09:00 - 12:00'
       case 1:
-        return '13:00 - 15:00'
-      case 2:
-        return '15:00 - 18:00'
+        return '13:00 - 18:00'
       default:
-        return '09:00 - 12:00'
+        return '09:00 - 13:00'
     }
   }
 
