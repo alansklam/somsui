@@ -213,21 +213,22 @@ export default function ContentPage3(props) {
     //  })
     //  return
     //} else {
-    //  let __mobile = mobile
-    //  let __re = /[^0-9]+/g
-    //  let __result = __mobile.match(__re)
-    //  let __length = __mobile.length
-    //  if (__result == null && __length <= 11 && __length >= 8) {
-    //  } else {
-    //    onNotification({
-    //      title: 'warning',
-    //      message: 'common.no-input-mobile-validate',
-    //      visible: true,
-    //      status: Math.floor(Math.random() * 100000),
-    //    })
-    //    return
-    //  }
-    //}
+    if (mobile !== "") {
+      let __mobile = mobile
+      let __re = /[^0-9]+/g
+      let __result = __mobile.match(__re)
+      let __length = __mobile.length
+      if (__result == null && __length <= 11 && __length >= 8) {
+      } else {
+        onNotification({
+          title: 'warning',
+          message: 'common.no-input-mobile-validate',
+          visible: true,
+          status: Math.floor(Math.random() * 100000),
+        })
+        return
+      }
+    }
     if (address === '') {
       onNotification({
         title: 'warning',
