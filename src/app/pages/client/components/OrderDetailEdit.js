@@ -403,6 +403,7 @@ export const OrderDetailEdit = (props) => {
               <CssTextField
                 fullWidth
                 required
+                //disabled
                 id='address'
                 label={t('common.wd-address')}
                 variant='standard'
