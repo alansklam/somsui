@@ -10,15 +10,11 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
 const timelist = [
   {
     value: 0,
-    label: '09:00 - 12:00',
+    label: '09:00 - 13:00',
   },
   {
     value: 1,
-    label: '13:00 - 15:00',
-  },
-  {
-    value: 2,
-    label: '15:00 - 18:00',
+    label: '13:00 - 18:00',
   },
 ]
 export default function ContentPage3(props) {
@@ -87,13 +83,13 @@ export default function ContentPage3(props) {
           mobile: '',
           address: '',
           deliveryDate: __deliveryDate.format('YYYY-MM-DD'),
-          deliveryTime: '09:00 - 12:00',
+          deliveryTime: '09:00 - 13:00',
           deliveryTimeIndex: 0,
           ladenReturnDate: __deliveryDate.format('YYYY-MM-DD'),
-          ladenReturnTime: '09:00 - 12:00',
+          ladenReturnTime: '09:00 - 13:00',
           ladenReturnTimeIndex: 0,
           tentativeDate: __deliveryDate.add(props.storage_month, 'month').format('YYYY-MM-DD'),
-          tentativeTime: '09:00 - 12:00',
+          tentativeTime: '09:00 - 13:00',
           tentativeTimeIndex: 0,
           expirationDate: __deliveryDate.add(props.storage_month, 'month').format('YYYY-MM-DD'),
         })
@@ -113,13 +109,13 @@ export default function ContentPage3(props) {
             contact: __userInfo.contact,
             address: __userInfo.address1,
             deliveryDate: __deliveryDate.format('YYYY-MM-DD'),
-            deliveryTime: '09:00 - 12:00',
+            deliveryTime: '09:00 - 13:00',
             deliveryTimeIndex: 0,
             ladenReturnDate: __deliveryDate.format('YYYY-MM-DD'),
-            ladenReturnTime: '09:00 - 12:00',
+            ladenReturnTime: '09:00 - 13:00',
             ladenReturnTimeIndex: 0,
             tentativeDate: __deliveryDate.add(props.storage_month, 'month').format('YYYY-MM-DD'),
-            tentativeTime: '09:00 - 12:00',
+            tentativeTime: '09:00 - 13:00',
             tentativeTimeIndex: 0,
             expirationDate: __deliveryDate.add(props.storage_month, 'month').format('YYYY-MM-DD'),
           })
