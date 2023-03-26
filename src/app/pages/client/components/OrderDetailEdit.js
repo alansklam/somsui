@@ -377,6 +377,7 @@ export const OrderDetailEdit = (props) => {
                   />
                 )}
               />
+              <div className='py-2 text-normal'>{t('common.wd-tentative-retrieval-note')}</div>
             </Grid>
             <Grid item xs={12} sm={6} md={6} className='px-[8px] py-[15px]'>
               <CssTextField
@@ -402,7 +403,6 @@ export const OrderDetailEdit = (props) => {
               <CssTextField
                 fullWidth
                 required
-                disabled
                 id='address'
                 label={t('common.wd-address')}
                 variant='standard'
