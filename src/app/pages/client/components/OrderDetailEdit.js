@@ -40,15 +40,11 @@ export const OrderDetailEdit = (props) => {
   const timelist = [
     {
       value: 0,
-      label: '09:00 - 12:00',
+      label: '09:00 - 13:00',
     },
     {
       value: 1,
-      label: '13:00 - 15:00',
-    },
-    {
-      value: 2,
-      label: '15:00 - 18:00',
+      label: '13:00 - 18:00',
     },
   ]
 
@@ -147,12 +143,10 @@ export const OrderDetailEdit = (props) => {
 
   const getTimeIndex = (time) => {
     switch (time) {
-      case '09:00 - 12:00':
+      case '09:00 - 13:00':
         return 0
-      case '13:00 - 15:00':
+      case '13:00 - 18:00':
         return 1
-      case '15:00 - 18:00':
-        return 2
       default:
         return 0
     }
@@ -161,13 +155,11 @@ export const OrderDetailEdit = (props) => {
   const getTime = (index) => {
     switch (index) {
       case 0:
-        return '09:00 - 12:00'
+        return '09:00 - 13:00'
       case 1:
-        return '13:00 - 15:00'
-      case 2:
-        return '15:00 - 18:00'
+        return '13:00 - 18:00'
       default:
-        return '09:00 - 12:00'
+        return '09:00 - 13:00'
     }
   }
 
