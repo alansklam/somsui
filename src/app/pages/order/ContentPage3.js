@@ -400,7 +400,7 @@ export default function ContentPage3(props) {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <CssTextField
-                    required
+                    //required
                     fullWidth
                     id='standard-required'
                     label={t('common.wd-mobile-no')}
