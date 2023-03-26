@@ -460,6 +460,7 @@ export const ExtendStorage = () => {
                       }
                     })}
                   </RadioGroup>
+                  <div className='text-lg'>{t('common.wd-checkout-note')}</div>
                   <div className='flex item-center my-[30px] w-[100%]'>
                     <span
                       className={duration === 0 ? 'custom-btn disabled-btn' : 'custom-btn hand'}
