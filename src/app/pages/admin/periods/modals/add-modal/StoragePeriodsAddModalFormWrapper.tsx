@@ -1,74 +1,79 @@
 import {useState} from 'react'
-import { useListView } from '../../core/PeriodsListViewProvider'
+import {useListView} from '../../core/PeriodsListViewProvider'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
-import { editPeriodsApi } from '../../../../../store/apis/admin'
+import {editPeriodsApi} from '../../../../../store/apis/admin'
+import {showNotification} from '../../../components/notification'
 
 export const StoragePeriodsAddModalFormWrapper = () => {
-
-  const { itemIdForUpdate, setItemIdForUpdate, data, fetchPeriodsFunc } = useListView();
+  const {itemIdForUpdate, setItemIdForUpdate, data, fetchPeriodsFunc} = useListView()
 
   const profileDetailsSchema = Yup.object().shape({
     code: Yup.string().required('The code is required'),
     name: Yup.string().required('Name is required'),
     min: Yup.number()
-            .required('The minmum storage is required')
-            .positive('This field should be positive integer')
-            .integer('This field should be positive integer'),
+      .required('The minmum storage is required')
+      .positive('This field should be positive integer')
+      .integer('This field should be positive integer'),
     max: Yup.number()
-            .required('The maximum storage is required')
-            .positive('This field should be positive integer')
-            .integer('This field should be positive integer'),
-  });
+      .required('The maximum storage is required')
+      .positive('This field should be positive integer')
+      .integer('This field should be positive integer'),
+  })
 
-  const initialValues = (itemIdForUpdate == null) ? {
-    code: "",
-    name: "",
-    max: undefined,
-    min: undefined,
-  } : {
-    code: data[itemIdForUpdate].code,
-    name: data[itemIdForUpdate].name,
-    max: data[itemIdForUpdate].max ? data[itemIdForUpdate].max : undefined,
-    min: data[itemIdForUpdate].min ? data[itemIdForUpdate].min : undefined,
-  }
+  const initialValues =
+    itemIdForUpdate == null
+      ? {
+          code: '',
+          name: '',
+          max: undefined,
+          min: undefined,
+        }
+      : {
+          code: data[itemIdForUpdate].code,
+          name: data[itemIdForUpdate].name,
+          max: data[itemIdForUpdate].max ? data[itemIdForUpdate].max : undefined,
+          min: data[itemIdForUpdate].min ? data[itemIdForUpdate].min : undefined,
+        }
 
   const [loading, setLoading] = useState(false)
   const formik = useFormik({
     initialValues,
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
-      setLoading(true);
-      (itemIdForUpdate == null) ? 
-      editPeriodsApi({data: values, id: undefined})
-        .then((res) => {
-          setLoading(false);
-          setItemIdForUpdate(undefined);
-          fetchPeriodsFunc();
-        })
-        .catch((err) => {
-          setLoading(false);
-        }) :
-      editPeriodsApi({data: values, id: data[itemIdForUpdate].id})
-        .then((res) => {
-          setLoading(false);
-          setItemIdForUpdate(undefined);
-          fetchPeriodsFunc();
-        })
-        .catch((err) => {
-          setLoading(false);
-        })
+      setLoading(true)
+      itemIdForUpdate == null
+        ? editPeriodsApi({data: values, id: undefined})
+            .then((res) => {
+              setLoading(false)
+              setItemIdForUpdate(undefined)
+              showNotification('success', 'Success', 'Create successfully.')
+              fetchPeriodsFunc()
+            })
+            .catch((err) => {
+              setLoading(false)
+              showNotification('error', 'Error', err.data.message)
+            })
+        : editPeriodsApi({data: values, id: data[itemIdForUpdate].id})
+            .then((res) => {
+              setLoading(false)
+              setItemIdForUpdate(undefined)
+              showNotification('success', 'Success', 'Update successfully.')
+              fetchPeriodsFunc()
+            })
+            .catch((err) => {
+              setLoading(false)
+              showNotification('error', 'Error', err.data.message)
+            })
     },
   })
 
   return (
     <>
       <div className='card mb-5 mb-xl-10'>
-
         <div id='kt_account_profile_details' className='collapse show'>
           <form onSubmit={formik.handleSubmit} noValidate className='form'>
             <div className='card-body border-top p-9'>
-
               <div className='row mb-6'>
                 <label className='col-lg-4 col-form-label required fw-bold fs-6'>The code</label>
 
@@ -146,7 +151,6 @@ export const StoragePeriodsAddModalFormWrapper = () => {
                   )}
                 </div>
               </div>
-
             </div>
 
             <div className='card-footer d-flex justify-content-end py-6 px-9'>

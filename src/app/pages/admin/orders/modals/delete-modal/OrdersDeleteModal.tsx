@@ -1,28 +1,28 @@
 import {useState, useEffect} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
-import { useOrdersListView } from '../../core/OrdersListViewProvider'
-import { deleteOrderApi } from '../../../../../store/apis/admin'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import {useOrdersListView} from '../../core/OrdersListViewProvider'
+import {deleteOrderApi} from '../../../../../store/apis/admin'
+import {showNotification} from '../../../components/notification'
 
 export const OrdersDeleteModal = () => {
-
-  const { itemIdForDelete, setItemIdForDelete, fetchOrdersFunc } = useOrdersListView();
-  const [loading, setLoading] = useState(false);
+  const {itemIdForDelete, setItemIdForDelete, fetchOrdersFunc} = useOrdersListView()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     document.body.classList.add('modal-open')
     return () => {
       document.body.classList.remove('modal-open')
     }
-  }, []);
+  }, [])
 
   const onDeleteHandler = () => {
-    setLoading(true);
-    deleteOrderApi({id: itemIdForDelete})
-      .then((res) => {
-        setLoading(false);
-        setItemIdForDelete(undefined);
-        fetchOrdersFunc();
-      })
+    setLoading(true)
+    deleteOrderApi({id: itemIdForDelete}).then((res) => {
+      setLoading(false)
+      setItemIdForDelete(undefined)
+      showNotification('success', 'Success', 'Deleted successfully.')
+      fetchOrdersFunc()
+    })
   }
 
   return (
@@ -56,11 +56,9 @@ export const OrdersDeleteModal = () => {
             </div>
             {/* begin::Modal body */}
             <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
-              <p className='fw-bolder fs-1 text-center mb-15'>Confrim delete?</p>
+              <p className='fw-bolder fs-1 text-center mb-15'>Confirm delete?</p>
               <div className='d-flex justify-content-around'>
-                <button className='btn btn-danger'
-                  onClick={onDeleteHandler}
-                >
+                <button className='btn btn-danger' onClick={onDeleteHandler}>
                   {!loading && 'Delete'}
                   {loading && (
                     <span className='indicator-progress' style={{display: 'block'}}>
@@ -69,8 +67,8 @@ export const OrdersDeleteModal = () => {
                     </span>
                   )}
                 </button>
-                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)} >
-                  Cancle
+                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)}>
+                  Cancel
                 </button>
               </div>
             </div>

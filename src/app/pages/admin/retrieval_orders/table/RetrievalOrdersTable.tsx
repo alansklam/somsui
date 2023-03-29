@@ -1,17 +1,19 @@
 import {useEffect, useState} from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {KTCardBody} from '../../../../../_metronic/helpers'
 
 import {RetrievalOrdersTableBody} from './RetrievalOrdersTableBody'
 import {useRetrievalOrdersListView} from '../core/RetrievalOrdersListViewProvider'
 import {RetrievalOrdersPagination} from '../components/pagination/RetrievalOrdersPagination'
 import {fetchRetrievalOrders} from '../../../../store/actions/admin'
+import {RootState} from '../../../../store/reducers'
 
 const RetrievalOrdersTable = () => {
   const dispatch = useDispatch()
   const {uid, data, setSelected, isAllSelected, pagination, filterData} =
     useRetrievalOrdersListView()
   const [listData, setListData] = useState(Array(0))
+  const products = useSelector((state: RootState) => state.admin.products)
 
   const onSortHandler = (order: string) => {
     let __sort: string | undefined = undefined
@@ -176,13 +178,13 @@ const RetrievalOrdersTable = () => {
                     onClick={() => onSortHandler('code')}
                     style={{cursor: 'pointer'}}
                   >
-                    The Code
+                    Retrieval Order ID
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='min-w-150px text-center'>
                   <div
                     className={
-                      pagination.orderBy === 'paperBoxes'
+                      pagination.orderBy === 'order_id'
                         ? pagination.sort
                           ? pagination.sort === 'asc'
                             ? 'table-sort-asc'
@@ -190,80 +192,46 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    onClick={() => onSortHandler('paperBoxes')}
+                    // onClick={() => onSortHandler('order_id')}
                     style={{cursor: 'pointer'}}
                   >
-                    File box
+                    Order ID
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'standardBoxes'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    onClick={() => onSortHandler('standardBoxes')}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Storage Box
-                  </div>
-                </th>
-                <th className='min-w-75px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'oversizeItems'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    onClick={() => onSortHandler('oversizeItems')}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Large Objects
-                  </div>
-                </th>
-                <th className='min-w-75px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'wardrobe'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    onClick={() => onSortHandler('wardrobe')}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Hanging suitcase
-                  </div>
-                </th>
-                {/* <th className='min-w-75px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'vacuumBags'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    onClick={() => onSortHandler('vacuumBags')}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Vacuum bag
-                  </div>
-                </th> */}
+                {products &&
+                  products.length > 0 &&
+                  products.map((item, index) =>
+                    item.top_state === 1 ? (
+                      <th className='min-w-75px text-center' key={index}>
+                        <div
+                          className={
+                            pagination.orderBy === 'paperBoxes'
+                              ? pagination.sort
+                                ? pagination.sort === 'asc'
+                                  ? 'table-sort-asc'
+                                  : 'table-sort-desc'
+                                : ''
+                              : ''
+                          }
+                          key={index}
+                          // onClick={() => onSortHandler('paperBoxes')}
+                          // style={{cursor: 'pointer'}}
+                        >
+                          {item.name}
+                        </div>
+                      </th>
+                    ) : (
+                      <th
+                        key={index}
+                        style={{padding: '0px'}}
+                        // ref={(el) => {
+                        //   if (el) {
+                        //     el.style.setProperty('padding', '0px', 'important')
+                        //   }
+                        // }}
+                      ></th>
+                    )
+                  )}
                 {/* <th className='min-w-75px text-center'>
                   <div 
                     className={pagination.orderBy ==="storage_month" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
@@ -356,6 +324,23 @@ const RetrievalOrdersTable = () => {
                     style={{cursor: 'pointer'}}
                   >
                     Special requirement
+                  </div>
+                </th>
+                <th className='min-w-125px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'special_instruction'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    // onClick={() => onSortHandler('special_instruction')}
+                    // style={{cursor: 'pointer'}}
+                  >
+                    QR Code
                   </div>
                 </th>
                 <th className='min-w-75px text-center'>

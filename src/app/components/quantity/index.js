@@ -10,13 +10,22 @@ const Quantity = (props) => {
       setValue(props.value)
       onChangeHandler(item, value)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disable])
 
   const minusValue = () => {
-    onChangeInput(value === 0 ? 0 : value - 1)
+    if (value === '' || value <= 0) {
+      onChangeInput(0)
+    } else {
+      onChangeInput(parseInt(value) - 1)
+    }
   }
   const plusValue = () => {
-    onChangeInput(value + 1)
+    if (value === '') {
+      onChangeInput(1)
+    } else {
+      onChangeInput(parseInt(value) + 1)
+    }
   }
   const onChangeInput = (value) => {
     if (!disable) {

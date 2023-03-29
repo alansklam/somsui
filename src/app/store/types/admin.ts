@@ -3,6 +3,7 @@ export interface AdminState {
   products: any[],
   ref: any,
   periods: any[],
+  items: any[],
   clients: any[],
   promotions: any[],
   payments: any[],
@@ -18,6 +19,7 @@ export enum AdminActionTypes {
   FETCH_UNVERSITIES = 'FETCH_UNVERSITIES',
   FETCH_PRODUCTS = 'FETCH_PRODUCTS',
   FETCH_PERIODS = 'FETCH_PERIODS',
+  FETCH_ITEMS = 'FETCH_ITEMS',
   FETCH_CLIENTS = 'FETCH_CLIENTS',
   FETCH_PROMOTIONS = 'FETCH_PROMOTIONS',
   FETCH_PAYMENTS = 'FETCH_PAYMENTS',
@@ -42,6 +44,10 @@ interface FetchRef {
 }
 interface fetchPeriods {
   type: AdminActionTypes.FETCH_PERIODS;
+  payload: any;
+}
+interface fetchItems {
+  type: AdminActionTypes.FETCH_ITEMS;
   payload: any;
 }
 interface fetchClients {
@@ -71,6 +77,7 @@ export type AdminAction =
   | FetchUniversities
   | FetchProducts
   | fetchPeriods
+  | fetchItems
   | fetchClients
   | fetchPromotions
   | fetchPayments

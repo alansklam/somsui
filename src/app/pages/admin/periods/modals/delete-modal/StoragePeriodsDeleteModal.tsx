@@ -1,12 +1,12 @@
 import {useState, useEffect} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
-import { useListView } from '../../core/PeriodsListViewProvider'
-import { deletePeriodsApi } from '../../../../../store/apis/admin'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import {useListView} from '../../core/PeriodsListViewProvider'
+import {deletePeriodsApi} from '../../../../../store/apis/admin'
+import {showNotification} from '../../../components/notification'
 
 export const StoragePeriodsDeleteModal = () => {
-
-  const { itemIdForDelete, setItemIdForDelete, fetchPeriodsFunc } = useListView();
-  const [loading, setLoading] = useState(false);
+  const {itemIdForDelete, setItemIdForDelete, fetchPeriodsFunc} = useListView()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     document.body.classList.add('modal-open')
@@ -16,12 +16,16 @@ export const StoragePeriodsDeleteModal = () => {
   }, [])
 
   const onDeleteHandler = () => {
-    setLoading(true);
+    setLoading(true)
     deletePeriodsApi({id: itemIdForDelete})
       .then((res) => {
-        setLoading(false);
-        setItemIdForDelete(undefined);
-        fetchPeriodsFunc();
+        setLoading(false)
+        setItemIdForDelete(undefined)
+        showNotification('success', 'Success', 'Deleted successfully.')
+        fetchPeriodsFunc()
+      })
+      .catch((err) => {
+        showNotification('error', 'Error', 'Failed delete.')
       })
   }
 
@@ -56,11 +60,9 @@ export const StoragePeriodsDeleteModal = () => {
             </div>
             {/* begin::Modal body */}
             <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
-              <p className='fw-bolder fs-1 text-center mb-15'>Confrim delete?</p>
+              <p className='fw-bolder fs-1 text-center mb-15'>Confirm delete?</p>
               <div className='d-flex justify-content-around'>
-                <button className='btn btn-danger'
-                  onClick={onDeleteHandler}
-                >
+                <button className='btn btn-danger' onClick={onDeleteHandler}>
                   {!loading && 'Delete'}
                   {loading && (
                     <span className='indicator-progress' style={{display: 'block'}}>
@@ -69,8 +71,8 @@ export const StoragePeriodsDeleteModal = () => {
                     </span>
                   )}
                 </button>
-                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)} >
-                  Cancle
+                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)}>
+                  Cancel
                 </button>
               </div>
             </div>

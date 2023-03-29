@@ -1,6 +1,7 @@
 import {Dispatch} from "redux";
 import { AdminAction, AdminActionTypes } from "../types/admin";
 import { fetchPeriodsApi, 
+    fetchItemsApi,
     fetchUniversitiesApi, 
     fetchClientsApi, 
     fetchPromotionsApi, 
@@ -69,6 +70,22 @@ export const fetchPeriods = (params: any):any => {
         } catch (e) {
             dispatch({
                 type: AdminActionTypes.FETCH_PERIODS,
+                payload: []
+            })
+        }
+    }
+}
+
+export const fetchItems = (params: any):any => {
+    return async (dispatch: Dispatch<AdminAction>) => {
+        try {
+            dispatch({type: AdminActionTypes.FETCH_DATA_ADMIN})
+            const response = fetchItemsApi(params);
+            const payloadData = (await response).data;
+            dispatch({type: AdminActionTypes.FETCH_ITEMS, payload: payloadData})
+        } catch (e) {
+            dispatch({
+                type: AdminActionTypes.FETCH_ITEMS,
                 payload: []
             })
         }

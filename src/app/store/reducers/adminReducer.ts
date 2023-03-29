@@ -5,6 +5,7 @@ const initialState: AdminState = {
     products: [],
     ref: {},
     periods: [],
+    items: [],
     clients: [],
     promotions: [],
     payments: [],
@@ -29,6 +30,11 @@ export const adminReducer = (state = initialState, action: AdminAction): AdminSt
         case AdminActionTypes.FETCH_PERIODS:
             return {...state, loading: false,
                 periods: action.payload.data,
+                pagination: action.payload.pagination
+            }
+        case AdminActionTypes.FETCH_ITEMS:
+            return {...state, loading: false,
+                items: action.payload.data,
                 pagination: action.payload.pagination
             }
         case AdminActionTypes.FETCH_CLIENTS:

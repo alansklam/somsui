@@ -1,55 +1,61 @@
-import {useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
-import {KTCardBody} from '../../../../../_metronic/helpers';
+import {useEffect, useState} from 'react'
+import {useDispatch} from 'react-redux'
+import {KTCardBody} from '../../../../../_metronic/helpers'
 
-import { PaymentsTableBody } from './PaymentsTableBody';
-import { usePaymentsListView } from '../core/PaymentsListViewProvider';
-import { PaymentsPagination } from '../components/pagination/PaymentsPagination';
-import { fetchPayments } from '../../../../store/actions/admin';
+import {PaymentsTableBody} from './PaymentsTableBody'
+import {usePaymentsListView} from '../core/PaymentsListViewProvider'
+import {PaymentsPagination} from '../components/pagination/PaymentsPagination'
+import {fetchPayments} from '../../../../store/actions/admin'
+import {useSearchParams} from 'react-router-dom'
 
 const PaymentsTable = (props: any) => {
-  const {paymentRemarkId} = props;
-  const dispatch = useDispatch();
-  const { orderId, data, setSelected, isAllSelected, pagination, filterData } = usePaymentsListView();
-  const [listData, setListData] = useState(Array(0));
+  const {paymentRemarkId} = props
+  const dispatch = useDispatch()
+  const {orderId, data, setSelected, isAllSelected, pagination, filterData} = usePaymentsListView()
+  const [searchParams] = useSearchParams()
+  const order_id = searchParams.get('order_id')
+  const retrieval_order_id = searchParams.get('retrieval_order_id')
+  const [listData, setListData] = useState(Array(0))
 
   const onSortHandler = (order: string) => {
-    let __sort: string | undefined = undefined;
-    if(pagination.orderBy === order) {
-      if(pagination.sort) {
-        pagination.sort === "desc" ? __sort = "asc" : __sort = undefined;
+    let __sort: string | undefined = undefined
+    if (pagination.orderBy === order) {
+      if (pagination.sort) {
+        pagination.sort === 'desc' ? (__sort = 'asc') : (__sort = undefined)
       } else {
-        __sort = "desc";
+        __sort = 'desc'
       }
     } else {
-      __sort = "desc";
+      __sort = 'desc'
     }
-    dispatch(fetchPayments({
-      filterData,
-      orderId,
-      paymentRemarkId,
-      ...pagination,
-      sort: __sort,
-      orderBy: order,
-    }));
-  };
+    dispatch(
+      fetchPayments({
+        filterData,
+        orderId,
+        paymentRemarkId,
+        ...pagination,
+        sort: __sort,
+        orderBy: order,
+      })
+    )
+  }
 
   useEffect(() => {
-    let __data = data;
-    __data.forEach((element:any, index:number) => {
+    let __data = data
+    __data.forEach((element: any, index: number) => {
       element = {
         ...element,
         checked: false,
-      };
-    });
-    setListData(__data);
-  }, [data]);
+      }
+    })
+    setListData(__data)
+  }, [data])
 
   useEffect(() => {
-    let __checked = [];
-    __checked = listData.filter((data) => data.checked === true);
-    setSelected(__checked);
-  }, [listData, setSelected]);
+    let __checked = []
+    __checked = listData.filter((data) => data.checked === true)
+    setSelected(__checked)
+  }, [listData, setSelected])
 
   return (
     <KTCardBody className='py-4'>
@@ -67,27 +73,43 @@ const PaymentsTable = (props: any) => {
                       data-kt-check-target='.widget-9-check'
                       checked={isAllSelected}
                       onChange={(e) => {
-                        let __listData = listData;
-                        __listData.forEach((data:any) => {
-                          data.checked = e.target.checked;
-                        });
-                        setListData([...__listData]);
+                        let __listData = listData
+                        __listData.forEach((data: any) => {
+                          data.checked = e.target.checked
+                        })
+                        setListData([...__listData])
                       }}
                     />
                   </div>
                 </th>
                 <th className='min-w-175px'>
-                  <div 
-                    className={pagination.orderBy === "code" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("code")}
+                  <div
+                    className={
+                      pagination.orderBy === 'code'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('code')}
                     style={{cursor: 'pointer'}}
                   >
                     Payment Code
                   </div>
                 </th>
-                <th className='min-w-100px'>
-                  <div 
-                    className={pagination.orderBy ==="client_id" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
+                <th className='min-w-100px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'client_id'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
                     // onClick={() => onSortHandler("client_id")}
                     style={{cursor: 'pointer'}}
                   >
@@ -95,36 +117,74 @@ const PaymentsTable = (props: any) => {
                   </div>
                 </th>
                 <th className='min-w-125px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="code" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
+                  <div
+                    className={
+                      pagination.orderBy === 'code'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
                     // onClick={() => onSortHandler("code")}
                     style={{cursor: 'pointer'}}
                   >
-                    Order ID
+                    {paymentRemarkId
+                      ? paymentRemarkId === 1
+                        ? 'Order ID'
+                        : 'Retrieval Order ID'
+                      : order_id
+                      ? 'Order ID'
+                      : 'Retrieval Order ID'}
                   </div>
                 </th>
                 <th className='min-w-100px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="amount" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("amount")}
+                  <div
+                    className={
+                      pagination.orderBy === 'amount'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('amount')}
                     style={{cursor: 'pointer'}}
                   >
                     Amount
                   </div>
                 </th>
                 <th className='min-w-100px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="payment_status_id" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("payment_status_id")}
+                  <div
+                    className={
+                      pagination.orderBy === 'payment_status_id'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('payment_status_id')}
                     style={{cursor: 'pointer'}}
                   >
                     Order Status
                   </div>
                 </th>
                 <th className='min-w-125px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="completed_at" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("updated_at")}
+                  <div
+                    className={
+                      pagination.orderBy === 'completed_at'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('updated_at')}
                     style={{cursor: 'pointer'}}
                   >
                     Action Date
@@ -134,21 +194,24 @@ const PaymentsTable = (props: any) => {
               </tr>
             </thead>
             <tbody>
-              <PaymentsTableBody listData={listData} setListData={setListData} />
+              <PaymentsTableBody
+                listData={listData}
+                setListData={setListData}
+                paymentRemarkId={paymentRemarkId}
+              />
             </tbody>
           </table>
-          {
-            listData.length === 0 &&
-            <div 
+          {listData.length === 0 && (
+            <div
               className='w-100 text-center text-muted fw-bold fs-6'
               style={{position: 'absolute', top: '100px'}}
             >
               No matching records found
             </div>
-          }
+          )}
         </div>
         <div className='d-flex justify-content-end my-7'>
-          <PaymentsPagination />
+          <PaymentsPagination paymentRemarkId={paymentRemarkId} />
         </div>
       </div>
     </KTCardBody>

@@ -44,6 +44,18 @@ export function fetchClientsApi(params) {
   )
 }
 
+export function getClientApi(params) {
+  return axios.post(
+    `/admin/getClient`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
 export function deleteClientApi(params) {
   return axios.post(
     `/admin/deleteClient`,
@@ -59,6 +71,42 @@ export function deleteClientApi(params) {
 export function editClientApi(params) {
   return axios.post(
     `/admin/editClient`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function fetchItemsApi(params) {
+  return axios.post(
+    `/admin/fetchItems`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function editItemsApi(params) {
+  return axios.post(
+    `/admin/editItem`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function deleteItemsApi(params) {
+  return axios.post(
+    `/admin/deleteItem`,
     {...params},
     {
       headers: {
@@ -95,6 +143,18 @@ export function editPeriodsApi(params) {
 export function editPeriodItemApi(params) {
   return axios.post(
     `/admin/editPeriodItem`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function getPeriodItemApi(params) {
+  return axios.post(
+    `/admin/getPeriodItem`,
     {...params},
     {
       headers: {
@@ -212,6 +272,18 @@ export function editPromotionItemApi(params) {
   )
 }
 
+export function getPromotionApi(params) {
+  return axios.post(
+    `/admin/getPromotion`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
 export function deletePromotionApi(params) {
   return axios.post(
     `/admin/deletePromotion`,
@@ -248,6 +320,18 @@ export function editOrderApi(params) {
   )
 }
 
+export function getOrderApi(params) {
+  return axios.post(
+    `/admin/getOrder`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
 export function deleteOrderApi(params) {
   return axios.post(
     `/admin/deleteOrder`,
@@ -275,6 +359,18 @@ export function fetchRetrievalOrdersApi(params) {
 export function editRetrievalOrderApi(params) {
   return axios.post(
     `/admin/editRetrievalOrder`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function getRetrievalOrderApi(params) {
+  return axios.post(
+    `/admin/getRetrievalOrder`,
     {...params},
     {
       headers: {

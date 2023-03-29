@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useRetrievalOrdersListView} from '../../core/RetrievalOrdersListViewProvider'
 import {deleteRetrievalOrderApi} from '../../../../../store/apis/admin'
+import {showNotification} from '../../../components/notification'
 
 export const RetrievalOrdersDeleteModal = () => {
   const {itemIdForDelete, setItemIdForDelete, fetchOrdersFunc} = useRetrievalOrdersListView()
@@ -16,11 +17,16 @@ export const RetrievalOrdersDeleteModal = () => {
 
   const onDeleteHandler = () => {
     setLoading(true)
-    deleteRetrievalOrderApi({id: itemIdForDelete}).then((res) => {
-      setLoading(false)
-      setItemIdForDelete(undefined)
-      fetchOrdersFunc()
-    })
+    deleteRetrievalOrderApi({id: itemIdForDelete})
+      .then((res) => {
+        setLoading(false)
+        setItemIdForDelete(undefined)
+        showNotification('success', 'Success', 'Deleted successfully.')
+        fetchOrdersFunc()
+      })
+      .catch((err) => {
+        showNotification('error', 'Error', 'Failed delete.')
+      })
   }
 
   return (
@@ -54,7 +60,7 @@ export const RetrievalOrdersDeleteModal = () => {
             </div>
             {/* begin::Modal body */}
             <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
-              <p className='fw-bolder fs-1 text-center mb-15'>Confrim delete?</p>
+              <p className='fw-bolder fs-1 text-center mb-15'>Confirm delete?</p>
               <div className='d-flex justify-content-around'>
                 <button className='btn btn-danger' onClick={onDeleteHandler}>
                   {!loading && 'Delete'}
@@ -66,7 +72,7 @@ export const RetrievalOrdersDeleteModal = () => {
                   )}
                 </button>
                 <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)}>
-                  Cancle
+                  Cancel
                 </button>
               </div>
             </div>

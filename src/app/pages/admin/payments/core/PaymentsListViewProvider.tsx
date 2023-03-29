@@ -1,76 +1,88 @@
-import {FC, useState, useEffect, createContext, useContext, useMemo, Dispatch, SetStateAction} from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom';
-import { WithChildren } from '../../../../../_metronic/helpers';
-import { RootState } from '../../../../store/reducers';
-import { fetchPayments } from '../../../../store/actions/admin';
+import {
+  FC,
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  useMemo,
+  Dispatch,
+  SetStateAction,
+} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {useParams} from 'react-router-dom'
+import {WithChildren} from '../../../../../_metronic/helpers'
+import {RootState} from '../../../../store/reducers'
+import {fetchPayments} from '../../../../store/actions/admin'
+import {useSearchParams} from 'react-router-dom'
 
 type pagination = {
-  total: number,
-  perPage: number,
-  page: number,
-  orderBy: string | undefined,
-  sort: string | undefined,
-};
+  total: number
+  perPage: number
+  page: number
+  orderBy: string | undefined
+  sort: string | undefined
+}
 
 type client = {
-  id?: number;
-  name?: string,
-  email?: string,
-  contact?: number | null,
-  wechat?: string,
-  student_id?: string,
-  address1?: string,
+  id?: number
+  name?: string
+  email?: string
+  contact?: number | null
+  wechat?: string
+  student_id?: string
+  address1?: string
 }
 
 type order = {
-  id?: number,
-  client?: client,
+  id?: number
+  client?: client
 }
 
 type ListViewContextProps = {
-  orderId?: string,
+  orderId?: string
   data: {
-    id?: number | null;
-    name?: string,
-    email?: string,
-    contact?: number | null,
-    wechat?: string,
-    student_id?: string,
-    address1?: string,
-    order?: order,
-  }[];
-  selected: any[];
-  setSelected: Dispatch<SetStateAction<any[]>>;
-  itemIdForUpdate: undefined | null | number;
-  setItemIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  clientIdForUpdate: undefined | null | number;
-  setClientIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  orderIdForUpdate: undefined | null | number;
-  setOrderIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  itemIdForDelete: undefined | null | number | any[];
-  setItemIdForDelete: Dispatch<SetStateAction<undefined | null | number | any[]>>;
-  pagination: pagination;
-  setPagination: Dispatch<SetStateAction<pagination>>;
-  isAllSelected: boolean;
-  isLoading: boolean;
+    id?: number | null
+    name?: string
+    email?: string
+    contact?: number | null
+    wechat?: string
+    student_id?: string
+    address1?: string
+    order?: order
+  }[]
+  selected: any[]
+  setSelected: Dispatch<SetStateAction<any[]>>
+  itemIdForUpdate: undefined | null | number
+  setItemIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>
+  clientIdForUpdate: undefined | null | number
+  setClientIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>
+  orderIdForUpdate: undefined | null | number
+  setOrderIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>
+  itemIdForDelete: undefined | null | number | any[]
+  setItemIdForDelete: Dispatch<SetStateAction<undefined | null | number | any[]>>
+  pagination: pagination
+  setPagination: Dispatch<SetStateAction<pagination>>
+  isAllSelected: boolean
+  isLoading: boolean
   filterData: {
-    order_id: string,
-    amount: string,
-  };
-  setFilterData: Dispatch<SetStateAction<any>>;
-  fetchPaymentsFunc: Function;
+    order_id: string
+    amount: string
+  }
+  setFilterData: Dispatch<SetStateAction<any>>
+  fetchPaymentsFunc: Function
 }
 
 const initialListView = {
-  data: [{
-    name: "",
-    email: "",
-    contact: null,
-    wechat: "",
-    student_id: "",
-    address: "",
-  }],
+  data: [
+    {
+      name: '',
+      email: '',
+      contact: null,
+      wechat: '',
+      student_id: '',
+      address: '',
+    },
+  ],
   selected: [],
   setSelected: () => {},
   itemIdForUpdate: undefined,
@@ -92,68 +104,92 @@ const initialListView = {
   isAllSelected: false,
   isLoading: false,
   filterData: {
-    order_id: "",
-    amount: "",
+    order_id: '',
+    amount: '',
   },
   setFilterData: () => {},
   fetchPaymentsFunc: () => {},
 }
 
-const ListViewContext = createContext<ListViewContextProps>(initialListView);
+const ListViewContext = createContext<ListViewContextProps>(initialListView)
 
 const calculateIsAllDataSelected = (__data: any[], __selected: any[]) => {
-  if(!__data) {
-    return false;
+  if (!__data) {
+    return false
   }
-  return __data.length > 0 && __data.length === __selected.length;
+  return __data.length > 0 && __data.length === __selected.length
 }
 
-
-const PaymentsListViewProvider:FC<WithChildren> = ({children, paymentRemarkId}) => {
-  const dispatch = useDispatch();
-  const {orderId} = useParams();
-  const [selected, setSelected] = useState(Array(0));
-  const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(initialListView.itemIdForUpdate);
-  const [itemIdForDelete, setItemIdForDelete] = useState<undefined | null | number | any[]>(initialListView.itemIdForUpdate);
-  const [clientIdForUpdate, setClientIdForUpdate] = useState<undefined | null | number>(initialListView.clientIdForUpdate);
-  const [orderIdForUpdate, setOrderIdForUpdate] = useState<undefined | null | number>(initialListView.orderIdForUpdate);
-  const [pagination, setPagination] = useState<pagination>(initialListView.pagination);
-  const isLoading = useSelector((state:RootState) => state.admin.loading);
-  const data = useSelector((state:RootState) => state.admin.payments);
-  const page = useSelector((state:RootState) => state.admin.pagination);
+const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId}) => {
+  const dispatch = useDispatch()
+  const {orderId} = useParams()
+  const [searchParams] = useSearchParams()
+  const order_id = searchParams.get('order_id')
+  const retrieval_order_id = searchParams.get('retrieval_order_id')
+  const [selected, setSelected] = useState(Array(0))
+  const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(
+    initialListView.itemIdForUpdate
+  )
+  const [itemIdForDelete, setItemIdForDelete] = useState<undefined | null | number | any[]>(
+    initialListView.itemIdForUpdate
+  )
+  const [clientIdForUpdate, setClientIdForUpdate] = useState<undefined | null | number>(
+    initialListView.clientIdForUpdate
+  )
+  const [orderIdForUpdate, setOrderIdForUpdate] = useState<undefined | null | number>(
+    initialListView.orderIdForUpdate
+  )
+  const [pagination, setPagination] = useState<pagination>(initialListView.pagination)
+  const isLoading = useSelector((state: RootState) => state.admin.loading)
+  const data = useSelector((state: RootState) => state.admin.payments)
+  const page = useSelector((state: RootState) => state.admin.pagination)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
-  const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected]);
-  const [filterData, setFilterData] = useState(initialListView.filterData);
+  const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
+  const [filterData, setFilterData] = useState(initialListView.filterData)
 
   useEffect(() => {
-    dispatch(fetchPayments({
-      filterData,
-      orderId,
-      paymentRemarkId,
-      total: 10,
-      perPage: 10,
-      page: 1,
-      orderBy: undefined,
-      sort: undefined,
-    }));
+    let __orderId = ''
+    let __isOrder = false
+    if (order_id) {
+      __orderId = order_id
+      __isOrder = true
+    } else if (retrieval_order_id) {
+      __orderId = retrieval_order_id
+      __isOrder = false
+    }
+    dispatch(
+      fetchPayments({
+        filterData,
+        paymentRemarkId,
+        orderId: __orderId,
+        isOrder: __isOrder,
+        total: 10,
+        perPage: 10,
+        page: 1,
+        orderBy: undefined,
+        sort: undefined,
+      })
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, paymentRemarkId]);
+  }, [order_id, retrieval_order_id, paymentRemarkId])
 
   useEffect(() => {
     setPagination({
       ...pagination,
       ...page,
-    });
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page])
 
   const fetchPaymentsFunc = () => {
-    dispatch(fetchPayments({
-      filterData,
-      orderId,
-      paymentRemarkId,
-      ...pagination,
-    }));
+    dispatch(
+      fetchPayments({
+        filterData,
+        orderId,
+        paymentRemarkId,
+        ...pagination,
+      })
+    )
   }
 
   return (
@@ -177,7 +213,7 @@ const PaymentsListViewProvider:FC<WithChildren> = ({children, paymentRemarkId}) 
         isLoading,
         filterData,
         setFilterData,
-        fetchPaymentsFunc
+        fetchPaymentsFunc,
       }}
     >
       {children}

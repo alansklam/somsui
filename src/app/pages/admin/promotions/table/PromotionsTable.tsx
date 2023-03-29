@@ -1,54 +1,55 @@
-import {useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
-import {KTCardBody} from '../../../../../_metronic/helpers';
+import {useEffect, useState} from 'react'
+import {useDispatch} from 'react-redux'
+import {KTCardBody} from '../../../../../_metronic/helpers'
 
-import { PromotionsTableBody } from './PromotionsTableBody';
-import { usePromotionsListView } from '../core/PromotionsListViewProvider';
-import { PromotionsPagination } from '../components/pagination/PromotionsPagination';
-import { fetchPromotions } from '../../../../store/actions/admin';
+import {PromotionsTableBody} from './PromotionsTableBody'
+import {usePromotionsListView} from '../core/PromotionsListViewProvider'
+import {PromotionsPagination} from '../components/pagination/PromotionsPagination'
+import {fetchPromotions} from '../../../../store/actions/admin'
 
 const PromotionsTable = () => {
-
-  const dispatch = useDispatch();
-  const { data, setSelected, isAllSelected, pagination, filterData } = usePromotionsListView();
-  const [listData, setListData] = useState(Array(0));
+  const dispatch = useDispatch()
+  const {data, setSelected, isAllSelected, pagination, filterData} = usePromotionsListView()
+  const [listData, setListData] = useState(Array(0))
 
   const onSortHandler = (order: string) => {
-    let __sort: string | undefined = undefined;
-    if(pagination.orderBy === order) {
-      if(pagination.sort) {
-        pagination.sort === "desc" ? __sort = "asc" : __sort = undefined;
+    let __sort: string | undefined = undefined
+    if (pagination.orderBy === order) {
+      if (pagination.sort) {
+        pagination.sort === 'desc' ? (__sort = 'asc') : (__sort = undefined)
       } else {
-        __sort = "desc";
+        __sort = 'desc'
       }
     } else {
-      __sort = "desc";
+      __sort = 'desc'
     }
-   
-    dispatch(fetchPromotions({
-      filterData,
-      ...pagination,
-      sort: __sort,
-      orderBy: order,
-    }));
-  };
+
+    dispatch(
+      fetchPromotions({
+        filterData,
+        ...pagination,
+        sort: __sort,
+        orderBy: order,
+      })
+    )
+  }
 
   useEffect(() => {
-    let __data = data;
-    __data.forEach((element:any, index:number) => {
+    let __data = data
+    __data.forEach((element: any, index: number) => {
       element = {
         ...element,
         checked: false,
-      };
-    });
-    setListData(__data);
-  }, [data]);
+      }
+    })
+    setListData(__data)
+  }, [data])
 
   useEffect(() => {
-    let __checked = [];
-    __checked = listData.filter((data) => data.checked === true);
-    setSelected(__checked);
-  }, [listData, setSelected]);
+    let __checked = []
+    __checked = listData.filter((data) => data.checked === true)
+    setSelected(__checked)
+  }, [listData, setSelected])
 
   return (
     <KTCardBody className='py-4'>
@@ -66,55 +67,95 @@ const PromotionsTable = () => {
                       data-kt-check-target='.widget-9-check'
                       checked={isAllSelected}
                       onChange={(e) => {
-                        let __listData = listData;
-                        __listData.forEach((data:any) => {
-                          data.checked = e.target.checked;
-                        });
-                        setListData([...__listData]);
+                        let __listData = listData
+                        __listData.forEach((data: any) => {
+                          data.checked = e.target.checked
+                        })
+                        setListData([...__listData])
                       }}
                     />
                   </div>
                 </th>
                 <th className='min-w-150px'>
-                  <div 
-                    className={pagination.orderBy === "code" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("code")}
+                  <div
+                    className={
+                      pagination.orderBy === 'code'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('code')}
                     style={{cursor: 'pointer'}}
                   >
-                    The Code
+                    ID
                   </div>
                 </th>
                 <th className='min-w-175px'>
-                  <div 
-                    className={pagination.orderBy ==="name" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("name")}
+                  <div
+                    className={
+                      pagination.orderBy === 'name'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('name')}
                     style={{cursor: 'pointer'}}
                   >
                     Name
                   </div>
                 </th>
                 <th className='min-w-125px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="effective_from" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("effective_from")}
+                  <div
+                    className={
+                      pagination.orderBy === 'effective_from'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('effective_from')}
                     style={{cursor: 'pointer'}}
                   >
                     Expiry date(by)
                   </div>
                 </th>
                 <th className='min-w-125px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="effective_to" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("effective_to")}
+                  <div
+                    className={
+                      pagination.orderBy === 'effective_to'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('effective_to')}
                     style={{cursor: 'pointer'}}
                   >
                     Valid(until)
                   </div>
                 </th>
                 <th className='min-w-125px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="updated_at" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("updated_at")}
+                  <div
+                    className={
+                      pagination.orderBy === 'updated_at'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('updated_at')}
                     style={{cursor: 'pointer'}}
                   >
                     Updated at
@@ -127,15 +168,14 @@ const PromotionsTable = () => {
               <PromotionsTableBody listData={listData} setListData={setListData} />
             </tbody>
           </table>
-          {
-            listData.length === 0 &&
-            <div 
+          {listData.length === 0 && (
+            <div
               className='w-100 text-center text-muted fw-bold fs-6'
               style={{position: 'absolute', top: '100px'}}
             >
               No matching records found
             </div>
-          }
+          )}
         </div>
         <div className='d-flex justify-content-end my-7'>
           <PromotionsPagination />

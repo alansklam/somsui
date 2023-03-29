@@ -1,104 +1,114 @@
-import {FC, useState, useEffect, createContext, useContext, useMemo, Dispatch, SetStateAction} from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { WithChildren } from '../../../../../_metronic/helpers';
-import { RootState } from '../../../../store/reducers';
-import { fetchOrders } from '../../../../store/actions/admin';
-import { useParams } from 'react-router-dom';
+import {
+  FC,
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  useMemo,
+  Dispatch,
+  SetStateAction,
+} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {WithChildren} from '../../../../../_metronic/helpers'
+import {RootState} from '../../../../store/reducers'
+import {fetchOrders} from '../../../../store/actions/admin'
+import {useSearchParams} from 'react-router-dom'
 
 type pagination = {
-  total: number,
-  perPage: number,
-  page: number,
-  orderBy: string | undefined,
-  sort: string | undefined,
-};
+  total: number
+  perPage: number
+  page: number
+  orderBy: string | undefined
+  sort: string | undefined
+}
 
 type client = {
-  id?: number;
-  name?: string,
-  email?: string,
-  contact?: number | null,
-  wechat?: string,
-  student_id?: string,
-  address1?: string,
-  university_id?: string,
+  id?: number
+  name?: string
+  email?: string
+  contact?: number | null
+  wechat?: string
+  student_id?: string
+  address1?: string
+  university_id?: string
 }
 
 type paymentStatus = {
-  code?: string,
+  code?: string
 }
 
 type ListViewContextProps = {
-  uid?: string;
+  uid: string | undefined | null
   data: {
-    id: number;
-    code: string,
-    emptyout_location_other: string,
-    emptyout_date_other: string,
-    emptyout_time_other: string,
-    checkin_location_other: string,
-    checkin_date_other: string,
-    checkin_time_other: string,
-    checkout_location_other: string,
-    checkout_date_other: string,
-    checkout_time_other: string,
-    paid_fee: string,
-    special_instruction: string,
-    payment_status_id: number,
-    payment_type_id: number,
-    order_status_id: number,
-    total_fee: string,
-    storage_month: string,
-    client: client,
-    status: paymentStatus,
-    items: any[],
-  }[];
-  selected: any[];
-  setSelected: Dispatch<SetStateAction<any[]>>;
-  itemIdForUpdate: undefined | null | number;
-  setItemIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  clientIdForUpdate: undefined | null | number;
-  setClientIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  orderIdForUpdate: undefined | null | number;
-  setOrderIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>;
-  itemIdForDelete: undefined | null | number | any[];
-  setItemIdForDelete: Dispatch<SetStateAction<undefined | null | number | any[]>>;
-  pagination: pagination;
-  setPagination: Dispatch<SetStateAction<pagination>>;
-  isAllSelected: boolean;
-  isLoading: boolean;
-  fetchOrdersFunc: Function;
+    id: number
+    code: string
+    emptyout_location_other: string
+    emptyout_date_other: string
+    emptyout_time_other: string
+    checkin_location_other: string
+    checkin_date_other: string
+    checkin_time_other: string
+    checkout_location_other: string
+    checkout_date_other: string
+    checkout_time_other: string
+    paid_fee: string
+    special_instruction: string
+    payment_status_id: number
+    payment_type_id: number
+    order_status_id: number
+    total_fee: string
+    storage_month: string
+    client: client
+    status: paymentStatus
+    items: any[]
+  }[]
+  selected: any[]
+  setSelected: Dispatch<SetStateAction<any[]>>
+  itemIdForUpdate: undefined | null | number
+  setItemIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>
+  clientIdForUpdate: undefined | null | number
+  setClientIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>
+  orderIdForUpdate: undefined | null | number
+  setOrderIdForUpdate: Dispatch<SetStateAction<undefined | null | number>>
+  itemIdForDelete: undefined | null | number | any[]
+  setItemIdForDelete: Dispatch<SetStateAction<undefined | null | number | any[]>>
+  pagination: pagination
+  setPagination: Dispatch<SetStateAction<pagination>>
+  isAllSelected: boolean
+  isLoading: boolean
+  fetchOrdersFunc: Function
   filterData: {
-    name: string,
-    email: string,
-    contact: string,
-    wechat: string,
-    student_id: string,
-    code: string,
-    emptyDateStart: string,
-    emptyDateEnd: string,
-    checkinDateStart: string,
-    checkinDateEnd: string,
-    checkoutDateStart: string,
-    checkoutDateEnd: string,
+    name: string
+    email: string
+    contact: string
+    wechat: string
+    student_id: string
+    code: string
+    emptyDateStart: string
+    emptyDateEnd: string
+    checkinDateStart: string
+    checkinDateEnd: string
+    checkoutDateStart: string
+    checkoutDateEnd: string
     status: {
-      new: boolean,
-      inProgress: boolean,
-      emptyDelivery: boolean,
-      schedCheckin: boolean,
-      checkin: boolean,
-      schedCheckout: boolean,
-      checkout: boolean,
-      schedEmptyReturn: boolean,
-      completed: boolean,
-      hold: boolean,
+      new: boolean
+      inProgress: boolean
+      emptyDelivery: boolean
+      schedCheckin: boolean
+      checkin: boolean
+      schedCheckout: boolean
+      checkout: boolean
+      schedEmptyReturn: boolean
+      completed: boolean
+      hold: boolean
       cancelled: boolean
-    },
-  },
-  setFilterData: Dispatch<SetStateAction<any>>;
+    }
+  }
+  setFilterData: Dispatch<SetStateAction<any>>
 }
 
 const initialListView = {
+  uid: '',
   data: [],
   selected: [],
   setSelected: () => {},
@@ -122,18 +132,18 @@ const initialListView = {
   isLoading: false,
   fetchOrdersFunc: () => {},
   filterData: {
-    name: "",
-    email: "",
-    contact: "",
-    wechat: "",
-    student_id: "",
-    code: "",
-    emptyDateStart: "",
-    emptyDateEnd: "",
-    checkinDateStart: "",
-    checkinDateEnd: "",
-    checkoutDateStart: "",
-    checkoutDateEnd: "",
+    name: '',
+    email: '',
+    contact: '',
+    wechat: '',
+    student_id: '',
+    code: '',
+    emptyDateStart: '',
+    emptyDateEnd: '',
+    checkinDateStart: '',
+    checkinDateEnd: '',
+    checkoutDateStart: '',
+    checkoutDateEnd: '',
     status: {
       new: false,
       inProgress: false,
@@ -145,67 +155,82 @@ const initialListView = {
       schedEmptyReturn: false,
       completed: false,
       hold: false,
-      cancelled: false
+      cancelled: false,
     },
   },
   setFilterData: () => {},
 }
 
-const ListViewContext = createContext<ListViewContextProps>(initialListView);
+const ListViewContext = createContext<ListViewContextProps>(initialListView)
 
 const calculateIsAllDataSelected = (__data: any[], __selected: any[]) => {
-  if(!__data) {
-    return false;
+  if (!__data) {
+    return false
   }
-  return __data.length > 0 && __data.length === __selected.length;
+  return __data.length > 0 && __data.length === __selected.length
 }
 
-
-const OrdersListViewProvider:FC<WithChildren> = ({children}) => {
-
-  const {uid, clientName} = useParams();
-  const dispatch = useDispatch();
-  const [selected, setSelected] = useState(Array(0));
-  const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(initialListView.itemIdForUpdate);
-  const [itemIdForDelete, setItemIdForDelete] = useState<undefined | null | number | any[]>(initialListView.itemIdForUpdate);
-  const [clientIdForUpdate, setClientIdForUpdate] = useState<undefined | null | number>(initialListView.clientIdForUpdate);
-  const [orderIdForUpdate, setOrderIdForUpdate] = useState<undefined | null | number>(initialListView.orderIdForUpdate);
-  const [pagination, setPagination] = useState<pagination>(initialListView.pagination);
-  const isLoading = useSelector((state:RootState) => state.admin.loading);
-  const data = useSelector((state:RootState) => state.admin.orders);
-  const page = useSelector((state:RootState) => state.admin.pagination);
+const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
+  const [searchParams] = useSearchParams()
+  const uid = searchParams.get('uid')
+  const clientName = searchParams.get('clientName')
+  // const {uid, clientName} = useParams();
+  const dispatch = useDispatch()
+  const [selected, setSelected] = useState(Array(0))
+  const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(
+    initialListView.itemIdForUpdate
+  )
+  const [itemIdForDelete, setItemIdForDelete] = useState<undefined | null | number | any[]>(
+    initialListView.itemIdForUpdate
+  )
+  const [clientIdForUpdate, setClientIdForUpdate] = useState<undefined | null | number>(
+    initialListView.clientIdForUpdate
+  )
+  const [orderIdForUpdate, setOrderIdForUpdate] = useState<undefined | null | number>(
+    initialListView.orderIdForUpdate
+  )
+  const [pagination, setPagination] = useState<pagination>(initialListView.pagination)
+  const isLoading = useSelector((state: RootState) => state.admin.loading)
+  const data = useSelector((state: RootState) => state.admin.orders)
+  const page = useSelector((state: RootState) => state.admin.pagination)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
-  const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected]);
-  const [filterData, setFilterData] = useState(clientName ? {...initialListView.filterData, name: clientName} : initialListView.filterData);
+  const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
+  const [filterData, setFilterData] = useState(
+    clientName ? {...initialListView.filterData, name: clientName} : initialListView.filterData
+  )
 
   const fetchOrdersFunc = () => {
-    dispatch(fetchOrders({
-      filterData,
-      uid, 
-      ...pagination
-    }));
+    dispatch(
+      fetchOrders({
+        filterData,
+        uid,
+        ...pagination,
+      })
+    )
   }
 
   useEffect(() => {
-    dispatch(fetchOrders({
-      filterData,
-      uid: uid,
-      total: 10,
-      perPage: 10,
-      page: 1,
-      orderBy: undefined,
-      sort: undefined,
-    }));
+    dispatch(
+      fetchOrders({
+        filterData,
+        uid: uid,
+        total: 10,
+        perPage: 10,
+        page: 1,
+        orderBy: undefined,
+        sort: undefined,
+      })
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uid]);
+  }, [uid])
 
   useEffect(() => {
     setPagination({
       ...pagination,
       ...page,
-    });
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page])
 
   return (
     <ListViewContext.Provider

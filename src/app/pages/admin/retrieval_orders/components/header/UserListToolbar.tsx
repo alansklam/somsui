@@ -1,16 +1,20 @@
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {useRetrievalOrdersListView} from '../../core/RetrievalOrdersListViewProvider'
+import {useNavigate} from 'react-router-dom'
 
 const UsersListToolbar = () => {
-  
-  const {setItemIdForUpdate} = useRetrievalOrdersListView()
+  const navigateTo = useNavigate()
   const openAddUserModal = () => {
-    setItemIdForUpdate(null);
+    navigateTo('add')
   }
 
   return (
     <div className='d-flex justify-content-end' data-kt-user-table-toolbar='base'>
-      <button disabled type='button' className='btn btn-primary d-flex justify-content-around align-items-center' onClick={openAddUserModal}>
+      <button
+        disabled
+        type='button'
+        className='btn btn-primary d-flex justify-content-around align-items-center'
+        onClick={openAddUserModal}
+      >
         <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
         Add
       </button>

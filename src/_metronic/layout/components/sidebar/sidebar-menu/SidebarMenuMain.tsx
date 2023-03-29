@@ -34,36 +34,50 @@ const SidebarMenuMain = () => {
         fontIcon='bi-layers'
       >
         <SidebarMenuItem to='/admin/payments/normal' title='Normal Payment' hasBullet={true} />
-        <SidebarMenuItem to='/admin/payments/retrieval' title='Retrieval Payment' hasBullet={true} />
+        <SidebarMenuItem
+          to='/admin/payments/retrieval'
+          title='Retrieval Payment'
+          hasBullet={true}
+        />
       </SidebarMenuItemWithSub>
       <SidebarMenuItem
         to='/admin/storage-periods'
-        icon='/media/icons/duotune/general/gen022.svg'
+        icon='/media/icons/duotune/general/gen054.svg'
         title={'Storage Period List'}
         fontIcon='bi-app-indicator'
       />
       <SidebarMenuItem
         to='/admin/promotions'
-        icon='/media/icons/duotune/general/gen040.svg'
+        icon='/media/icons/duotune/general/gen022.svg'
         title='Promotion List'
         fontIcon='bi-app-indicator'
       />
-      <SidebarMenuItemWithSub to='/admin/orders' title='Client Group' icon='/media/icons/duotune/general/gen051.svg'>
-        <SidebarMenuItem to='/admin/orders/90' title='All' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/1' title='HKU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/2' title='PolyU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/3' title='CityU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/8' title='SYU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/4' title='CHCHE' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/5' title='LU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/6' title='UST' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/7' title='HKBU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders/0' title='ubox Group' hasBullet={true} />
+      <SidebarMenuItemWithSub
+        to='/admin/orders'
+        title='Client Group'
+        icon='/media/icons/duotune/general/gen049.svg'
+      >
+        <SidebarMenuItem to='/admin/orders?uid=90' title='All' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=1' title='HKU' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=2' title='PolyU' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=3' title='CityU' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=8' title='SYU' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=4' title='CHCHE' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=5' title='LU' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=6' title='UST' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=7' title='HKBU' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=0' title='ubox Group' hasBullet={true} />
       </SidebarMenuItemWithSub>
       <SidebarMenuItem
         to='/admin/retrieval-order'
-        icon='/media/icons/duotune/general/gen040.svg'
+        icon='/media/icons/duotune/general/gen005.svg'
         title='Retrieval Orders List'
+        fontIcon='bi-app-indicator'
+      />
+      <SidebarMenuItem
+        to='/admin/items'
+        icon='/media/icons/duotune/general/gen019.svg'
+        title='Item List'
         fontIcon='bi-app-indicator'
       />
     </>

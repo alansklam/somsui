@@ -1,54 +1,55 @@
-import {useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
-import {KTCardBody} from '../../../../../_metronic/helpers';
+import {useEffect, useState} from 'react'
+import {useDispatch} from 'react-redux'
+import {KTCardBody} from '../../../../../_metronic/helpers'
 
-import { PeriodsTableBody } from './PeriodsTableBody';
-import { useListView } from '../core/PeriodsListViewProvider';
-import { StoragePeriodPagination } from '../components/pagination/StoragePeriodsPagination';
-import { fetchPeriods } from '../../../../store/actions/admin';
+import {PeriodsTableBody} from './PeriodsTableBody'
+import {useListView} from '../core/PeriodsListViewProvider'
+import {StoragePeriodPagination} from '../components/pagination/StoragePeriodsPagination'
+import {fetchPeriods} from '../../../../store/actions/admin'
 
 const PeriodsTable = () => {
-
-  const dispatch = useDispatch();
-  const { data, setSelected, isAllSelected, pagination, filterData } = useListView();
-  const [listData, setListData] = useState(Array(0));
+  const dispatch = useDispatch()
+  const {data, setSelected, isAllSelected, pagination, filterData} = useListView()
+  const [listData, setListData] = useState(Array(0))
 
   const onSortHandler = (order: string) => {
-    let __sort: string | undefined = undefined;
-    if(pagination.orderBy === order) {
-      if(pagination.sort) {
-        pagination.sort === "desc" ? __sort = "asc" : __sort = undefined;
+    let __sort: string | undefined = undefined
+    if (pagination.orderBy === order) {
+      if (pagination.sort) {
+        pagination.sort === 'desc' ? (__sort = 'asc') : (__sort = undefined)
       } else {
-        __sort = "desc";
+        __sort = 'desc'
       }
     } else {
-      __sort = "desc";
+      __sort = 'desc'
     }
-   
-    dispatch(fetchPeriods({
-      filterData,
-      ...pagination,
-      sort: __sort,
-      orderBy: order,
-    }));
-  };
+
+    dispatch(
+      fetchPeriods({
+        filterData,
+        ...pagination,
+        sort: __sort,
+        orderBy: order,
+      })
+    )
+  }
 
   useEffect(() => {
-    let __data = data;
-    __data.forEach((element:any, index:number) => {
+    let __data = data
+    __data.forEach((element: any, index: number) => {
       element = {
         ...element,
         checked: false,
-      };
-    });
-    setListData(__data);
-  }, [data]);
+      }
+    })
+    setListData(__data)
+  }, [data])
 
   useEffect(() => {
-    let __checked = [];
-    __checked = listData.filter((data) => data.checked === true);
-    setSelected(__checked);
-  }, [listData, setSelected]);
+    let __checked = []
+    __checked = listData.filter((data) => data.checked === true)
+    setSelected(__checked)
+  }, [listData, setSelected])
 
   return (
     <KTCardBody className='py-4'>
@@ -66,55 +67,95 @@ const PeriodsTable = () => {
                       data-kt-check-target='.widget-9-check'
                       checked={isAllSelected}
                       onChange={(e) => {
-                        let __listData = listData;
-                        __listData.forEach((data:any) => {
-                          data.checked = e.target.checked;
-                        });
-                        setListData([...__listData]);
+                        let __listData = listData
+                        __listData.forEach((data: any) => {
+                          data.checked = e.target.checked
+                        })
+                        setListData([...__listData])
                       }}
                     />
                   </div>
                 </th>
                 <th className='min-w-150px'>
-                  <div 
-                    className={pagination.orderBy === "code" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("code")}
+                  <div
+                    className={
+                      pagination.orderBy === 'code'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('code')}
                     style={{cursor: 'pointer'}}
                   >
-                    The Code
+                    ID
                   </div>
                 </th>
                 <th className='min-w-150px'>
-                  <div 
-                    className={pagination.orderBy ==="name" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("name")}
+                  <div
+                    className={
+                      pagination.orderBy === 'name'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('name')}
                     style={{cursor: 'pointer'}}
                   >
                     Name
                   </div>
                 </th>
                 <th className='min-w-100px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="min" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("min")}
+                  <div
+                    className={
+                      pagination.orderBy === 'min'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('min')}
                     style={{cursor: 'pointer'}}
                   >
                     Minimum storage period(months)
                   </div>
                 </th>
                 <th className='min-w-100px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="max" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("max")}
+                  <div
+                    className={
+                      pagination.orderBy === 'max'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('max')}
                     style={{cursor: 'pointer'}}
                   >
                     The longest storage period(months)
                   </div>
                 </th>
                 <th className='min-w-125px text-center'>
-                  <div 
-                    className={pagination.orderBy ==="updated_at" ? (pagination.sort ? (pagination.sort === "asc" ? "table-sort-asc" : "table-sort-desc") : "") : ""} 
-                    onClick={() => onSortHandler("updated_at")}
+                  <div
+                    className={
+                      pagination.orderBy === 'updated_at'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('updated_at')}
                     style={{cursor: 'pointer'}}
                   >
                     Updated at
@@ -127,15 +168,14 @@ const PeriodsTable = () => {
               <PeriodsTableBody listData={listData} setListData={setListData} />
             </tbody>
           </table>
-          {
-            listData.length === 0 &&
-            <div 
+          {listData.length === 0 && (
+            <div
               className='w-100 text-center text-muted fw-bold fs-6'
               style={{position: 'absolute', top: '100px'}}
             >
               No matching records found
             </div>
-          }
+          )}
         </div>
         <div className='d-flex justify-content-end my-7'>
           <StoragePeriodPagination />

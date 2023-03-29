@@ -1,11 +1,14 @@
 import {useRetrievalOrdersListView} from '../core/RetrievalOrdersListViewProvider'
+import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
-// import { sendInvoiceApi } from "../../../../store/apis/admin";
-// import { notification } from "antd";
+import {useNavigate} from 'react-router-dom'
+import {RootState} from '../../../../store/reducers'
 
 export const RetrievalOrdersTableBody = (props: any) => {
   const {listData, setListData} = props
+  const navigateTo = useNavigate()
   const {setClientIdForUpdate, setRetrievalOrderIdForUpdate} = useRetrievalOrdersListView()
+  const products = useSelector((state: RootState) => state.admin.products)
 
   const selectHandler = (index: number, state: boolean) => {
     let __data = listData[index]
@@ -32,6 +35,16 @@ export const RetrievalOrdersTableBody = (props: any) => {
   //     })
   // }
 
+  const getItem = (selectItem: any, items: any[]) => {
+    let __quantity = 0
+    items.forEach((item) => {
+      if (selectItem.id === item.item_id) {
+        __quantity = item.item_qty
+      }
+    })
+    return __quantity
+  }
+
   return (
     <>
       {listData.length > 0 ? (
@@ -57,6 +70,7 @@ export const RetrievalOrdersTableBody = (props: any) => {
                     style={{cursor: 'pointer'}}
                     onClick={() => {
                       setClientIdForUpdate(index)
+                      navigateTo('/admin/clients/edit?clientId=' + data.client.id)
                     }}
                   >
                     {data.client?.name}
@@ -81,23 +95,44 @@ export const RetrievalOrdersTableBody = (props: any) => {
                   style={{cursor: 'pointer'}}
                   onClick={() => {
                     setRetrievalOrderIdForUpdate(index)
+                    navigateTo('edit?retrievalOrderId=' + data.id)
                   }}
                 >
                   {data.code}
                 </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.paperBoxes}</span>
+                <span
+                  className='text-blue fw-bold d-block fs-6'
+                  style={{cursor: 'pointer'}}
+                  onClick={() => {
+                    setRetrievalOrderIdForUpdate(index)
+                    navigateTo('/admin/orders/edit?orderId=' + data.order.id)
+                  }}
+                >
+                  {data.order?.code}
+                </span>
               </td>
-              <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.standardBoxes}</span>
-              </td>
-              <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.oversizeItems}</span>
-              </td>
-              <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.wardrobe}</span>
-              </td>
+              {products &&
+                products.length > 0 &&
+                products.map((item, index) =>
+                  item.top_state === 1 ? (
+                    <td className='text-center' key={index}>
+                      <span className='text-dark fw-bold d-block fs-6' key={index}>
+                        {getItem(item, data.items)}
+                      </span>
+                    </td>
+                  ) : (
+                    <th
+                      key={index}
+                      ref={(el) => {
+                        if (el) {
+                          el.style.setProperty('padding', '0px', 'important')
+                        }
+                      }}
+                    ></th>
+                  )
+                )}
               {/* <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.vacuumBags}</span>
               </td> */}
@@ -126,6 +161,9 @@ export const RetrievalOrdersTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.special_instruction}</span>
               </td>
               <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.remark_qr_code}</span>
+              </td>
+              <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.total_fee}</span>
               </td>
               <td className='text-center'>
@@ -133,7 +171,7 @@ export const RetrievalOrdersTableBody = (props: any) => {
               </td>
               <td className='text-center'>
                 <Link
-                  to={'/admin/payments/' + data.id}
+                  to={'/admin/payments?retrieval_order_id=' + data.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                 >

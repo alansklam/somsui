@@ -1,27 +1,32 @@
 import {useState, useEffect} from 'react'
-import { KTSVG } from '../../../../../../_metronic/helpers'
-import { usePaymentsListView } from '../../core/PaymentsListViewProvider'
-import { deletePaymentsApi } from '../../../../../store/apis/admin'
+import {KTSVG} from '../../../../../../_metronic/helpers'
+import {usePaymentsListView} from '../../core/PaymentsListViewProvider'
+import {deletePaymentsApi} from '../../../../../store/apis/admin'
+import {showNotification} from '../../../components/notification'
 
 export const PaymentsDeleteModal = () => {
-
-  const { itemIdForDelete, setItemIdForDelete, fetchPaymentsFunc } = usePaymentsListView();
-  const [loading, setLoading] = useState(false);
+  const {itemIdForDelete, setItemIdForDelete, fetchPaymentsFunc} = usePaymentsListView()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     document.body.classList.add('modal-open')
     return () => {
       document.body.classList.remove('modal-open')
     }
-  }, []);
+  }, [])
 
   const onDeleteHandler = () => {
-    setLoading(true);
+    setLoading(true)
     deletePaymentsApi({id: itemIdForDelete})
       .then((res) => {
-        setLoading(false);
-        setItemIdForDelete(undefined);
-        fetchPaymentsFunc();
+        setLoading(false)
+        setItemIdForDelete(undefined)
+        showNotification('success', 'Success', 'Delete successfully.')
+        fetchPaymentsFunc()
+      })
+      .catch((err) => {
+        showNotification('success', 'Success', 'Delete successfully.')
+        setItemIdForDelete(undefined)
       })
   }
 
@@ -56,11 +61,9 @@ export const PaymentsDeleteModal = () => {
             </div>
             {/* begin::Modal body */}
             <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
-              <p className='fw-bolder fs-1 text-center mb-15'>Confrim delete?</p>
+              <p className='fw-bolder fs-1 text-center mb-15'>Confirm delete?</p>
               <div className='d-flex justify-content-around'>
-                <button className='btn btn-danger'
-                  onClick={onDeleteHandler}
-                >
+                <button className='btn btn-danger' onClick={onDeleteHandler}>
                   {!loading && 'Delete'}
                   {loading && (
                     <span className='indicator-progress' style={{display: 'block'}}>
@@ -69,8 +72,8 @@ export const PaymentsDeleteModal = () => {
                     </span>
                   )}
                 </button>
-                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)} >
-                  Cancle
+                <button className='btn btn-light' onClick={() => setItemIdForDelete(undefined)}>
+                  Cancel
                 </button>
               </div>
             </div>
