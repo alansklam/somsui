@@ -61,17 +61,17 @@ export default function Home() {
 
       // Update the price
       __materials.forEach((item, index) => {
-        Object.keys(__newPrice).forEach((key) => {
-          if (parseInt(key) === item.id) {
-            __materials[index].price = __newPrice[key]
+        __newPrice.forEach((element) => {
+          if (element.item_id === item.id) {
+            __materials[index].price = element.price
           }
         })
       })
 
       __products.forEach((item, index) => {
-        Object.keys(__newPrice).forEach((key) => {
-          if (parseInt(key) === item.id) {
-            __products[index].price = __newPrice[key]
+        __newPrice.forEach((element) => {
+          if (element.item_id === item.id) {
+            __products[index].price = element.price
           }
         })
       })

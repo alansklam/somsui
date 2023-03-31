@@ -3,6 +3,13 @@ const NumberInput = (props) => {
   const onChangeHandle = (e) => {
     onChange(parseInt(e.target.value))
   }
+  const onBlurHandle = (e) => {
+    let __value = e.target.value
+    if (e.target.value === '') {
+      __value = '0'
+    }
+    onChange(parseInt(__value))
+  }
 
   return (
     <>
@@ -12,8 +19,9 @@ const NumberInput = (props) => {
         max={18}
         value={props.value}
         onChange={onChangeHandle}
+        onBlur={onBlurHandle}
         className={`number-input ${
-          props.value !== 0 ? 'bg-active' : 'bg-default'
+          props.value !== 0 && !isNaN(props.value) ? 'bg-active' : 'bg-default'
         } text-normal-18 text-white ${props.className}`}
       />
     </>

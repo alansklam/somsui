@@ -39,8 +39,12 @@ const Quantity = (props) => {
         }
         return
       }
+      if (isNaN(value)) {
+        onChangeHandler(item, 0)
+      } else {
+        onChangeHandler(item, value)
+      }
       setValue(value)
-      onChangeHandler(item, value)
     }
   }
   return (
