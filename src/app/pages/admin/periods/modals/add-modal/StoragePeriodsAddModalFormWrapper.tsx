@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useListView} from '../../core/PeriodsListViewProvider'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
@@ -8,42 +8,51 @@ import {showNotification} from '../../../components/notification'
 export const StoragePeriodsAddModalFormWrapper = () => {
   const {itemIdForUpdate, setItemIdForUpdate, data, fetchPeriodsFunc} = useListView()
 
+  const [minValue, setMinValue] = useState('')
+  const [maxValue, setMaxValue] = useState('')
+
   const profileDetailsSchema = Yup.object().shape({
     code: Yup.string().required('The code is required'),
     name: Yup.string().required('Name is required'),
-    min: Yup.number()
-      .required('The minmum storage is required')
-      .positive('This field should be positive integer')
-      .integer('This field should be positive integer'),
-    max: Yup.number()
-      .required('The maximum storage is required')
-      .positive('This field should be positive integer')
-      .integer('This field should be positive integer'),
   })
+
+  useEffect(() => {
+    if (data.length > 0 && itemIdForUpdate !== null) {
+      if (itemIdForUpdate !== undefined && itemIdForUpdate !== null) {
+        let min = NaN
+        let max = NaN
+        min = data[itemIdForUpdate].min ? data[itemIdForUpdate].min : NaN
+        max = data[itemIdForUpdate].max ? data[itemIdForUpdate].max : NaN
+        setMinValue(min.toString())
+        setMaxValue(max.toString())
+      }
+    }
+  }, [data, itemIdForUpdate])
 
   const initialValues =
     itemIdForUpdate == null
       ? {
           code: '',
           name: '',
-          max: undefined,
-          min: undefined,
         }
       : {
           code: data[itemIdForUpdate].code,
           name: data[itemIdForUpdate].name,
-          max: data[itemIdForUpdate].max ? data[itemIdForUpdate].max : undefined,
-          min: data[itemIdForUpdate].min ? data[itemIdForUpdate].min : undefined,
         }
 
   const [loading, setLoading] = useState(false)
+
   const formik = useFormik({
     initialValues,
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
+      if (minValue === '' && maxValue === '') {
+        showNotification('error', 'Error', 'Please fill min or max field.')
+        return
+      }
       setLoading(true)
       itemIdForUpdate == null
-        ? editPeriodsApi({data: values, id: undefined})
+        ? editPeriodsApi({data: {...values, min: minValue, max: maxValue}, id: undefined})
             .then((res) => {
               setLoading(false)
               setItemIdForUpdate(undefined)
@@ -54,7 +63,10 @@ export const StoragePeriodsAddModalFormWrapper = () => {
               setLoading(false)
               showNotification('error', 'Error', err.data.message)
             })
-        : editPeriodsApi({data: values, id: data[itemIdForUpdate].id})
+        : editPeriodsApi({
+            data: {...values, min: minValue, max: maxValue},
+            id: data[itemIdForUpdate].id,
+          })
             .then((res) => {
               setLoading(false)
               setItemIdForUpdate(undefined)
@@ -122,13 +134,11 @@ export const StoragePeriodsAddModalFormWrapper = () => {
                     type='number'
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Minimum storage month'
-                    {...formik.getFieldProps('min')}
+                    value={minValue}
+                    onChange={(e) => {
+                      setMinValue(e.target.value)
+                    }}
                   />
-                  {formik.touched.min && formik.errors.min && (
-                    <div className='fv-plugins-message-container'>
-                      <div className='fv-help-block'>{formik.errors.min}</div>
-                    </div>
-                  )}
                 </div>
               </div>
 
@@ -142,13 +152,11 @@ export const StoragePeriodsAddModalFormWrapper = () => {
                     type='number'
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Maximum storage month'
-                    {...formik.getFieldProps('max')}
+                    value={maxValue}
+                    onChange={(e) => {
+                      setMaxValue(e.target.value)
+                    }}
                   />
-                  {formik.touched.max && formik.errors.max && (
-                    <div className='fv-plugins-message-container'>
-                      <div className='fv-help-block'>{formik.errors.max}</div>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>

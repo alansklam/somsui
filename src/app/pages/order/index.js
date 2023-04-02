@@ -61,6 +61,7 @@ export default function Home() {
 
       // Update the price
       __materials.forEach((item, index) => {
+        __materials[index].price = item.default_price.toFixed(2)
         __newPrice.forEach((element) => {
           if (element.item_id === item.id) {
             __materials[index].price = element.price
@@ -69,6 +70,7 @@ export default function Home() {
       })
 
       __products.forEach((item, index) => {
+        __products[index].price = item.default_price.toFixed(2)
         __newPrice.forEach((element) => {
           if (element.item_id === item.id) {
             __products[index].price = element.price
