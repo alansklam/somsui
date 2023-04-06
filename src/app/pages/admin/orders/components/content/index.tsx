@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {RootState} from '../../../../../store/reducers'
 import {MinusOutlined, PlusOutlined} from '@ant-design/icons'
-import {editOrderApi} from '../../../../../store/apis/admin'
+import {editOrderApi, fetchClientNameApi} from '../../../../../store/apis/admin'
 import dayjs from 'dayjs'
 import {useNavigate} from 'react-router-dom'
 import {showNotification} from '../../../components/notification'
@@ -39,30 +39,32 @@ const ContentOrder = (props: propState) => {
   const [specialInstruction, setSpecialInstruction] = useState('')
   const [lumpSum, setLumpSum] = useState('')
   const [storageMonth, setStorageMonth] = useState('')
+  const [clients, setClients] = useState<any[]>([])
+  const [selectedClient, setSelectedClient] = useState<number | undefined>()
   const [orderItems, setOrderItems] = useState<any[]>([])
   const [newItemsList, setNewItemsList] = useState<any[]>([])
   const [qrCode, setQrCode] = useState('')
 
   const profileDetailsSchema = Yup.object().shape({
     emptyout_location_other: Yup.string()
-      .required('Name is required')
-      .min(3, 'Name 3 symbols')
-      .max(50, 'Name 50 symbols'),
-    emptyout_date_other: Yup.date().required('Date is required'),
-    emptyout_time_other: Yup.string().required('Time is required'),
+      .required('Emptyout location is required')
+      .min(3, 'Emptyout location should be 3 letters at least')
+      .max(50, 'Emptyout location should be 50 letters at maximum'),
+    emptyout_date_other: Yup.date().required('Emptyout Date is required'),
+    emptyout_time_other: Yup.string().required('Emptyout Time is required'),
     checkin_location_other: Yup.string()
-      .required('Name is required')
-      .min(3, 'Name 3 symbols')
-      .max(50, 'Name 50 symbols'),
-    checkin_date_other: Yup.date().required('Date is required'),
-    checkin_time_other: Yup.string().required('Time is required'),
+      .required('Checkin location is required')
+      .min(3, 'Checkin location 3 letters at least')
+      .max(50, 'Checkin location 50 letters at maximum'),
+    checkin_date_other: Yup.date().required('Checkin Date is required'),
+    checkin_time_other: Yup.string().required('Checkin Time is required'),
     checkout_location_other: Yup.string()
-      .required('Name is required')
-      .min(3, 'Name 3 symbols')
-      .max(50, 'Name 50 symbols'),
-    checkout_date_other: Yup.date().required('Date is required'),
-    checkout_time_other: Yup.string().required('Time is required'),
-    paid_fee: Yup.string().required('This field is required.'),
+      .required('Checkout location is required')
+      .min(3, 'Checkout location 3 letters at least')
+      .max(50, 'Checkout location 50 letters at maximum'),
+    checkout_date_other: Yup.date().required('Checkout Date is required'),
+    checkout_time_other: Yup.string().required('Checkout Time is required'),
+    paid_fee: Yup.string().required('Paid fee is required.'),
   })
 
   const initialValues = orderInfo
@@ -73,10 +75,35 @@ const ContentOrder = (props: propState) => {
     initialValues,
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
+      if (!selectedClient) {
+        showNotification('error', 'Error', 'Please selecte the name of client.')
+        return
+      }
+      if (orderItems.length === 0) {
+        showNotification('error', 'Error', 'Please add items.')
+        return
+      }
+      if (orderStatusId === '') {
+        showNotification('error', 'Error', 'Please select the order status.')
+        return
+      }
+      if (paymentMethodId === '') {
+        showNotification('error', 'Error', 'Please select the payment method.')
+        return
+      }
+      if (paymentStatusId === '') {
+        showNotification('error', 'Error', 'Please select the payment status.')
+        return
+      }
+      if (order === 0) {
+        showNotification('error', 'Error', 'Please add items.')
+        return
+      }
       setLoading(true)
       editOrderApi({
         data: {
           ...values,
+          client_id: selectedClient,
           items: orderItems,
           order_status_id: orderStatusId,
           payment_type_id: paymentMethodId,
@@ -86,11 +113,11 @@ const ContentOrder = (props: propState) => {
           total_fee: lumpSum,
           remark_qrcode: qrCode,
         },
-        id: order.id,
+        id: order.id ? order.id : '',
       })
         .then((res) => {
           setLoading(false)
-          navigateTo('/admin/orders?uid=90')
+          navigateTo(-1)
           showNotification('success', 'Success', 'Update successfully.')
         })
         .catch((err) => {
@@ -101,8 +128,15 @@ const ContentOrder = (props: propState) => {
   })
 
   useEffect(() => {
+    fetchClientNameApi().then((res) => {
+      let __clients = res.data
+      setClients(__clients)
+    })
+  }, [])
+
+  useEffect(() => {
+    let __items: any[] = []
     if (order?.items) {
-      let __items: any[] = []
       order.items.forEach((item: any) => {
         __items.push({
           id: item.item_id,
@@ -115,13 +149,14 @@ const ContentOrder = (props: propState) => {
           added_item: false,
         })
       })
-      setOrderItems(__items)
     }
-    setOrderStatusId(order.order_status_id)
-    setPaymentMethodId(order.payment_type_id)
-    setPaymentStatusId(order.payment_status_id)
+    setOrderItems(__items)
+    setSelectedClient(order.client?.id ? order.client?.id : undefined)
+    setOrderStatusId(order.order_status_id ? order.order_status_id : '')
+    setPaymentMethodId(order.payment_type_id ? order.payment_type_id : '')
+    setPaymentStatusId(order.payment_status_id ? order.payment_status_id : '')
     setSpecialInstruction(order.special_instruction ? order.special_instruction : '')
-    setLumpSum(order.total_fee)
+    setLumpSum(order.total_fee ? order.total_fee : '')
     setQrCode(order.remark_qrcode ? order.remark_qrcode : '')
   }, [order])
 
@@ -129,9 +164,10 @@ const ContentOrder = (props: propState) => {
     if (products && products?.length > 0) {
       let __newItemsList = products.filter((element: any) => {
         let __state = false
-        order.items.forEach((item: any) => {
-          if (element.id === item.item_id) __state = true
-        })
+        order?.items &&
+          order.items.forEach((item: any) => {
+            if (element.id === item.item_id) __state = true
+          })
         if (!__state) {
           return element
         } else {
@@ -161,14 +197,17 @@ const ContentOrder = (props: propState) => {
       //   __months = Math.ceil((__checkout.getTime() - __checkin.getTime()) / (1000 * 3600 * 24 * 30))
       setStorageMonth(__months.toString())
     }
-    let __totalFee = (__subTotalFee * __months + __packageFee).toFixed(2)
-    setLumpSum(__totalFee.toString())
+    let __totalFee = __subTotalFee * __months + __packageFee
+    if (isNaN(__totalFee)) {
+      __totalFee = 0
+    }
+    setLumpSum(__totalFee.toFixed(2))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values, orderItems])
 
   return (
     <div>
-      <div className='mx-auto mw-1000px'>
+      <div className='mx-auto mw-1300px'>
         <div className=''>
           <div className='mx-5 mx-xl-15'>
             <h2 className='fw-bolder fs-1 px-7'>Order</h2>
@@ -180,7 +219,7 @@ const ContentOrder = (props: propState) => {
                   <div className='card-body border-top p-9'>
                     <div className='row'>
                       <div className='col-lg-6 px-8'>
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
                           <div className='col-lg-8 fv-row'>
                             <input
@@ -193,16 +232,36 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </div>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
                           <div className='col-lg-8 fv-row'>
-                            <input
+                            {/* <input
                               type='text'
                               disabled
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Name'
                               value={order?.client?.name}
-                            />
+                            /> */}
+                            <select
+                              className='form-select form-select-solid'
+                              value={selectedClient ? selectedClient : 'default'}
+                              onChange={(e) => {
+                                let __value = e.target.value
+                                if (__value !== 'default') {
+                                  setSelectedClient(parseInt(__value))
+                                } else {
+                                  setSelectedClient(undefined)
+                                }
+                              }}
+                            >
+                              <option value={'default'}>{'Select the name of client'}</option>
+                              {clients.length > 0 &&
+                                clients.map((client, index) => (
+                                  <option key={index} value={client.id}>
+                                    {client.name}
+                                  </option>
+                                ))}
+                            </select>
                           </div>
                         </div>
 
@@ -402,7 +461,7 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </div>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>
                             Special requirement
                           </label>
@@ -419,7 +478,7 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </div>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>
                             <span className='required'>Order status</span>
                           </label>
@@ -618,7 +677,7 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>
                             <span className='required'>Payment Method</span>
                           </label>
@@ -642,7 +701,7 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </div>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>
                             <span className='required'>Payment status</span>
                           </label>
@@ -666,7 +725,7 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </div>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>
                             <span className=''>Storage month</span>
                           </label>
@@ -681,7 +740,7 @@ const ContentOrder = (props: propState) => {
                           </div>
                         </div>
 
-                        <div className='row py-4 flex items-center'>
+                        <div className='row py-3 flex items-center'>
                           <label className='col-lg-4 col-form-label fw-bold fs-6'>
                             <span className=''>Lump sum</span>
                           </label>
@@ -719,6 +778,14 @@ const ContentOrder = (props: propState) => {
                   </div>
 
                   <div className='card-footer d-flex justify-content-end py-6 px-9'>
+                    <span
+                      className='btn btn-secondary mx-7'
+                      onClick={(e) => {
+                        navigateTo(-1)
+                      }}
+                    >
+                      Cancel
+                    </span>
                     <button type='submit' className='btn btn-primary' disabled={loading}>
                       {!loading && 'Save Changes'}
                       {loading && (

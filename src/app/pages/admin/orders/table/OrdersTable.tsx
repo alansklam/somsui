@@ -90,10 +90,27 @@ const OrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("name")}
+                    onClick={() => onSortHandler('name')}
                     style={{cursor: 'pointer'}}
                   >
                     Name
+                  </div>
+                </th>
+                <th className='min-w-100px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'student_id'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('student_id')}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Student ID
                   </div>
                 </th>
                 <th className='min-w-150px'>
@@ -107,7 +124,7 @@ const OrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("email")}
+                    onClick={() => onSortHandler('email')}
                     style={{cursor: 'pointer'}}
                   >
                     Email
@@ -124,10 +141,27 @@ const OrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("contact")}
+                    onClick={() => onSortHandler('contact')}
                     style={{cursor: 'pointer'}}
                   >
                     Contact Number
+                  </div>
+                </th>
+                <th className='min-w-125px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'mobile_phone_cn'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('mobile_phone_cn')}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Phone CN
                   </div>
                 </th>
                 <th className='min-w-100px text-center'>
@@ -141,29 +175,13 @@ const OrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("wechat")}
+                    onClick={() => onSortHandler('wechat')}
                     style={{cursor: 'pointer'}}
                   >
                     WeChat
                   </div>
                 </th>
-                <th className='min-w-100px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'student_id'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    // onClick={() => onSortHandler("student_id")}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Student ID
-                  </div>
-                </th>
+
                 <th className='min-w-150px text-center'>
                   <div
                     className={
@@ -336,7 +354,7 @@ const OrdersTable = () => {
                 <th className='min-w-125px text-center'>
                   <div
                     className={
-                      pagination.orderBy === 'qr_code'
+                      pagination.orderBy === 'remark_qrcode'
                         ? pagination.sort
                           ? pagination.sort === 'asc'
                             ? 'table-sort-asc'
@@ -344,8 +362,8 @@ const OrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler('special_instruction')}
-                    // style={{cursor: 'pointer'}}
+                    onClick={() => onSortHandler('remark_qrcode')}
+                    style={{cursor: 'pointer'}}
                   >
                     QR Code
                   </div>
@@ -401,7 +419,7 @@ const OrdersTable = () => {
                     Outstanding amount
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='min-w-125px text-center'>
                   <div
                     className={
                       pagination.orderBy === 'order_status_id'

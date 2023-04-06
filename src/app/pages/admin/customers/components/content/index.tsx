@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useSelector} from 'react-redux'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
@@ -18,6 +18,8 @@ type propsState = {
     student_id: string | undefined
     password: string | undefined
     confirmPassword: string | undefined
+    university_id: string | undefined
+    mobile_phone_cn: string | undefined
   }
   onSave: Function
   createState: boolean
@@ -29,7 +31,7 @@ const ContentCustomer = (props: propsState) => {
   const [searchParams] = useSearchParams()
   const clientId = searchParams.get('clientId')
   const universities = useSelector((state: RootState) => state.admin.universities)
-  const [universityId, setUniversityId] = useState('')
+  const [universityId, setUniversityId] = useState<string>('')
   const [resetPassword, setResetPassword] = useState(false)
   const [errorStatus, setErrorStatus] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -37,23 +39,28 @@ const ContentCustomer = (props: propsState) => {
   const profileDetailsSchema = Yup.object().shape({
     name: Yup.string()
       .required('Name is required')
-      .min(3, 'Name 3 symbols')
-      .max(50, 'Name 50 symbols'),
+      .min(3, 'Name should be 3 numbers at least')
+      .max(50, 'Name should be 50 numbers at maximum'),
     email: Yup.string()
       .email('Wrong email format')
-      .min(3, 'Email 3 symbols')
-      .max(50, 'Email 50 symbols')
+      .min(3, 'Email should be 3 numbers at least')
+      .max(50, 'Email should be 50 numbers at maximum')
       .required('Email is required'),
     contact: Yup.number()
       .required('Contact is required')
       .positive('This field should be positive integer')
       .integer('This field should be positive integer')
-      .min(9999999, 'Contact 8 symbols')
-      .max(100000000000, 'Contact 11 symbols'),
+      .min(9999999, 'Contact should be 8 numbers at least')
+      .max(100000000000, 'Contact should be 11 numbers at maximum'),
+    mobile_phone_cn: Yup.number()
+      .positive('This field should be positive integer')
+      .integer('This field should be positive integer')
+      .min(9999999, 'Phone CN should be 8 numbers at least')
+      .max(100000000000, 'Phone CN should be 11 numbers at maximum'),
     address1: Yup.string()
-      .required('Name is required')
-      .min(3, 'Name 3 symbols')
-      .max(100, 'Name 100 symbols'),
+      .required('Address is required')
+      .min(3, 'Address should be 3 letters at least')
+      .max(100, 'Address should be 100 letters at maximum'),
 
     // password: Yup.string()
     //         .required('Password is required')
@@ -76,7 +83,7 @@ const ContentCustomer = (props: propsState) => {
             .then((res) => {
               setLoading(false)
               setErrorStatus(false)
-              navigateTo('/admin/clients')
+              navigateTo(-1)
               showNotification('success', 'Success', 'Created successfully.')
             })
             .catch((err) => {
@@ -88,7 +95,7 @@ const ContentCustomer = (props: propsState) => {
             .then((res) => {
               setLoading(false)
               setErrorStatus(false)
-              navigateTo('/admin/clients')
+              navigateTo(-1)
               showNotification('success', 'Success', 'Updated successfully.')
             })
             .catch((err) => {
@@ -98,6 +105,16 @@ const ContentCustomer = (props: propsState) => {
             })
     },
   })
+
+  useEffect(() => {
+    console.log('university', customerInfo?.university_id)
+    if (clientId) {
+      setUniversityId(
+        customerInfo?.university_id?.toString() ? customerInfo?.university_id.toString() : ''
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clientId])
 
   return (
     <div className='mw-800px box mx-auto'>
@@ -170,6 +187,26 @@ const ContentCustomer = (props: propsState) => {
 
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className=''>Phone CN</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <input
+                        type='number'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholder='Phone CN'
+                        {...formik.getFieldProps('mobile_phone_cn')}
+                      />
+                      {formik.touched.mobile_phone_cn && formik.errors.mobile_phone_cn && (
+                        <div className='fv-plugins-message-container'>
+                          <div className='fv-help-block'>{formik.errors.mobile_phone_cn}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
                       <span className='required'>Address</span>
                     </label>
 
@@ -208,16 +245,11 @@ const ContentCustomer = (props: propsState) => {
                         <option value='default'>Select Univeristy</option>
                         {universities.length > 0 &&
                           universities.map((university, index) => (
-                            <option value={university.id} key={index}>
+                            <option value={university.id.toString()} key={index}>
                               {university.display_name}
                             </option>
                           ))}
                       </select>
-                      {formik.touched.address1 && formik.errors.address1 && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.address1}</div>
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -290,19 +322,34 @@ const ContentCustomer = (props: propsState) => {
                       <div className='alert-text font-weight-bold'>Email is already exist.</div>
                     </div>
                   )}
+
+                  {!createState && (
+                    <div className='row mt-6'>
+                      <label className='col-lg-4 col-form-label fw-bold fs-6'></label>
+
+                      <div className='col-lg-8 fv-row flex flex-end'>
+                        <span
+                          className='btn btn-danger'
+                          onClick={(e) => {
+                            setResetPassword(true)
+                          }}
+                        >
+                          Reset Password
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className='card-footer d-flex justify-content-end py-10 px-9'>
-                  {!createState && (
-                    <span
-                      className='btn btn-danger mx-7'
-                      onClick={(e) => {
-                        setResetPassword(true)
-                      }}
-                    >
-                      Reset Password
-                    </span>
-                  )}
+                  <span
+                    className='btn btn-secondary mx-7'
+                    onClick={(e) => {
+                      navigateTo(-1)
+                    }}
+                  >
+                    Cancel
+                  </span>
 
                   <button type='submit' className='btn btn-primary' disabled={loading}>
                     {!loading && 'Save Changes'}

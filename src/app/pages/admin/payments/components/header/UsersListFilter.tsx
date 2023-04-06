@@ -1,26 +1,26 @@
 import {useEffect} from 'react'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import { usePaymentsListView } from '../../core/PaymentsListViewProvider'
+import {usePaymentsListView} from '../../core/PaymentsListViewProvider'
 
 const UsersListFilter = () => {
-  const {filterData, setFilterData, fetchPaymentsFunc } = usePaymentsListView();
-  const isLoading = false;
+  const {filterData, setFilterData, fetchPaymentsFunc} = usePaymentsListView()
+  const isLoading = false
 
   useEffect(() => {
     MenuComponent.reinitialization()
   }, [])
 
   const applyHandler = () => {
-    fetchPaymentsFunc();
-  };
+    fetchPaymentsFunc()
+  }
 
   const resetHandler = () => {
     setFilterData({
-     order_id: "",
-     amount: "",
-    });
-  };
+      order_id: '',
+      amount: '',
+    })
+  }
 
   return (
     <>
@@ -37,7 +37,7 @@ const UsersListFilter = () => {
       </button>
       {/* end::Filter Button */}
       {/* begin::SubMenu */}
-      <div className='menu menu-sub menu-sub-dropdown w-600px w-md-625px' data-kt-menu='true'>
+      <div className='menu menu-sub menu-sub-dropdown w-800px w-md-825px' data-kt-menu='true'>
         {/* begin::Header */}
         <div className='px-7 py-5'>
           <div className='fs-5 text-dark fw-bolder'>Filter Options</div>
@@ -51,39 +51,41 @@ const UsersListFilter = () => {
         {/* begin::Content */}
         <div className='px-7 py-5' data-kt-user-table-filter='form'>
           {/* begin::Input group */}
-        <div className='row'>
+          <div className='row'>
+            <div className='col-lg-6'>
+              <div className='row mb-6'>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Order ID</label>
+                <div className='col-lg-8 fv-row'>
+                  <input
+                    type='text'
+                    className='form-control form-control-lg form-control-solid'
+                    placeholder='Order ID'
+                    value={filterData.order_id}
+                    onChange={(e) => {
+                      setFilterData({...filterData, order_id: e.target.value})
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
 
-          <div className='col-lg-6'>
-            <div className='row mb-6'>
-              <label className='col-lg-4 col-form-label fw-bold fs-6'>Order ID</label>
-              <div className='col-lg-8 fv-row'>
-                <input
-                  type='text'
-                  className='form-control form-control-lg form-control-solid'
-                  placeholder='Order ID'
-                  value={filterData.order_id}
-                  onChange={(e) => {setFilterData({...filterData, order_id: e.target.value})}}
-                />
+            <div className='col-lg-6'>
+              <div className='row mb-6'>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Amount</label>
+                <div className='col-lg-8 fv-row'>
+                  <input
+                    type='text'
+                    className='form-control form-control-lg form-control-solid'
+                    placeholder='Amount'
+                    value={filterData.amount}
+                    onChange={(e) => {
+                      setFilterData({...filterData, amount: e.target.value})
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-
-          <div className='col-lg-6'>
-            <div className='row mb-6'>
-              <label className='col-lg-4 col-form-label fw-bold fs-6'>Amount</label>
-              <div className='col-lg-8 fv-row'>
-                <input
-                  type='text'
-                  className='form-control form-control-lg form-control-solid'
-                  placeholder='Amount'
-                  value={filterData.amount}
-                  onChange={(e) => {setFilterData({...filterData, amount: e.target.value})}}
-                />
-              </div>
-            </div>
-          </div>
-          
-        </div>
           {/* end::Input group */}
 
           {/* begin::Actions */}

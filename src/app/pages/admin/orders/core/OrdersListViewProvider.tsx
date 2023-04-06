@@ -173,6 +173,7 @@ const calculateIsAllDataSelected = (__data: any[], __selected: any[]) => {
 const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   const [searchParams] = useSearchParams()
   const uid = searchParams.get('uid')
+  const statusId = searchParams.get('order_status_id')
   const clientName = searchParams.get('clientName')
   // const {uid, clientName} = useParams();
   const dispatch = useDispatch()
@@ -195,9 +196,16 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   const page = useSelector((state: RootState) => state.admin.pagination)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
-  const [filterData, setFilterData] = useState(
-    clientName ? {...initialListView.filterData, name: clientName} : initialListView.filterData
-  )
+  const [filterData, setFilterData] = useState({
+    ...initialListView.filterData,
+    name: clientName ? clientName : '',
+    status: {
+      ...initialListView.filterData.status,
+      new: statusId === '1' ? true : false,
+      checkin: statusId === '16' ? true : false,
+      schedCheckout: statusId === '20' ? true : false,
+    },
+  })
 
   const fetchOrdersFunc = () => {
     dispatch(

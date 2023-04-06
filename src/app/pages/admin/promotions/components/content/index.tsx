@@ -241,9 +241,9 @@ const ContentPromotion = (props: propState) => {
                           <div className='card-footer d-flex justify-content-end py-6 px-9'>
                             <span
                               onClick={() => {
-                                navigateTo('/admin/promotions')
+                                navigateTo(-1)
                               }}
-                              className='btn btn-secondary mx-6 text-white'
+                              className='btn btn-secondary mx-6'
                             >
                               Cancel
                             </span>
@@ -299,9 +299,9 @@ const ContentPromotion = (props: propState) => {
                           <div className='card-footer d-flex justify-content-end py-6 px-9'>
                             <span
                               onClick={() => {
-                                navigateTo('/admin/promotions')
+                                navigateTo(-1)
                               }}
-                              className='btn btn-secondary mx-6 text-white'
+                              className='btn btn-secondary mx-6'
                             >
                               Cancel
                             </span>

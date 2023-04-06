@@ -36,7 +36,7 @@ const ItemsListFilter = () => {
       </button>
       {/* end::Filter Button */}
       {/* begin::SubMenu */}
-      <div className='menu menu-sub menu-sub-dropdown w-600px w-md-625px' data-kt-menu='true'>
+      <div className='menu menu-sub menu-sub-dropdown w-800px w-md-825px' data-kt-menu='true'>
         {/* begin::Header */}
         <div className='px-7 py-5'>
           <div className='fs-5 text-dark fw-bolder'>Filter Options</div>

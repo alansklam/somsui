@@ -46,6 +46,34 @@ export const OrdersTableBody = (props: any) => {
     })
     return __quantity
   }
+  const getStatus = (id: number) => {
+    switch (id) {
+      case 1:
+        return 'New'
+      case 4:
+        return 'In Progress'
+      case 8:
+        return 'Empty Delivery'
+      case 14:
+        return 'Sched Check-In'
+      case 16:
+        return 'Check-in'
+      case 20:
+        return 'Sch Check-Out'
+      case 24:
+        return 'Check-Out'
+      case 25:
+        return 'Sch Empty Return'
+      case 28:
+        return 'Completed'
+      case 30:
+        return 'Hold'
+      case 32:
+        return 'Cancelled'
+      default:
+        return ''
+    }
+  }
 
   return (
     <>
@@ -79,6 +107,9 @@ export const OrdersTableBody = (props: any) => {
                   </span>
                 </div>
               </td>
+              <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
+              </td>
               <td>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.email}</span>
               </td>
@@ -86,11 +117,14 @@ export const OrdersTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.contact}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.client?.wechat}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {data.client?.mobile_phone_cn}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.wechat}</span>
               </td>
+
               <td className='text-center'>
                 <span
                   className='text-blue fw-bold d-block fs-6'
@@ -166,7 +200,9 @@ export const OrdersTableBody = (props: any) => {
                 </Link>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.status.code}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {getStatus(data.order_status_id)}
+                </span>
               </td>
               <td>
                 <div className='d-flex justify-content-end flex-shrink-0'>

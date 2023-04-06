@@ -17,6 +17,7 @@ export interface AdminState {
 export enum AdminActionTypes {
   FETCH_DATA_ADMIN = 'FETCH_DATA_ADMIN',
   FETCH_UNVERSITIES = 'FETCH_UNVERSITIES',
+  FETCH_DASHBOARD_DATA = 'FETCH_DASHBOARD_DATA',
   FETCH_PRODUCTS = 'FETCH_PRODUCTS',
   FETCH_PERIODS = 'FETCH_PERIODS',
   FETCH_ITEMS = 'FETCH_ITEMS',
@@ -32,6 +33,10 @@ interface FetchDataAdminAction {
 }
 interface FetchUniversities {
   type: AdminActionTypes.FETCH_UNVERSITIES;
+  payload: any;
+}
+interface fetchDashboardData {
+  type: AdminActionTypes.FETCH_DASHBOARD_DATA;
   payload: any;
 }
 interface FetchProducts {
@@ -75,6 +80,7 @@ interface fetchRetrievalOrders {
 export type AdminAction =
   FetchDataAdminAction
   | FetchUniversities
+  | fetchDashboardData
   | FetchProducts
   | fetchPeriods
   | fetchItems

@@ -130,16 +130,14 @@ const EditStoragePeriodItemPrice = () => {
                   </div>
 
                   <div className='card-footer d-flex justify-content-end py-6 px-9'>
-                    <div
-                      className='btn btn-secondary mx-6'
-                      onClick={() => {
-                        navigateTo('/admin/storage-periods')
+                    <span
+                      className='btn btn-secondary mx-7'
+                      onClick={(e) => {
+                        navigateTo(-1)
                       }}
                     >
-                      <span className='text-white' style={{display: 'block'}}>
-                        Cancel
-                      </span>
-                    </div>
+                      Cancel
+                    </span>
 
                     <button type='submit' className='btn btn-primary' disabled={loading}>
                       {!loading && 'Save Changes'}

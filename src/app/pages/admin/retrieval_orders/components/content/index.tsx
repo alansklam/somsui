@@ -49,13 +49,13 @@ const ContentRetrievalOrder = (props: propState) => {
   const profileDetailsSchema = Yup.object().shape({
     checkout_location_other: Yup.string()
       .required('Name is required')
-      .min(3, 'Name 3 symbols')
-      .max(50, 'Name 50 symbols'),
-    checkout_date_other: Yup.date().required('Date is required'),
-    checkout_time_other: Yup.string().required('Time is required'),
-    empty_return_date_other: Yup.date().required('Date is required'),
-    empty_return_time_other: Yup.string().required('Time is required'),
-    paid_fee: Yup.string().required('This field is required.'),
+      .min(3, 'Name should be 3 numbers at least')
+      .max(50, 'Name should be 50 numbers at maximum'),
+    checkout_date_other: Yup.date().required('Checkout Date is required'),
+    checkout_time_other: Yup.string().required('Checkout Time is required'),
+    empty_return_date_other: Yup.date().required('Empty return Date is required'),
+    empty_return_time_other: Yup.string().required('Empty return Time is required'),
+    paid_fee: Yup.string().required('Paid fee is required.'),
   })
 
   const initialValues = retrievalOrderInfo
@@ -81,7 +81,7 @@ const ContentRetrievalOrder = (props: propState) => {
       })
         .then((res) => {
           setLoading(false)
-          navigateTo('/admin/retrieval-order')
+          navigateTo(-1)
           showNotification('success', 'Success', 'Update successfully.')
         })
         .catch((err) => {
@@ -516,6 +516,14 @@ const ContentRetrievalOrder = (props: propState) => {
                 </div>
 
                 <div className='card-footer d-flex justify-content-end py-6 px-9'>
+                  <span
+                    className='btn btn-secondary mx-7'
+                    onClick={(e) => {
+                      navigateTo(-1)
+                    }}
+                  >
+                    Cancel
+                  </span>
                   <button type='submit' className='btn btn-primary' disabled={loading}>
                     {!loading && 'Save Changes'}
                     {loading && (

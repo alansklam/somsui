@@ -22,12 +22,23 @@ const EditOrder = () => {
   })
 
   useEffect(() => {
+    if (!orderId) return
     getOrderApi({id: orderId})
       .then((res) => {
         let __order = res.data.result
         setOrder({
-          ...order,
           ...__order,
+          emptyout_location_other: '',
+          emptyout_date_other: '',
+          emptyout_time_other: '',
+          checkin_location_other: '',
+          checkin_date_other: '',
+          checkin_time_other: '',
+          checkout_location_other: '',
+          checkout_date_other: '',
+          checkout_time_other: '',
+          special_instruction: '',
+          paid_fee: '',
         })
         setOrderInfo({
           ...orderInfo,
@@ -45,12 +56,18 @@ const EditOrder = () => {
         })
       })
       .catch((err) => {
-        console.log('err', err.data.msg)
+        console.log('err', 'err.data')
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId])
 
-  return <>{orderInfo.paid_fee !== '' && <ContentOrder orderInfo={orderInfo} order={order} />}</>
+  return (
+    <>
+      {(!orderId || (orderId && orderInfo?.paid_fee !== '')) && (
+        <ContentOrder orderInfo={orderInfo} order={order} />
+      )}
+    </>
+  )
 }
 
 export default EditOrder

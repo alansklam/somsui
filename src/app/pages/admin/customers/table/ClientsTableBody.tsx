@@ -46,6 +46,9 @@ export const ClientsTableBody = (props: any) => {
                   </span>
                 </div>
               </td>
+              <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.student_id}</span>
+              </td>
               <td>
                 <span className='text-dark fw-bold d-block fs-6'>{data.email}</span>
               </td>
@@ -53,14 +56,15 @@ export const ClientsTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.contact}</span>
               </td>
               <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.mobile_phone_cn}</span>
+              </td>
+              <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.address1}</span>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.wechat}</span>
               </td>
-              <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.student_id}</span>
-              </td>
+
               <td className='text-center'>
                 <Link
                   className='text-blue fw-bold d-block fs-6'

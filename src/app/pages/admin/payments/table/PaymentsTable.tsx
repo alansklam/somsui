@@ -14,7 +14,7 @@ const PaymentsTable = (props: any) => {
   const {orderId, data, setSelected, isAllSelected, pagination, filterData} = usePaymentsListView()
   const [searchParams] = useSearchParams()
   const order_id = searchParams.get('order_id')
-  const retrieval_order_id = searchParams.get('retrieval_order_id')
+  // const retrieval_order_id = searchParams.get('retrieval_order_id')
   const [listData, setListData] = useState(Array(0))
 
   const onSortHandler = (order: string) => {
@@ -102,7 +102,7 @@ const PaymentsTable = (props: any) => {
                 <th className='min-w-100px text-center'>
                   <div
                     className={
-                      pagination.orderBy === 'client_id'
+                      pagination.orderBy === 'name'
                         ? pagination.sort
                           ? pagination.sort === 'asc'
                             ? 'table-sort-asc'
@@ -110,7 +110,7 @@ const PaymentsTable = (props: any) => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("client_id")}
+                    onClick={() => onSortHandler('name')}
                     style={{cursor: 'pointer'}}
                   >
                     Client
@@ -119,7 +119,8 @@ const PaymentsTable = (props: any) => {
                 <th className='min-w-125px text-center'>
                   <div
                     className={
-                      pagination.orderBy === 'code'
+                      pagination.orderBy ===
+                      (paymentRemarkId === 1 ? 'order_id' : 'retrieval_order_id')
                         ? pagination.sort
                           ? pagination.sort === 'asc'
                             ? 'table-sort-asc'
@@ -127,7 +128,9 @@ const PaymentsTable = (props: any) => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("code")}
+                    onClick={() =>
+                      onSortHandler(paymentRemarkId === 1 ? 'order_id' : 'retrieval_order_id')
+                    }
                     style={{cursor: 'pointer'}}
                   >
                     {paymentRemarkId

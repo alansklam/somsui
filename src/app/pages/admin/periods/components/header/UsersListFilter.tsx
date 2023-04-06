@@ -1,26 +1,26 @@
 import {useEffect} from 'react'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import { useListView } from '../../core/PeriodsListViewProvider'
+import {useListView} from '../../core/PeriodsListViewProvider'
 
 const UsersListFilter = () => {
-  const {filterData, setFilterData, fetchPeriodsFunc } = useListView();
-  const isLoading = false;
+  const {filterData, setFilterData, fetchPeriodsFunc} = useListView()
+  const isLoading = false
 
   useEffect(() => {
     MenuComponent.reinitialization()
   }, [])
 
   const applyHandler = () => {
-    fetchPeriodsFunc();
-  };
+    fetchPeriodsFunc()
+  }
 
   const resetHandler = () => {
     setFilterData({
-      name: "",
-      code: "",
-    });
-  };
+      name: '',
+      code: '',
+    })
+  }
 
   return (
     <>
@@ -37,7 +37,7 @@ const UsersListFilter = () => {
       </button>
       {/* end::Filter Button */}
       {/* begin::SubMenu */}
-      <div className='menu menu-sub menu-sub-dropdown w-600px w-md-625px' data-kt-menu='true'>
+      <div className='menu menu-sub menu-sub-dropdown w-800px w-md-825px' data-kt-menu='true'>
         {/* begin::Header */}
         <div className='px-7 py-5'>
           <div className='fs-5 text-dark fw-bolder'>Filter Options</div>
@@ -51,39 +51,41 @@ const UsersListFilter = () => {
         {/* begin::Content */}
         <div className='px-7 py-5' data-kt-user-table-filter='form'>
           {/* begin::Input group */}
-        <div className='row'>
+          <div className='row'>
+            <div className='col-lg-6'>
+              <div className='row mb-6'>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
+                <div className='col-lg-8 fv-row'>
+                  <input
+                    type='text'
+                    className='form-control form-control-lg form-control-solid'
+                    placeholder='The code'
+                    value={filterData.code}
+                    onChange={(e) => {
+                      setFilterData({...filterData, code: e.target.value})
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
 
-          <div className='col-lg-6'>
-            <div className='row mb-6'>
-              <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
-              <div className='col-lg-8 fv-row'>
-                <input
-                  type='text'
-                  className='form-control form-control-lg form-control-solid'
-                  placeholder='The code'
-                  value={filterData.code}
-                  onChange={(e) => {setFilterData({...filterData, code: e.target.value})}}
-                />
+            <div className='col-lg-6'>
+              <div className='row mb-6'>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
+                <div className='col-lg-8 fv-row'>
+                  <input
+                    type='text'
+                    className='form-control form-control-lg form-control-solid'
+                    placeholder='Name'
+                    value={filterData.name}
+                    onChange={(e) => {
+                      setFilterData({...filterData, name: e.target.value})
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
-
-          <div className='col-lg-6'>
-            <div className='row mb-6'>
-              <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
-              <div className='col-lg-8 fv-row'>
-                <input
-                  type='text'
-                  className='form-control form-control-lg form-control-solid'
-                  placeholder='Name'
-                  value={filterData.name}
-                  onChange={(e) => {setFilterData({...filterData, name: e.target.value})}}
-                />
-              </div>
-            </div>
-          </div>
-          
-        </div>
           {/* end::Input group */}
 
           {/* begin::Actions */}

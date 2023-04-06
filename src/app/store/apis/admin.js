@@ -16,6 +16,22 @@ export function fetchUniversitiesApi() {
   })
 }
 
+export function fetchDashboardDataApi() {
+  return axios.post(`/admin/fetchDashboardData`, {
+    headers: {
+      'content-type': 'text/json',
+    },
+  })
+}
+
+export function fetchClientNameApi() {
+  return axios.post(`/admin/fetchClientName`, {
+    headers: {
+      'content-type': 'text/json',
+    },
+  })
+}
+
 export function fetchProductsApi() {
   return axios.post(`/admin/fetchProducts`, {
     headers: {

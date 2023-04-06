@@ -10,6 +10,8 @@ const AddCustomer = () => {
     student_id: '',
     password: '',
     confirmPassword: '',
+    university_id: '',
+    mobile_phone_cn: '',
   }
 
   const saveHandler = () => {}

@@ -130,7 +130,7 @@ const EditStoragePeriodItemPrice = () => {
                     <div
                       className='btn btn-secondary mx-6'
                       onClick={() => {
-                        navigateTo('/admin/storage-periods')
+                        navigateTo(-1)
                       }}
                     >
                       <span className='text-white' style={{display: 'block'}}>

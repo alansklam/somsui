@@ -44,6 +44,22 @@ export const fetchProducts = ():any => {
     }
 }
 
+export const fetchDashboardData = ():any => {
+    return async (dispatch: Dispatch<AdminAction>) => {
+        try {
+            dispatch({type: AdminActionTypes.FETCH_DATA_ADMIN})
+            const response = fetchProductsApi();
+            const payloadData = (await response).data;
+            dispatch({type: AdminActionTypes.FETCH_DASHBOARD_DATA, payload: payloadData})
+        } catch (e) {
+            dispatch({
+                type: AdminActionTypes.FETCH_DASHBOARD_DATA,
+                payload: []
+            })
+        }
+    }
+}
+
 export const fetchRef = ():any => {
     return async (dispatch: Dispatch<AdminAction>) => {
         try {

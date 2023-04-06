@@ -77,6 +77,9 @@ export const RetrievalOrdersTableBody = (props: any) => {
                   </span>
                 </div>
               </td>
+              <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
+              </td>
               <td>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.email}</span>
               </td>
@@ -84,11 +87,14 @@ export const RetrievalOrdersTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.contact}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.client?.wechat}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {data.client?.mobile_phone_cn}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
+                <span className='text-dark fw-bold d-block fs-6'>{data.client?.wechat}</span>
               </td>
+
               <td className='text-center'>
                 <span
                   className='text-blue fw-bold d-block fs-6'

@@ -12,8 +12,10 @@ const EditCustomer = () => {
     address1: '',
     wechat: '',
     student_id: '',
+    mobile_phone_cn: '',
     password: '',
     confirmPassword: '',
+    university_id: '',
   })
 
   useEffect(() => {
@@ -30,12 +32,14 @@ const EditCustomer = () => {
           address1: client.address1 ? client.address1 : '',
           wechat: client.wechat ? client.wechat : '',
           student_id: client.student_id ? client.student_id : '',
+          mobile_phone_cn: client.mobile_phone_cn ? client.mobile_phone_cn : '',
+          university_id: client.university_id ? client.university_id.toString() : '',
           password: '',
           confirmPassword: '',
         })
       })
       .catch((err) => {
-        console.log('err', err.data.msg)
+        console.log('err', 'err')
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])

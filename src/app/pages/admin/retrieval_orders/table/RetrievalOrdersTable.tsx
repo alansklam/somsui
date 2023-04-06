@@ -90,10 +90,27 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("name")}
+                    onClick={() => onSortHandler('name')}
                     style={{cursor: 'pointer'}}
                   >
                     Name
+                  </div>
+                </th>
+                <th className='min-w-100px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'student_id'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('student_id')}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Student ID
                   </div>
                 </th>
                 <th className='min-w-150px'>
@@ -107,7 +124,7 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("email")}
+                    onClick={() => onSortHandler('email')}
                     style={{cursor: 'pointer'}}
                   >
                     Email
@@ -124,10 +141,27 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("contact")}
+                    onClick={() => onSortHandler('contact')}
                     style={{cursor: 'pointer'}}
                   >
                     Contact Number
+                  </div>
+                </th>
+                <th className='min-w-125px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'mobile_phone_cn'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('mobile_phone_cn')}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Phone CN
                   </div>
                 </th>
                 <th className='min-w-100px text-center'>
@@ -141,29 +175,13 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler("wechat")}
+                    onClick={() => onSortHandler('wechat')}
                     style={{cursor: 'pointer'}}
                   >
                     WeChat
                   </div>
                 </th>
-                <th className='min-w-100px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'student_id'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    // onClick={() => onSortHandler("student_id")}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Student ID
-                  </div>
-                </th>
+
                 <th className='min-w-150px text-center'>
                   <div
                     className={
@@ -192,7 +210,7 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler('order_id')}
+                    onClick={() => onSortHandler('order_id')}
                     style={{cursor: 'pointer'}}
                   >
                     Order ID
@@ -329,7 +347,7 @@ const RetrievalOrdersTable = () => {
                 <th className='min-w-125px text-center'>
                   <div
                     className={
-                      pagination.orderBy === 'special_instruction'
+                      pagination.orderBy === 'remark_qr_code'
                         ? pagination.sort
                           ? pagination.sort === 'asc'
                             ? 'table-sort-asc'
@@ -337,8 +355,8 @@ const RetrievalOrdersTable = () => {
                           : ''
                         : ''
                     }
-                    // onClick={() => onSortHandler('special_instruction')}
-                    // style={{cursor: 'pointer'}}
+                    onClick={() => onSortHandler('remark_qr_code')}
+                    style={{cursor: 'pointer'}}
                   >
                     QR Code
                   </div>
