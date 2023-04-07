@@ -192,7 +192,7 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td className='text-center'>
                 <Link
-                  to={'/admin/payments?order_id' + data.id}
+                  to={'/admin/payments?order_id=' + data.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                 >

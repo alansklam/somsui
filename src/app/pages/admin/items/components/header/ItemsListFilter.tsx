@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useListView} from '../../core/ItemsListViewProvider'
-import {updateItemsFilterData} from '../../../../../store/actions/admin'
+import {updateFilterData} from '../../../../../store/actions/admin'
 
 const ItemsListFilter = () => {
   const dispatch = useDispatch()
@@ -16,12 +16,13 @@ const ItemsListFilter = () => {
 
   const applyHandler = () => {
     fetchItemsFunc()
-    dispatch(updateItemsFilterData(filterData))
+    dispatch(updateFilterData(filterData))
   }
 
   const resetHandler = () => {
     setFilterData({
       name: '',
+      menu: 'items',
     })
   }
 

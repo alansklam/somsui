@@ -35,6 +35,7 @@ export enum AdminActionTypes {
   FETCH_RETRIEVAL_ORDERS = 'FETCH_RETRIEVAL_ORDERS',
   UPDATE_RETRIEVAL_FILTER_DATA = 'UPDATE_RETRIEVAL_FILTER_DATA',
   FETCH_REF = 'FETCH_REF',
+  UPDATE_FILTER_DATA = 'UPDATE_FILTER_DATA',
 }
 interface FetchDataAdminAction {
   type: AdminActionTypes.FETCH_DATA_ADMIN
@@ -112,6 +113,11 @@ interface UpdateRetrievalFilterData {
   payload: any
 }
 
+interface UpdateFilterData {
+  type: AdminActionTypes.UPDATE_FILTER_DATA
+  payload: any
+}
+
 export type AdminAction =
   | FetchDataAdminAction
   | FetchUniversities
@@ -132,3 +138,4 @@ export type AdminAction =
   | fetchRetrievalOrders
   | UpdateRetrievalFilterData
   | FetchRef
+  | UpdateFilterData

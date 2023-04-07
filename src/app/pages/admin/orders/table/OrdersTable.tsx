@@ -10,7 +10,8 @@ import {RootState} from '../../../../store/reducers'
 
 const OrdersTable = () => {
   const dispatch = useDispatch()
-  const {uid, data, setSelected, isAllSelected, pagination, filterData} = useOrdersListView()
+  const {uid, clientId, data, setSelected, isAllSelected, pagination, filterData} =
+    useOrdersListView()
   const [listData, setListData] = useState(Array(0))
   const products = useSelector((state: RootState) => state.admin.products)
   const materialItems = useSelector((state: RootState) => state.admin.ref.materialItems)
@@ -30,6 +31,7 @@ const OrdersTable = () => {
       fetchOrders({
         filterData,
         uid,
+        clientId,
         ...pagination,
         sort: __sort,
         orderBy: order,

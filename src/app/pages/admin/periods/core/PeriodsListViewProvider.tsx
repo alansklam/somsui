@@ -12,6 +12,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {WithChildren} from '../../../../../_metronic/helpers'
 import {RootState} from '../../../../store/reducers'
 import {fetchPeriods} from '../../../../store/actions/admin'
+import {updateFilterData} from '../../../../store/actions/admin'
 
 type pagination = {
   total: number
@@ -111,24 +112,29 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
   const isLoading = useSelector((state: RootState) => state.admin.loading)
   const data = useSelector((state: RootState) => state.admin.periods.data)
   const page = useSelector((state: RootState) => state.admin.periods.pagination)
-  const filter = useSelector((state: RootState) => state.admin.periods.filterData)
+  const filter = useSelector((state: RootState) => state.admin.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState(initialListView.filterData)
   useEffect(() => {
     let __filterData = filter
+    if (__filterData.menu !== 'periods') {
+      __filterData = {
+        ...filterData,
+        menu: 'periods',
+      }
+      dispatch(updateFilterData(__filterData))
+    }
     dispatch(
       fetchPeriods({
-        filterData: __filterData.name !== undefined ? __filterData : filterData,
+        filterData: __filterData,
         ...page,
       })
     )
-    if (__filterData.name !== undefined) {
-      setFilterData({
-        ...filterData,
-        ...__filterData,
-      })
-    }
+    setFilterData({
+      ...filterData,
+      ...__filterData,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

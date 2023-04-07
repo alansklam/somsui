@@ -14,6 +14,7 @@ import {WithChildren} from '../../../../../_metronic/helpers'
 import {RootState} from '../../../../store/reducers'
 import {fetchPayments} from '../../../../store/actions/admin'
 import {useSearchParams} from 'react-router-dom'
+import {updateFilterData} from '../../../../store/actions/admin'
 
 type pagination = {
   total: number
@@ -145,7 +146,7 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
   const isLoading = useSelector((state: RootState) => state.admin.loading)
   const data = useSelector((state: RootState) => state.admin.payments.data)
   const page = useSelector((state: RootState) => state.admin.payments.pagination)
-  const filter = useSelector((state: RootState) => state.admin.payments.filterData)
+  const filter = useSelector((state: RootState) => state.admin.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState(initialListView.filterData)
@@ -161,6 +162,13 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
       __isOrder = false
     }
     let __filterData = filter
+    if (__filterData.menu !== 'payments') {
+      __filterData = {
+        ...filterData,
+        menu: 'payments',
+      }
+      dispatch(updateFilterData(__filterData))
+    }
     let __page = page
     if (__page.code !== paymentRemarkId) {
       __page = {
@@ -170,19 +178,17 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
     }
     dispatch(
       fetchPayments({
-        filterData: __filterData.order_id !== undefined ? __filterData : filterData,
+        filterData: __filterData,
         paymentRemarkId,
         orderId: __orderId,
         isOrder: __isOrder,
         ...__page,
       })
     )
-    if (__filterData.order_id !== undefined) {
-      setFilterData({
-        ...filterData,
-        ...__filterData,
-      })
-    }
+    setFilterData({
+      ...filterData,
+      ...__filterData,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order_id, retrieval_order_id, paymentRemarkId])
 

@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useRetrievalOrdersListView} from '../../core/RetrievalOrdersListViewProvider'
-import {updateRetrievalFilterData} from '../../../../../store/actions/admin'
+import {updateFilterData} from '../../../../../store/actions/admin'
 
 const UsersListFilter = () => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const UsersListFilter = () => {
 
   const applyHandler = () => {
     fetchOrdersFunc()
-    dispatch(updateRetrievalFilterData(filterData))
+    dispatch(updateFilterData(filterData))
   }
 
   const resetHandler = () => {
@@ -44,6 +44,7 @@ const UsersListFilter = () => {
         hold: false,
         cancelled: false,
       },
+      menu: 'retrieval_orders',
     })
   }
 

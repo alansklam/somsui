@@ -12,6 +12,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {WithChildren} from '../../../../../_metronic/helpers'
 import {RootState} from '../../../../store/reducers'
 import {fetchPromotions} from '../../../../store/actions/admin'
+import {updateFilterData} from '../../../../store/actions/admin'
 
 type pagination = {
   total: number
@@ -113,16 +114,23 @@ const PromotionsListViewProvider: FC<WithChildren> = ({children}) => {
   const isLoading = useSelector((state: RootState) => state.admin.loading)
   const data = useSelector((state: RootState) => state.admin.promotions.data)
   const page = useSelector((state: RootState) => state.admin.promotions.pagination)
-  const filter = useSelector((state: RootState) => state.admin.promotions.filterData)
+  const filter = useSelector((state: RootState) => state.admin.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState(initialListView.filterData)
 
   useEffect(() => {
     let __filterData = filter
+    if (__filterData.menu !== 'promotions') {
+      __filterData = {
+        ...filterData,
+        menu: 'promotions',
+      }
+      dispatch(updateFilterData(__filterData))
+    }
     dispatch(
       fetchPromotions({
-        filterData: __filterData.name !== undefined ? __filterData : filterData,
+        filterData: __filterData,
         ...page,
       })
     )

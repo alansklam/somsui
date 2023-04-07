@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useListView} from '../../core/PeriodsListViewProvider'
-import {updatePeriodsFilterData} from '../../../../../store/actions/admin'
+import {updateFilterData} from '../../../../../store/actions/admin'
 
 const UsersListFilter = () => {
   const dispatch = useDispatch()
@@ -16,13 +16,14 @@ const UsersListFilter = () => {
 
   const applyHandler = () => {
     fetchPeriodsFunc()
-    dispatch(updatePeriodsFilterData(filterData))
+    dispatch(updateFilterData(filterData))
   }
 
   const resetHandler = () => {
     setFilterData({
       name: '',
       code: '',
+      menu: 'periods',
     })
   }
 

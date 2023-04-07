@@ -238,6 +238,11 @@ export const adminReducer = (state = initialState, action: AdminAction): AdminSt
           filterData: action.payload,
         },
       }
+    case AdminActionTypes.UPDATE_FILTER_DATA:
+      return {
+        ...state,
+        filterData: action.payload,
+      }
     default:
       return state
   }

@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {usePromotionsListView} from '../../core/PromotionsListViewProvider'
-import {updatePromotionsFilterData} from '../../../../../store/actions/admin'
+import {updateFilterData} from '../../../../../store/actions/admin'
 
 const UsersListFilter = () => {
   const dispatch = useDispatch()
@@ -16,7 +16,7 @@ const UsersListFilter = () => {
 
   const applyHandler = () => {
     fetchPromotionFunc()
-    dispatch(updatePromotionsFilterData(filterData))
+    dispatch(updateFilterData(filterData))
   }
 
   const resetHandler = () => {
@@ -27,6 +27,7 @@ const UsersListFilter = () => {
       fromDateEnd: '',
       toDateStart: '',
       toDateEnd: '',
+      menu: 'promotions',
     })
   }
 

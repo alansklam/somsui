@@ -13,6 +13,7 @@ import {WithChildren} from '../../../../../_metronic/helpers'
 import {RootState} from '../../../../store/reducers'
 import {fetchOrders} from '../../../../store/actions/admin'
 import {useSearchParams} from 'react-router-dom'
+import {updateFilterData} from '../../../../store/actions/admin'
 
 type pagination = {
   total: number
@@ -40,6 +41,7 @@ type paymentStatus = {
 
 type ListViewContextProps = {
   uid: string | undefined | null
+  clientId: string | undefined | null
   data: {
     id: number
     code: string
@@ -104,12 +106,14 @@ type ListViewContextProps = {
       hold: boolean
       cancelled: boolean
     }
+    menu: string
   }
   setFilterData: Dispatch<SetStateAction<any>>
 }
 
 const initialListView = {
   uid: '',
+  clientId: '',
   data: [],
   selected: [],
   setSelected: () => {},
@@ -159,6 +163,7 @@ const initialListView = {
       hold: false,
       cancelled: false,
     },
+    menu: 'orders',
   },
   setFilterData: () => {},
 }
@@ -176,8 +181,7 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   const [searchParams] = useSearchParams()
   const uid = searchParams.get('uid')
   const statusId = searchParams.get('order_status_id')
-  const clientName = searchParams.get('clientName')
-  // const {uid, clientName} = useParams();
+  const clientId = searchParams.get('client_id')
   const dispatch = useDispatch()
   const [selected, setSelected] = useState(Array(0))
   const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(
@@ -196,12 +200,11 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   const isLoading = useSelector((state: RootState) => state.admin.loading)
   const data = useSelector((state: RootState) => state.admin.orders.data)
   const page = useSelector((state: RootState) => state.admin.orders.pagination)
-  const filter = useSelector((state: RootState) => state.admin.orders.filterData)
+  const filter = useSelector((state: RootState) => state.admin.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState({
     ...initialListView.filterData,
-    name: clientName ? clientName : '',
     status: {
       ...initialListView.filterData.status,
       new: statusId === '1' ? true : false,
@@ -215,6 +218,7 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
       fetchOrders({
         filterData,
         uid,
+        clientId: clientId ? clientId : '',
         ...pagination,
       })
     )
@@ -222,6 +226,13 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
 
   useEffect(() => {
     let __filterData = filter
+    if (__filterData.menu !== 'orders') {
+      __filterData = {
+        ...filterData,
+        menu: 'orders',
+      }
+      dispatch(updateFilterData(__filterData))
+    }
     let __page = page
     if (__page.code !== uid) {
       __page = {
@@ -231,19 +242,18 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
     }
     dispatch(
       fetchOrders({
-        filterData: __filterData.name !== undefined ? __filterData : filterData,
+        filterData: __filterData,
         uid: uid,
+        clientId: clientId ? clientId : '',
         ...__page,
       })
     )
-    if (__filterData.name !== undefined) {
-      setFilterData({
-        ...filterData,
-        ...filter,
-      })
-    }
+    setFilterData({
+      ...filterData,
+      ...__filterData,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uid])
+  }, [uid, clientId])
 
   useEffect(() => {
     setPagination({
@@ -257,6 +267,7 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
     <ListViewContext.Provider
       value={{
         uid,
+        clientId,
         data,
         selected,
         setSelected,

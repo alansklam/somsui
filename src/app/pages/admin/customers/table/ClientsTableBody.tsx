@@ -69,7 +69,7 @@ export const ClientsTableBody = (props: any) => {
                 <Link
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
-                  to={'/admin/orders?uid=90&clientName=' + data.name}
+                  to={'/admin/orders?uid=90&client_id=' + data.id}
                 >
                   {data.orderCount}
                 </Link>

@@ -279,3 +279,16 @@ export const updateItemsFilterData = (params: any): any => {
     }
   }
 }
+
+export const updateFilterData = (params: any): any => {
+  return async (dispatch: Dispatch<AdminAction>) => {
+    try {
+      dispatch({type: AdminActionTypes.UPDATE_FILTER_DATA, payload: params})
+    } catch (e) {
+      dispatch({
+        type: AdminActionTypes.UPDATE_FILTER_DATA,
+        payload: {},
+      })
+    }
+  }
+}
