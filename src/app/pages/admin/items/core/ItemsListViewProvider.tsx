@@ -120,23 +120,27 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
   )
   const [pagination, setPagination] = useState<pagination>(initialListView.pagination)
   const isLoading = useSelector((state: RootState) => state.admin.loading)
-  const data = useSelector((state: RootState) => state.admin.items)
-  const page = useSelector((state: RootState) => state.admin.pagination)
+  const data = useSelector((state: RootState) => state.admin.items.data)
+  const page = useSelector((state: RootState) => state.admin.items.pagination)
+  const filter = useSelector((state: RootState) => state.admin.items.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState(initialListView.filterData)
 
   useEffect(() => {
+    let __filterData = filter
     dispatch(
       fetchItems({
-        filterData,
-        total: 10,
-        perPage: 10,
-        page: 1,
-        orderBy: undefined,
-        sort: undefined,
+        filterData: __filterData.name !== undefined ? __filterData : filterData,
+        ...page,
       })
     )
+    if (__filterData.name !== undefined) {
+      setFilterData({
+        ...filterData,
+        ...filter,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

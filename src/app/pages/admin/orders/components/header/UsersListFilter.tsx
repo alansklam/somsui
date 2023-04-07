@@ -1,9 +1,12 @@
 import {useEffect} from 'react'
+import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useOrdersListView} from '../../core/OrdersListViewProvider'
+import {updateOrdersFilterData} from '../../../../../store/actions/admin'
 
 const UsersListFilter = () => {
+  const dispatch = useDispatch()
   const {filterData, setFilterData, fetchOrdersFunc} = useOrdersListView()
   const isLoading = false
 
@@ -13,10 +16,11 @@ const UsersListFilter = () => {
 
   const applyHandler = () => {
     fetchOrdersFunc()
+    dispatch(updateOrdersFilterData(filterData))
   }
 
   const resetHandler = () => {
-    setFilterData({
+    let __filterData = {
       name: '',
       email: '',
       contact: '',
@@ -42,7 +46,8 @@ const UsersListFilter = () => {
         hold: false,
         cancelled: false,
       },
-    })
+    }
+    setFilterData(__filterData)
   }
 
   return (

@@ -39,12 +39,13 @@ const OrdersTable = () => {
 
   useEffect(() => {
     let __data = data
-    __data.forEach((element: any, index: number) => {
-      element = {
-        ...element,
-        checked: false,
-      }
-    })
+    __data.length > 0 &&
+      __data.forEach((element: any, index: number) => {
+        element = {
+          ...element,
+          checked: false,
+        }
+      })
     setListData(__data)
   }, [data])
 

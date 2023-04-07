@@ -1,9 +1,12 @@
 import {useEffect} from 'react'
+import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useRetrievalOrdersListView} from '../../core/RetrievalOrdersListViewProvider'
+import {updateRetrievalFilterData} from '../../../../../store/actions/admin'
 
 const UsersListFilter = () => {
+  const dispatch = useDispatch()
   const {filterData, setFilterData, fetchOrdersFunc} = useRetrievalOrdersListView()
   const isLoading = false
 
@@ -13,6 +16,7 @@ const UsersListFilter = () => {
 
   const applyHandler = () => {
     fetchOrdersFunc()
+    dispatch(updateRetrievalFilterData(filterData))
   }
 
   const resetHandler = () => {

@@ -1,9 +1,12 @@
 import {useEffect} from 'react'
+import {useDispatch} from 'react-redux'
 import {MenuComponent} from '../../../../../../_metronic/assets/ts/components'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import {useClientsListView} from '../../core/ClientsListViewProvider'
+import {updateClientsFilterData} from '../../../../../store/actions/admin'
 
 const UsersListFilter = () => {
+  const dispatch = useDispatch()
   const {filterData, setFilterData, fetchClientsFunc} = useClientsListView()
   const isLoading = false
 
@@ -13,6 +16,7 @@ const UsersListFilter = () => {
 
   const applyHandler = () => {
     fetchClientsFunc()
+    dispatch(updateClientsFilterData(filterData))
   }
 
   const resetHandler = () => {

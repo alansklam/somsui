@@ -207,7 +207,7 @@ const ClientsTable = () => {
                         : ''
                     }
                     // onClick={() => onSortHandler('orderCount')}
-                    style={{cursor: 'pointer'}}
+                    // style={{cursor: 'pointer'}}
                   >
                     Number of Order
                   </div>

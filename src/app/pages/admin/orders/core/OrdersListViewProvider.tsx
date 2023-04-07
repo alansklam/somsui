@@ -20,6 +20,7 @@ type pagination = {
   page: number
   orderBy: string | undefined
   sort: string | undefined
+  code: string
 }
 
 type client = {
@@ -126,6 +127,7 @@ const initialListView = {
     page: 1,
     orderBy: undefined,
     sort: undefined,
+    code: '',
   },
   setPagination: () => {},
   isAllSelected: false,
@@ -192,8 +194,9 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   )
   const [pagination, setPagination] = useState<pagination>(initialListView.pagination)
   const isLoading = useSelector((state: RootState) => state.admin.loading)
-  const data = useSelector((state: RootState) => state.admin.orders)
-  const page = useSelector((state: RootState) => state.admin.pagination)
+  const data = useSelector((state: RootState) => state.admin.orders.data)
+  const page = useSelector((state: RootState) => state.admin.orders.pagination)
+  const filter = useSelector((state: RootState) => state.admin.orders.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState({
@@ -218,17 +221,27 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   }
 
   useEffect(() => {
+    let __filterData = filter
+    let __page = page
+    if (__page.code !== uid) {
+      __page = {
+        ...initialListView.pagination,
+        code: uid,
+      }
+    }
     dispatch(
       fetchOrders({
-        filterData,
+        filterData: __filterData.name !== undefined ? __filterData : filterData,
         uid: uid,
-        total: 10,
-        perPage: 10,
-        page: 1,
-        orderBy: undefined,
-        sort: undefined,
+        ...__page,
       })
     )
+    if (__filterData.name !== undefined) {
+      setFilterData({
+        ...filterData,
+        ...filter,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid])
 

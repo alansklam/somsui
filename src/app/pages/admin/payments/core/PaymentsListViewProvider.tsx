@@ -21,6 +21,7 @@ type pagination = {
   page: number
   orderBy: string | undefined
   sort: string | undefined
+  code: string
 }
 
 type client = {
@@ -99,6 +100,7 @@ const initialListView = {
     page: 1,
     orderBy: undefined,
     sort: undefined,
+    code: '',
   },
   setPagination: () => {},
   isAllSelected: false,
@@ -141,8 +143,9 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
   )
   const [pagination, setPagination] = useState<pagination>(initialListView.pagination)
   const isLoading = useSelector((state: RootState) => state.admin.loading)
-  const data = useSelector((state: RootState) => state.admin.payments)
-  const page = useSelector((state: RootState) => state.admin.pagination)
+  const data = useSelector((state: RootState) => state.admin.payments.data)
+  const page = useSelector((state: RootState) => state.admin.payments.pagination)
+  const filter = useSelector((state: RootState) => state.admin.payments.filterData)
   // const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])
   const [filterData, setFilterData] = useState(initialListView.filterData)
@@ -157,19 +160,29 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
       __orderId = retrieval_order_id
       __isOrder = false
     }
+    let __filterData = filter
+    let __page = page
+    if (__page.code !== paymentRemarkId) {
+      __page = {
+        ...initialListView.pagination,
+        code: paymentRemarkId,
+      }
+    }
     dispatch(
       fetchPayments({
-        filterData,
+        filterData: __filterData.order_id !== undefined ? __filterData : filterData,
         paymentRemarkId,
         orderId: __orderId,
         isOrder: __isOrder,
-        total: 10,
-        perPage: 10,
-        page: 1,
-        orderBy: undefined,
-        sort: undefined,
+        ...__page,
       })
     )
+    if (__filterData.order_id !== undefined) {
+      setFilterData({
+        ...filterData,
+        ...__filterData,
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order_id, retrieval_order_id, paymentRemarkId])
 
