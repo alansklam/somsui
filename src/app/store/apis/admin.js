@@ -419,3 +419,15 @@ export function sendInvoiceApi(params) {
     }
   )
 }
+
+export function searchClientApi(params) {
+  return axios.post(
+    `/admin/searchClient`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}

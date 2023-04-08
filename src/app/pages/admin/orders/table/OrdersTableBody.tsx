@@ -176,6 +176,9 @@ export const OrdersTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.checkout_date_other}</span>
               </td>
               <td className='text-center'>
+                <span className='text-dark fw-bold d-block fs-6'>{data.storage_expired_date}</span>
+              </td>
+              <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.address1}</span>
               </td>
               <td className='text-center'>

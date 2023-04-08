@@ -18,7 +18,7 @@ const EditOrder = () => {
     checkout_date_other: '',
     checkout_time_other: '',
     special_instruction: '',
-    paid_fee: '',
+    paid_fee: '0',
   })
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const EditOrder = () => {
 
   return (
     <>
-      {(!orderId || (orderId && orderInfo?.paid_fee !== '')) && (
+      {(!orderId || (orderId && orderInfo?.emptyout_date_other !== '')) && (
         <ContentOrder orderInfo={orderInfo} order={order} />
       )}
     </>

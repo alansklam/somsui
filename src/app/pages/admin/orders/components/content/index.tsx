@@ -4,10 +4,12 @@ import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {RootState} from '../../../../../store/reducers'
 import {MinusOutlined, PlusOutlined} from '@ant-design/icons'
-import {editOrderApi, fetchClientNameApi} from '../../../../../store/apis/admin'
+import {editOrderApi} from '../../../../../store/apis/admin'
 import dayjs from 'dayjs'
 import {useNavigate} from 'react-router-dom'
 import {showNotification} from '../../../components/notification'
+import Select from 'react-select'
+import {searchClientApi} from '../../../../../store/apis/admin'
 
 type propState = {
   orderInfo: {
@@ -40,10 +42,14 @@ const ContentOrder = (props: propState) => {
   const [lumpSum, setLumpSum] = useState('')
   const [storageMonth, setStorageMonth] = useState('')
   const [clients, setClients] = useState<any[]>([])
-  const [selectedClient, setSelectedClient] = useState<number | undefined>()
+  const [selectedClient, setSelectedClient] = useState<any>({})
   const [orderItems, setOrderItems] = useState<any[]>([])
   const [newItemsList, setNewItemsList] = useState<any[]>([])
+  const [storagExpireDate, setStorageExpireDate] = useState<string>('')
   const [qrCode, setQrCode] = useState('')
+  let changeTime = 0
+  let __options: any[] = []
+  const [searchClients, setSearchClients] = useState<any[]>([])
 
   const profileDetailsSchema = Yup.object().shape({
     emptyout_location_other: Yup.string()
@@ -75,7 +81,7 @@ const ContentOrder = (props: propState) => {
     initialValues,
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
-      if (!selectedClient) {
+      if (!selectedClient.value) {
         showNotification('error', 'Error', 'Please selecte the name of client.')
         return
       }
@@ -103,7 +109,7 @@ const ContentOrder = (props: propState) => {
       editOrderApi({
         data: {
           ...values,
-          client_id: selectedClient,
+          client_id: selectedClient.value,
           items: orderItems,
           order_status_id: orderStatusId,
           payment_type_id: paymentMethodId,
@@ -112,6 +118,7 @@ const ContentOrder = (props: propState) => {
           storage_month: storageMonth,
           total_fee: lumpSum,
           remark_qrcode: qrCode,
+          storage_expired_date: storagExpireDate,
         },
         id: order.id ? order.id : '',
       })
@@ -128,9 +135,15 @@ const ContentOrder = (props: propState) => {
   })
 
   useEffect(() => {
-    fetchClientNameApi().then((res) => {
-      let __clients = res.data
-      setClients(__clients)
+    searchClientApi(order.client?.name ? order.client?.name : '').then((res) => {
+      let __data = res.data.result
+      __data.forEach((item: any) => {
+        __options.push({
+          value: item.id.toString(),
+          label: item.name,
+        })
+      })
+      setSearchClients(__options)
     })
   }, [])
 
@@ -150,14 +163,19 @@ const ContentOrder = (props: propState) => {
         })
       })
     }
+
     setOrderItems(__items)
-    setSelectedClient(order.client?.id ? order.client?.id : undefined)
+    setStorageExpireDate(order.storage_expired_date ? order.storage_expired_date : '')
     setOrderStatusId(order.order_status_id ? order.order_status_id : '')
-    setPaymentMethodId(order.payment_type_id ? order.payment_type_id : '')
-    setPaymentStatusId(order.payment_status_id ? order.payment_status_id : '')
+    setPaymentMethodId(order.payment_type_id ? order.payment_type_id : '6')
+    setPaymentStatusId(order.payment_status_id ? order.payment_status_id : '1')
     setSpecialInstruction(order.special_instruction ? order.special_instruction : '')
-    setLumpSum(order.total_fee ? order.total_fee : '')
+    setLumpSum(order.total_fee ? order.total_fee : '0')
     setQrCode(order.remark_qrcode ? order.remark_qrcode : '')
+    setSelectedClient({
+      value: order.client?.id ? order.client?.id : undefined,
+      label: order.client?.name ? order.client?.name : undefined,
+    })
   }, [order])
 
   useEffect(() => {
@@ -180,6 +198,12 @@ const ContentOrder = (props: propState) => {
   }, [products])
 
   useEffect(() => {
+    if (!order.id) {
+      setStorageExpireDate(formik.values.checkout_date_other)
+    }
+  }, [formik.values.checkout_date_other])
+
+  useEffect(() => {
     let __subTotalFee = 0
     let __packageFee = 0
     let __months = parseInt(storageMonth)
@@ -192,7 +216,12 @@ const ContentOrder = (props: propState) => {
     })
     if (formik.values.checkin_date_other && formik.values.checkout_date_other) {
       let __checkin = dayjs(formik.values.checkin_date_other)
-      let __checkout = dayjs(formik.values.checkout_date_other)
+      let __checkout
+      if (order.id) {
+        __checkout = dayjs(storagExpireDate)
+      } else {
+        __checkout = dayjs(formik.values.checkout_date_other)
+      }
       __months = Math.ceil(__checkout.diff(__checkin, 'month', true))
       //   __months = Math.ceil((__checkout.getTime() - __checkin.getTime()) / (1000 * 3600 * 24 * 30))
       setStorageMonth(__months.toString())
@@ -242,26 +271,38 @@ const ContentOrder = (props: propState) => {
                               placeholder='Name'
                               value={order?.client?.name}
                             /> */}
-                            <select
-                              className='form-select form-select-solid'
-                              value={selectedClient ? selectedClient : 'default'}
-                              onChange={(e) => {
-                                let __value = e.target.value
-                                if (__value !== 'default') {
-                                  setSelectedClient(parseInt(__value))
-                                } else {
-                                  setSelectedClient(undefined)
-                                }
+                            <Select
+                              className='basic-single'
+                              classNamePrefix='select'
+                              isDisabled={false}
+                              isLoading={false}
+                              isClearable={true}
+                              isRtl={false}
+                              isSearchable={true}
+                              value={selectedClient}
+                              onChange={(value) => {
+                                setSelectedClient(value)
                               }}
-                            >
-                              <option value={'default'}>{'Select the name of client'}</option>
-                              {clients.length > 0 &&
-                                clients.map((client, index) => (
-                                  <option key={index} value={client.id}>
-                                    {client.name}
-                                  </option>
-                                ))}
-                            </select>
+                              onInputChange={(value) => {
+                                changeTime = Date.now()
+                                setTimeout(() => {
+                                  if (Date.now() - changeTime >= 500) {
+                                    if (value === '') return
+                                    searchClientApi({name: value}).then((res) => {
+                                      let __data = res.data.result
+                                      __data.forEach((item: any) => {
+                                        __options.push({
+                                          value: item.id.toString(),
+                                          label: item.name,
+                                        })
+                                      })
+                                      setSearchClients(__options)
+                                    })
+                                  }
+                                }, 500)
+                              }}
+                              options={[...searchClients]}
+                            />
                           </div>
                         </div>
 
@@ -426,6 +467,11 @@ const ContentOrder = (props: propState) => {
                               type='date'
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Pickup date'
+                              max={
+                                order.id
+                                  ? dayjs(storagExpireDate).format('YYYY-MM-DD')
+                                  : dayjs().add(18, 'month').format('YYYY-MM-DD')
+                              }
                               {...formik.getFieldProps('checkout_date_other')}
                             />
                             {formik.touched.checkout_date_other &&
@@ -736,6 +782,21 @@ const ContentOrder = (props: propState) => {
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Storage month'
                               value={storageMonth}
+                            />
+                          </div>
+                        </div>
+
+                        <div className='row py-3 flex items-center'>
+                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                            <span className=''>Storage expire date</span>
+                          </label>
+                          <div className='col-lg-8 fv-row'>
+                            <input
+                              type='string'
+                              disabled
+                              className='form-control form-control-lg form-control-solid'
+                              placeholder='Storage expire date'
+                              value={storagExpireDate}
                             />
                           </div>
                         </div>

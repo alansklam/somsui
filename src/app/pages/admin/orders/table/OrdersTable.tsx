@@ -323,6 +323,23 @@ const OrdersTable = () => {
                 <th className='min-w-125px text-center'>
                   <div
                     className={
+                      pagination.orderBy === 'storage_expired_date'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('storage_expired_date')}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Storage expire date
+                  </div>
+                </th>
+                <th className='min-w-125px text-center'>
+                  <div
+                    className={
                       pagination.orderBy === 'updated_at'
                         ? pagination.sort
                           ? pagination.sort === 'asc'
