@@ -19,10 +19,17 @@ const timelist = [
 ]
 export default function ContentPage3(props) {
   const {onChangeStep, onNotification, stuffInfo, setStuffInfo} = props
-  const [deliveryDate, setDeliveryDate] = useState(dayjs().add(2, 'day').format('yyyy-mm-dd'))
-  const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(2, 'day'))
-  const [tentativeDate, setTentativeDate] = useState(dayjs().add(2, 'day'))
-  const [expirationDate, setExpirationDate] = useState(dayjs().add(2, 'day'))
+  // for day after (+2 days) order - Alan
+  //const [deliveryDate, setDeliveryDate] = useState(dayjs().add(2, 'day').format('yyyy-mm-dd'))
+  //const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(2, 'day'))
+  //const [tentativeDate, setTentativeDate] = useState(dayjs().add(2, 'day'))
+  //const [expirationDate, setExpirationDate] = useState(dayjs().add(2, 'day'))
+  // for next day order - Alan
+  const [deliveryDate, setDeliveryDate] = useState(dayjs().add(1, 'day').format('yyyy-mm-dd'))
+  const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(1, 'day'))
+  const [tentativeDate, setTentativeDate] = useState(dayjs().add(1, 'day'))
+  const [expirationDate, setExpirationDate] = useState(dayjs().add(1, 'day')) 
+  //
   const [deliveryTimeIndex, setDeliveryTimeIndex] = useState(0)
   const [ladenReturnTimeIndex, setLadenReturnTimeIndex] = useState(0)
   //   const [tentativeTimeIndex, setTentativeTimeIndex] = useState(0)
@@ -47,7 +54,10 @@ export default function ContentPage3(props) {
       let __stuffInfo = stuffInfo
       let __today = new Date()
       let __time = __today.getHours()
-      let __deliveryDate = dayjs().add(2, 'day')
+      // for day after (+2 days) order - Alan
+      //let __deliveryDate = dayjs().add(2, 'day')
+      // for next day order - Alan
+      let __deliveryDate = dayjs().add(1, 'day')
       if (__time < 12) {
         __deliveryDate = dayjs().add(1, 'day')
       }
