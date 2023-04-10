@@ -232,6 +232,14 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
         menu: 'orders',
       }
       dispatch(updateFilterData(__filterData))
+    } else {
+      if (page.code !== uid) {
+        __filterData = {
+          ...initialListView.filterData,
+          menu: 'orders',
+        }
+        dispatch(updateFilterData(__filterData))
+      }
     }
     let __page = page
     if (__page.code !== uid) {

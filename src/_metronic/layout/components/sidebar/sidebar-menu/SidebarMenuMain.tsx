@@ -66,7 +66,7 @@ const SidebarMenuMain = () => {
         <SidebarMenuItem to='/admin/orders?uid=5' title='LU' hasBullet={true} />
         <SidebarMenuItem to='/admin/orders?uid=6' title='UST' hasBullet={true} />
         <SidebarMenuItem to='/admin/orders?uid=7' title='HKBU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=0' title='ubox Group' hasBullet={true} />
+        <SidebarMenuItem to='/admin/orders?uid=10' title='ubox Group' hasBullet={true} />
       </SidebarMenuItemWithSub>
       <SidebarMenuItem
         to='/admin/retrieval-order'

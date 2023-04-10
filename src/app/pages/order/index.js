@@ -259,18 +259,11 @@ export default function Home() {
     if (
       stuff_info.name === '' ||
       stuff_info.contact === '' ||
-      stuff_info.mobile === '' ||
       stuff_info.email === '' ||
       stuff_info.address === ''
     )
       return StepType.STUFF // step=3
-    if (
-      stuff_info.name &&
-      stuff_info.contact &&
-      stuff_info.mobile &&
-      stuff_info.email &&
-      stuff_info.address
-    ) {
+    if (stuff_info.name && stuff_info.contact && stuff_info.email && stuff_info.address) {
       let __email = stuff_info.email
       let __reEmail = /\S+@\S+\.\S+/
       let __resultEmail = __email.match(__reEmail)
@@ -286,14 +279,25 @@ export default function Home() {
         return StepType.STUFF
       }
       let __mobile = stuff_info.mobile
-      let __re_mobile = /[^0-9]+/g
-      let __result_mobile = __mobile.match(__re_mobile)
-      let __length_mobile = __mobile.length
-      if (__result_mobile == null && __length_mobile <= 11 && __length_mobile >= 8) {
-      } else {
-        return StepType.STUFF
+      if (__mobile !== undefined && __mobile !== '') {
+        let __re_mobile = /[^0-9]+/g
+        let __result_mobile = __mobile.match(__re_mobile)
+        let __length_mobile = __mobile.length
+        if (__result_mobile == null && __length_mobile <= 11 && __length_mobile >= 8) {
+        } else {
+          return StepType.STUFF
+        }
       }
     } else return StepType.STUFF // step=3
+    if (
+      dayjs(stuff_info.deliveryDate) < dayjs(stuff_info.deliveryMinDate) ||
+      dayjs(stuff_info.ladenReturnDate) < dayjs(stuff_info.deliveryDate) ||
+      dayjs(stuff_info.ladenReturnDate) > dayjs(stuff_info.deliveryDate).add(14, 'day') ||
+      dayjs(stuff_info.tentativeDate) < dayjs(stuff_info.ladenReturnDate) ||
+      dayjs(stuff_info.tentativeDate) > dayjs(stuff_info.expirationDate)
+    ) {
+      return StepType.STUFF
+    }
     const account_data = accountInfo
     if (account_data === undefined || account_data == null) return StepType.ACCOUNT // step=4
     if (account_data.isStudent === undefined) return StepType.ACCOUNT

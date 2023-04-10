@@ -41,15 +41,16 @@ const ContentOrder = (props: propState) => {
   const [specialInstruction, setSpecialInstruction] = useState('')
   const [lumpSum, setLumpSum] = useState('')
   const [storageMonth, setStorageMonth] = useState('')
-  const [clients, setClients] = useState<any[]>([])
+  // const [clients, setClients] = useState<any[]>([])
   const [selectedClient, setSelectedClient] = useState<any>({})
   const [orderItems, setOrderItems] = useState<any[]>([])
   const [newItemsList, setNewItemsList] = useState<any[]>([])
-  const [storagExpireDate, setStorageExpireDate] = useState<string>('')
+  const [storageExpireDate, setStorageExpireDate] = useState<string>('')
   const [qrCode, setQrCode] = useState('')
   let changeTime = 0
   let __options: any[] = []
   const [searchClients, setSearchClients] = useState<any[]>([])
+  const [productTotalFee, setProductTotalFee] = useState<string>('')
 
   const profileDetailsSchema = Yup.object().shape({
     emptyout_location_other: Yup.string()
@@ -105,6 +106,23 @@ const ContentOrder = (props: propState) => {
         showNotification('error', 'Error', 'Please add items.')
         return
       }
+      if (orderItems.length === 0) {
+        showNotification('error', 'Error', 'Please add items.')
+      } else {
+        let __state_id = false
+        let __state_price = false
+        orderItems.forEach((item) => {
+          if (item.id === undefined) __state_id = true
+          if (item.price === '0') __state_price = true
+        })
+        if (__state_id) {
+          showNotification('error', 'Error', "Please select the item's name.")
+          return
+        } else if (__state_price) {
+          showNotification('error', 'Error', "Please enter the item's price.")
+          return
+        }
+      }
       setLoading(true)
       editOrderApi({
         data: {
@@ -116,9 +134,10 @@ const ContentOrder = (props: propState) => {
           payment_status_id: paymentStatusId,
           special_instruction: specialInstruction,
           storage_month: storageMonth,
+          product_total_fee: productTotalFee,
           total_fee: lumpSum,
           remark_qrcode: qrCode,
-          storage_expired_date: storagExpireDate,
+          storage_expired_date: storageExpireDate,
         },
         id: order.id ? order.id : '',
       })
@@ -145,6 +164,7 @@ const ContentOrder = (props: propState) => {
       })
       setSearchClients(__options)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -176,6 +196,7 @@ const ContentOrder = (props: propState) => {
       value: order.client?.id ? order.client?.id : undefined,
       label: order.client?.name ? order.client?.name : undefined,
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
 
   useEffect(() => {
@@ -200,7 +221,14 @@ const ContentOrder = (props: propState) => {
   useEffect(() => {
     if (!order.id) {
       setStorageExpireDate(formik.values.checkout_date_other)
+    } else {
+      if (dayjs(formik.values.checkout_date_other) > dayjs(order.storage_expired_date)) {
+        setStorageExpireDate(formik.values.checkout_date_other)
+      } else {
+        setStorageExpireDate(order.storage_expired_date)
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.checkout_date_other])
 
   useEffect(() => {
@@ -217,8 +245,8 @@ const ContentOrder = (props: propState) => {
     if (formik.values.checkin_date_other && formik.values.checkout_date_other) {
       let __checkin = dayjs(formik.values.checkin_date_other)
       let __checkout
-      if (order.id) {
-        __checkout = dayjs(storagExpireDate)
+      if (order.id && storageExpireDate) {
+        __checkout = dayjs(storageExpireDate)
       } else {
         __checkout = dayjs(formik.values.checkout_date_other)
       }
@@ -226,6 +254,11 @@ const ContentOrder = (props: propState) => {
       //   __months = Math.ceil((__checkout.getTime() - __checkin.getTime()) / (1000 * 3600 * 24 * 30))
       setStorageMonth(__months.toString())
     }
+    let __product_total_fee = __subTotalFee
+    if (isNaN(__product_total_fee)) {
+      __product_total_fee = 0
+    }
+    setProductTotalFee(__product_total_fee.toFixed(2))
     let __totalFee = __subTotalFee * __months + __packageFee
     if (isNaN(__totalFee)) {
       __totalFee = 0
@@ -249,7 +282,7 @@ const ContentOrder = (props: propState) => {
                     <div className='row'>
                       <div className='col-lg-6 px-8'>
                         <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
+                          <label className='col-lg-4 col-form-label fw-bold fs-6'>Code</label>
                           <div className='col-lg-8 fv-row'>
                             <input
                               type='text'
@@ -335,6 +368,8 @@ const ContentOrder = (props: propState) => {
                           <div className='col-lg-8 fv-row'>
                             <input
                               type='date'
+                              onKeyDown={(e) => e.preventDefault()}
+                              max={dayjs(formik.errors.checkin_date_other).format('YYYY-MM-DD')}
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Empty box date'
                               {...formik.getFieldProps('emptyout_date_other')}
@@ -401,6 +436,9 @@ const ContentOrder = (props: propState) => {
                           <div className='col-lg-8 fv-row'>
                             <input
                               type='date'
+                              onKeyDown={(e) => e.preventDefault()}
+                              min={dayjs(formik.errors.emptyout_date_other).format('YYYY-MM-DD')}
+                              max={dayjs(formik.errors.checkout_date_other).format('YYYY-MM-DD')}
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Storage date'
                               {...formik.getFieldProps('checkin_date_other')}
@@ -465,13 +503,10 @@ const ContentOrder = (props: propState) => {
                           <div className='col-lg-8 fv-row'>
                             <input
                               type='date'
+                              min={dayjs(formik.errors.checkin_date_other).format('YYYY-MM-DD')}
+                              onKeyDown={(e) => e.preventDefault()}
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Pickup date'
-                              max={
-                                order.id
-                                  ? dayjs(storagExpireDate).format('YYYY-MM-DD')
-                                  : dayjs().add(18, 'month').format('YYYY-MM-DD')
-                              }
                               {...formik.getFieldProps('checkout_date_other')}
                             />
                             {formik.touched.checkout_date_other &&
@@ -796,7 +831,7 @@ const ContentOrder = (props: propState) => {
                               disabled
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Storage expire date'
-                              value={storagExpireDate}
+                              value={storageExpireDate}
                             />
                           </div>
                         </div>

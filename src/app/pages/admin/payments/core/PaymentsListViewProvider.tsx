@@ -163,10 +163,33 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
     }
     let __filterData = filter
     if (__filterData.menu !== 'payments') {
-      __filterData = {
-        ...filterData,
-        menu: 'payments',
+      if (page.code !== paymentRemarkId) {
+        __filterData = {
+          ...initialListView.filterData,
+          menu: 'payments',
+        }
+      } else {
+        __filterData = {
+          ...filterData,
+          menu: 'payments',
+        }
       }
+      console.log('filterData', __filterData)
+
+      dispatch(updateFilterData(__filterData))
+    } else {
+      if (page.code !== paymentRemarkId) {
+        __filterData = {
+          ...initialListView.filterData,
+          menu: 'payments',
+        }
+      } else {
+        __filterData = {
+          ...filterData,
+          menu: 'payments',
+        }
+      }
+      console.log('filterData', __filterData)
       dispatch(updateFilterData(__filterData))
     }
     let __page = page

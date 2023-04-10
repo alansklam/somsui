@@ -244,6 +244,20 @@ export const OrderDetailEdit = (props) => {
   }
 
   const updateOrderHandler = () => {
+    if (
+      dayjs(ladenReturnDate) < dayjs(deliveryDate) ||
+      dayjs(ladenReturnDate) > dayjs(deliveryDate).add(14, 'day') ||
+      dayjs(tentativeDate) < dayjs(ladenReturnDate) ||
+      dayjs(tentativeDate) > dayjs(extendDate)
+    ) {
+      onNotification({
+        title: 'warning',
+        message: 'common.no-input-date-error',
+        visible: true,
+        status: Math.floor(Math.random() * 100000),
+      })
+      return
+    }
     if (permitEdit.permitTentative) {
       let data = {
         id: order.id,
@@ -285,6 +299,7 @@ export const OrderDetailEdit = (props) => {
                   <CssTextField
                     required
                     fullWidth
+                    onKeyDown={(e) => e.preventDefault()}
                     id='standard-required1'
                     label={t('common.wd-empty-box-delivery')}
                     variant='standard'
@@ -328,6 +343,7 @@ export const OrderDetailEdit = (props) => {
                     label={t('common.wd-laden-return-date')}
                     required
                     fullWidth
+                    onKeyDown={(e) => e.preventDefault()}
                     id='standard-required2'
                     variant='standard'
                     {...params}
@@ -369,6 +385,7 @@ export const OrderDetailEdit = (props) => {
                   <CssTextField
                     required
                     fullWidth
+                    onKeyDown={(e) => e.preventDefault()}
                     id='standard-required3'
                     label={t('common.wd-tentative-retrieval-date')}
                     variant='standard'
@@ -437,12 +454,14 @@ export const OrderDetailEdit = (props) => {
                         ? dayjs()
                         : dayjs(order?.emptyout_date_other)
                     }
+                    maxDate={dayjs(order?.storage_expired_date)}
                     onChange={handleRetrievalDateChange}
                     disabled={!permitEdit.permitRetrieval}
                     renderInput={(params) => (
                       <CssTextField
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required1'
                         label={t('common.wd-empty-box-delivery')}
                         variant='standard'
@@ -455,9 +474,17 @@ export const OrderDetailEdit = (props) => {
                 <div className='col-sm-6 col-12'>
                   <div className='flex extend-btn-padding'>
                     <Link
-                      to={permitEdit.permitRetrieval ? '/client/order/retrieval/' + id : '#'}
+                      to={
+                        permitEdit.permitRetrieval &&
+                        dayjs(retrievalDate) <= dayjs(order?.storage_expired_date)
+                          ? '/client/order/retrieval/' + id
+                          : '#'
+                      }
                       className={
-                        permitEdit.permitRetrieval ? 'custom-btn hand' : 'custom-btn disabled-btn'
+                        permitEdit.permitRetrieval &&
+                        dayjs(retrievalDate) <= dayjs(order?.storage_expired_date)
+                          ? 'custom-btn hand'
+                          : 'custom-btn disabled-btn'
                       }
                     >
                       {t('common.wd-retrieval-now')}
@@ -500,6 +527,7 @@ export const OrderDetailEdit = (props) => {
                         label={t('common.wd-laden-return-date')}
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required2'
                         variant='standard'
                         {...params}

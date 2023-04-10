@@ -276,7 +276,7 @@ export const OrdersAddModalFormWrapper = () => {
               <div className='row'>
                 <div className='col-lg-6' style={{paddingRight: '30px'}}>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>Code</label>
                     <div className='col-lg-8 fv-row'>
                       <input
                         type='text'
@@ -338,6 +338,7 @@ export const OrdersAddModalFormWrapper = () => {
                     <div className='col-lg-8 fv-row'>
                       <input
                         type='date'
+                        onKeyDown={(e) => e.preventDefault()}
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Empty box date'
                         {...formik.getFieldProps('emptyout_date_other')}
@@ -398,6 +399,7 @@ export const OrdersAddModalFormWrapper = () => {
                     <div className='col-lg-8 fv-row'>
                       <input
                         type='date'
+                        onKeyDown={(e) => e.preventDefault()}
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Storage date'
                         {...formik.getFieldProps('checkin_date_other')}
@@ -458,6 +460,7 @@ export const OrdersAddModalFormWrapper = () => {
                     <div className='col-lg-8 fv-row'>
                       <input
                         type='date'
+                        onKeyDown={(e) => e.preventDefault()}
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Pickup date'
                         {...formik.getFieldProps('checkout_date_other')}

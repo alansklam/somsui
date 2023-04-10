@@ -308,7 +308,7 @@ export const ClientsAddModalFormWrapper = () => {
               )}
               {errorStatus && (
                 <div className='alert alert-danger'>
-                  <div className='alert-text font-weight-bold'>Email is already exist.</div>
+                  <div className='alert-text font-weight-bold'>Email already exists.</div>
                 </div>
               )}
             </div>

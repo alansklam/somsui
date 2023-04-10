@@ -217,7 +217,7 @@ export default function RetrievalEdit(props) {
                 <DesktopDatePicker
                   label={t('common.wd-retrieval-date')}
                   inputFormat='DD/MM/YYYY'
-                  minDate={dayjs()}
+                  minDate={order?.checkin_date_other}
                   maxDate={order?.storage_expired_date}
                   value={retrievalDate}
                   onChange={handleRetrievalDateChange}
@@ -225,6 +225,7 @@ export default function RetrievalEdit(props) {
                     <CssTextField
                       required
                       fullWidth
+                      onKeyDown={(e) => e.preventDefault()}
                       id='standard-required1'
                       label={t('common.wd-retrieval-date')}
                       variant='standard'
@@ -293,6 +294,7 @@ export default function RetrievalEdit(props) {
                       <CssTextField
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required1'
                         label={t('common.wd-empty-box-return-date')}
                         variant='standard'

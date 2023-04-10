@@ -8,6 +8,7 @@ import {editPromotionApi} from '../../../../../store/apis/admin'
 import {editPromotionItemApi} from '../../../../../store/apis/admin'
 import {RootState} from '../../../../../store/reducers'
 import {showNotification} from '../../../components/notification'
+import dayjs from 'dayjs'
 
 type propState = {
   promotionInfo: {
@@ -86,7 +87,7 @@ const ContentPromotion = (props: propState) => {
   }
 
   const profileDetailsSchema = Yup.object().shape({
-    code: Yup.string().required('The code is required'),
+    code: Yup.string().required('Code is required'),
     name: Yup.string().required('Name is required'),
     effective_from: Yup.string().required('The minmum storage is required'),
     effective_to: Yup.string().required('The maximum storage is required'),
@@ -98,6 +99,10 @@ const ContentPromotion = (props: propState) => {
     initialValues,
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
+      if (dayjs(formik.values.effective_from) > dayjs(formik.values.effective_to)) {
+        showNotification('error', 'Error', 'Please fix the dates')
+        return
+      }
       setLoading(true)
       editPromotionApi({data: values, id: promotionId})
         .then((res) => {
@@ -155,7 +160,7 @@ const ContentPromotion = (props: propState) => {
                           <div className='card-body border-top p-9'>
                             <div className='row mb-6'>
                               <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                                The code
+                                Code
                               </label>
 
                               <div className='col-lg-8 fv-row'>
@@ -201,6 +206,7 @@ const ContentPromotion = (props: propState) => {
                               <div className='col-lg-8 fv-row'>
                                 <input
                                   type='date'
+                                  onKeyDown={(e) => e.preventDefault()}
                                   className='form-control form-control-lg form-control-solid'
                                   placeholder='From'
                                   {...formik.getFieldProps('effective_from')}
@@ -223,6 +229,7 @@ const ContentPromotion = (props: propState) => {
                               <div className='col-lg-8 fv-row'>
                                 <input
                                   type='date'
+                                  onKeyDown={(e) => e.preventDefault()}
                                   className='form-control form-control-lg form-control-solid'
                                   placeholder='To'
                                   {...formik.getFieldProps('effective_to')}

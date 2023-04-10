@@ -58,11 +58,6 @@ export default function RetrievalPage(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial])
 
-  const dateFormat = (date) => {
-    let newDate = dayjs(date).format('DD/MM/YYYY')
-    return newDate
-  }
-
   const onCartHandler = (item, value) => {
     let __delivery_items = cartInfo.delivery_items
     let __delivery_fee = 0
@@ -119,7 +114,9 @@ export default function RetrievalPage(props) {
           <span>
             {t('customer-retrieval.no-title', {
               order: order.code ? order.code : '',
-              date: dateFormat(order.storage_expired_date ? order.storage_expired_date : '', 2),
+              date: order.storage_expired_date
+                ? dayjs(order.storage_expired_date).format('DD/MM/YYYY')
+                : '',
             })}
           </span>
         </div>

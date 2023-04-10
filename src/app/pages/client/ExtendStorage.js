@@ -318,7 +318,7 @@ export const ExtendStorage = () => {
               <span>
                 {t('customer-extend.no-title', {
                   order: order.code ? order.code : '',
-                  date: dateFormat(order.created_at ? order.created_at : '', 2),
+                  date: dateFormat(order.storage_expired_date ? order.storage_expired_date : '', 2),
                   monthlyFee: order?.product_total_fee,
                 })}
               </span>

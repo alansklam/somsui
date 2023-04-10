@@ -12,7 +12,7 @@ export const StoragePeriodsAddModalFormWrapper = () => {
   const [maxValue, setMaxValue] = useState('')
 
   const profileDetailsSchema = Yup.object().shape({
-    code: Yup.string().required('The code is required'),
+    code: Yup.string().required('Code is required'),
     name: Yup.string().required('Name is required'),
   })
 
@@ -23,8 +23,8 @@ export const StoragePeriodsAddModalFormWrapper = () => {
         let max = NaN
         min = data[itemIdForUpdate].min ? data[itemIdForUpdate].min : NaN
         max = data[itemIdForUpdate].max ? data[itemIdForUpdate].max : NaN
-        setMinValue(min.toString())
-        setMaxValue(max.toString())
+        setMinValue(isNaN(min) ? '' : min.toString())
+        setMaxValue(isNaN(max) ? '' : max.toString())
       }
     }
   }, [data, itemIdForUpdate])
@@ -48,6 +48,10 @@ export const StoragePeriodsAddModalFormWrapper = () => {
     onSubmit: (values) => {
       if (minValue === '' && maxValue === '') {
         showNotification('error', 'Error', 'Please fill min or max field.')
+        return
+      }
+      if (parseInt(minValue) > parseInt(maxValue)) {
+        showNotification('error', 'Error', 'Please fix the periods.')
         return
       }
       setLoading(true)
@@ -87,7 +91,7 @@ export const StoragePeriodsAddModalFormWrapper = () => {
           <form onSubmit={formik.handleSubmit} noValidate className='form'>
             <div className='card-body border-top p-9'>
               <div className='row mb-6'>
-                <label className='col-lg-4 col-form-label required fw-bold fs-6'>The code</label>
+                <label className='col-lg-4 col-form-label required fw-bold fs-6'>Code</label>
 
                 <div className='col-lg-8 fv-row'>
                   <input

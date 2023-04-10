@@ -168,12 +168,12 @@ const UsersListFilter = () => {
 
             <div className='col-lg-6'>
               <div className='row mb-6'>
-                <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Code</label>
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='text'
                     className='form-control form-control-lg form-control-solid'
-                    placeholder='The code'
+                    placeholder='Code'
                     value={filterData.code}
                     onChange={(e) => {
                       setFilterData({...filterData, code: e.target.value})
@@ -189,6 +189,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Emptybox date start'
                     value={filterData.emptyDateStart}
@@ -206,6 +207,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Emptybox date start'
                     value={filterData.emptyDateEnd}
@@ -223,6 +225,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Storage date start'
                     value={filterData.checkinDateStart}
@@ -240,6 +243,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Storage date end'
                     value={filterData.checkinDateEnd}
@@ -257,6 +261,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Pick-up date start'
                     value={filterData.checkoutDateStart}
@@ -274,6 +279,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Pick-up date end'
                     value={filterData.checkoutDateEnd}

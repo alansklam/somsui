@@ -63,12 +63,12 @@ const UsersListFilter = () => {
           <div className='row'>
             <div className='col-lg-6'>
               <div className='row mb-6'>
-                <label className='col-lg-4 col-form-label fw-bold fs-6'>The code</label>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Code</label>
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='text'
                     className='form-control form-control-lg form-control-solid'
-                    placeholder='The code'
+                    placeholder='Code'
                     value={filterData.code}
                     onChange={(e) => {
                       setFilterData({...filterData, code: e.target.value})
@@ -101,6 +101,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Effective from start'
                     value={filterData.fromDateStart}
@@ -118,6 +119,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Effective from end'
                     value={filterData.fromDateEnd}
@@ -135,6 +137,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Effective to start'
                     value={filterData.toDateStart}
@@ -152,6 +155,7 @@ const UsersListFilter = () => {
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
+                    onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
                     placeholder='Effective to end'
                     value={filterData.toDateEnd}

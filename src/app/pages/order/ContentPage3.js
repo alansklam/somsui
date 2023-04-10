@@ -19,16 +19,14 @@ const timelist = [
 ]
 export default function ContentPage3(props) {
   const {onChangeStep, onNotification, stuffInfo, setStuffInfo} = props
+  const additionalDay = process.env.REACT_APP_ADDTIONAL_DATE
   // for day after (+2 days) order - Alan
-  //const [deliveryDate, setDeliveryDate] = useState(dayjs().add(2, 'day').format('yyyy-mm-dd'))
-  //const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(2, 'day'))
-  //const [tentativeDate, setTentativeDate] = useState(dayjs().add(2, 'day'))
-  //const [expirationDate, setExpirationDate] = useState(dayjs().add(2, 'day'))
-  // for next day order - Alan
-  const [deliveryDate, setDeliveryDate] = useState(dayjs().add(1, 'day').format('yyyy-mm-dd'))
-  const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(1, 'day'))
-  const [tentativeDate, setTentativeDate] = useState(dayjs().add(1, 'day'))
-  const [expirationDate, setExpirationDate] = useState(dayjs().add(1, 'day')) 
+  const [deliveryDate, setDeliveryDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [tentativeDate, setTentativeDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [expirationDate, setExpirationDate] = useState(dayjs().add(additionalDay, 'day'))
+  const deliveryMinDate = dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+
   //
   const [deliveryTimeIndex, setDeliveryTimeIndex] = useState(0)
   const [ladenReturnTimeIndex, setLadenReturnTimeIndex] = useState(0)
@@ -43,7 +41,6 @@ export default function ContentPage3(props) {
   const __userInfo = localStorage.getItem('ubox-user')
     ? JSON.parse(localStorage.getItem('ubox-user'))
     : ''
-  const [deliveryMinDate, setDeliveryMinDate] = useState(dayjs().add(1, 'day'))
 
   useEffect(() => {
     setInitial(true)
@@ -52,16 +49,18 @@ export default function ContentPage3(props) {
   useEffect(() => {
     if (initial) {
       let __stuffInfo = stuffInfo
-      let __today = new Date()
-      let __time = __today.getHours()
-      // for day after (+2 days) order - Alan
-      //let __deliveryDate = dayjs().add(2, 'day')
-      // for next day order - Alan
-      let __deliveryDate = dayjs().add(1, 'day')
-      if (__time < 12) {
-        __deliveryDate = dayjs().add(1, 'day')
-      }
-      setDeliveryMinDate(__deliveryDate)
+      let __deliveryDate = dayjs(deliveryDate)
+
+      // let __deliveryDate = dayjs().add(1, 'day')
+      // if (parseInt(additionalDay) > 1) {
+      //   if (__time < 11) {
+      //     __deliveryDate = dayjs().add(parseInt(additionalDay) - 1, 'day')
+      //   } else {
+      //     __deliveryDate = dayjs().add(parseInt(additionalDay), 'day')
+      //   }
+      // }
+
+      // setDeliveryMinDate(__deliveryDate)
       setName(__stuffInfo.name ? __stuffInfo.name : '')
       setEmail(__stuffInfo.email ? __stuffInfo.email : '')
       setContact(__stuffInfo.contact ? __stuffInfo.contact : '')
@@ -92,6 +91,7 @@ export default function ContentPage3(props) {
           contact: '',
           mobile: '',
           address: '',
+          deliveryMinDate: deliveryMinDate,
           deliveryDate: __deliveryDate.format('YYYY-MM-DD'),
           deliveryTime: '09:00 - 13:00',
           deliveryTimeIndex: 0,
@@ -219,7 +219,7 @@ export default function ContentPage3(props) {
     //  })
     //  return
     //} else {
-    if (mobile !== "") {
+    if (mobile !== '') {
       let __mobile = mobile
       let __re = /[^0-9]+/g
       let __result = __mobile.match(__re)
@@ -253,10 +253,26 @@ export default function ContentPage3(props) {
       return
     }
 
+    if (
+      dayjs(deliveryDate) < dayjs(deliveryMinDate) ||
+      dayjs(ladenReturnDate) < dayjs(deliveryDate) ||
+      dayjs(ladenReturnDate) > dayjs(deliveryDate).add(14, 'day') ||
+      dayjs(tentativeDate) < dayjs(ladenReturnDate) ||
+      dayjs(tentativeDate) > dayjs(expirationDate)
+    ) {
+      onNotification({
+        title: 'warning',
+        message: 'common.no-input-date-error',
+        visible: true,
+        status: Math.floor(Math.random() * 100000),
+      })
+      return
+    }
     onChangeStep()
   }
 
   const handleDeliveryDateChange = (newValue) => {
+    if (newValue === null || newValue.format('YYYY-MM-DD') === 'Invalid Date') return
     let __stuffInfo = stuffInfo
     __stuffInfo = {...__stuffInfo, deliveryDate: newValue.format('YYYY-MM-DD')}
     setDeliveryDate(newValue)
@@ -270,6 +286,7 @@ export default function ContentPage3(props) {
     setStuffInfo(__stuffInfo)
   }
   const handleLadenReturnDateChange = (newValue) => {
+    if (newValue === null || newValue.format('YYYY-MM-DD') === 'Invalid Date') return
     let __stuffInfo = stuffInfo
     __stuffInfo = {...__stuffInfo, ladenReturnDate: newValue.format('YYYY-MM-DD')}
     setLadenReturnDate(newValue)
@@ -283,18 +300,17 @@ export default function ContentPage3(props) {
     setStuffInfo(__stuffInfo)
   }
   const handleTentativeDateChange = (newValue) => {
+    if (newValue === null || newValue.format('YYYY-MM-DD') === 'Invalid Date') return
     let __stuffInfo = stuffInfo
     __stuffInfo = {...__stuffInfo, tentativeDate: newValue.format('YYYY-MM-DD')}
     setTentativeDate(newValue)
-    if (newValue >= dayjs(expirationDate)) {
-      setExpirationDate(newValue)
-      __stuffInfo = {...__stuffInfo, expirationDate: newValue.format('YYYY-MM-DD')}
-    }
+    // if (newValue >= dayjs(expirationDate)) {
+    //   setExpirationDate(newValue)
+    //   __stuffInfo = {...__stuffInfo, expirationDate: newValue.format('YYYY-MM-DD')}
+    // }
     setStuffInfo(__stuffInfo)
   }
-  const handleExpirationDateChange = (newValue) => {
-    setTentativeDate(newValue)
-  }
+
   const handleDeliveryTimeChange = (e) => {
     setDeliveryTimeIndex(e.target.value)
     setStuffInfo({
@@ -454,6 +470,7 @@ export default function ContentPage3(props) {
                       <CssTextField
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required1'
                         label={t('common.wd-empty-box-delivery')}
                         variant='standard'
@@ -495,6 +512,7 @@ export default function ContentPage3(props) {
                         label={t('common.wd-laden-return-date')}
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required2'
                         variant='standard'
                         {...params}
@@ -534,6 +552,7 @@ export default function ContentPage3(props) {
                       <CssTextField
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required3'
                         label={t('common.wd-tentative-retrieval-date')}
                         variant='standard'
@@ -544,35 +563,18 @@ export default function ContentPage3(props) {
                   />
                   <div className='py-2 text-normal'>{t('common.wd-tentative-retrieval-note')}</div>
                 </Grid>
-                {/* <Grid item xs={12} sm={6} md={6}>
-                    <CssTextField
-                        id="standard-select-currency3"
-                        select fullWidth
-                        label=""
-                        value={tentativeTimeIndex}
-                        onChange={handleTentativeTimeChange}
-                        className="mt-17"
-                        helperText=""
-                        variant="standard"
-                    >
-                        {timelist.map((option) => (
-                            <MenuItem key={option.value} value={option.value} style={{fontSize: '16px'}}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </CssTextField>
-                </Grid> */}
                 <Grid item xs={12} sm={6} md={6}>
                   <DesktopDatePicker
                     label={t('common.wd-storage-expiration-date')}
                     inputFormat='DD/MM/YYYY'
                     disabled
                     value={expirationDate}
-                    onChange={handleExpirationDateChange}
+                    onChange={() => {}}
                     renderInput={(params) => (
                       <CssTextField
                         required
                         fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
                         id='standard-required3'
                         label={t('common.wd-storage-expiration-date')}
                         variant='standard'

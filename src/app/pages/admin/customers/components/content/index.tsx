@@ -77,6 +77,13 @@ const ContentCustomer = (props: propsState) => {
     initialValues,
     validationSchema: profileDetailsSchema,
     onSubmit: (values) => {
+      if (
+        (resetPassword === true || createState === true) &&
+        (formik.values.password === '' || formik.values.password === undefined)
+      ) {
+        showNotification('error', 'Error', 'Please enter Password.')
+        return
+      }
       setLoading(true)
       createState
         ? editClientApi({data: {...values, universityId}, id: undefined})
@@ -107,7 +114,6 @@ const ContentCustomer = (props: propsState) => {
   })
 
   useEffect(() => {
-    console.log('university', customerInfo?.university_id)
     if (clientId) {
       setUniversityId(
         customerInfo?.university_id?.toString() ? customerInfo?.university_id.toString() : ''
@@ -227,7 +233,7 @@ const ContentCustomer = (props: propsState) => {
 
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Univerisity</span>
+                      <span className=''>University</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -242,7 +248,7 @@ const ContentCustomer = (props: propsState) => {
                         }}
                         value={universityId}
                       >
-                        <option value='default'>Select Univeristy</option>
+                        <option value='default'>Select University</option>
                         {universities.length > 0 &&
                           universities.map((university, index) => (
                             <option value={university.id.toString()} key={index}>
@@ -319,7 +325,7 @@ const ContentCustomer = (props: propsState) => {
                   )}
                   {errorStatus && (
                     <div className='alert alert-danger mt-6'>
-                      <div className='alert-text font-weight-bold'>Email is already exist.</div>
+                      <div className='alert-text font-weight-bold'>Email already exists.</div>
                     </div>
                   )}
 
