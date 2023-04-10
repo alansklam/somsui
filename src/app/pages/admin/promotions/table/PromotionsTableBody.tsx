@@ -1,6 +1,7 @@
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {usePromotionsListView} from '../core/PromotionsListViewProvider'
 import {useNavigate} from 'react-router-dom'
+import dayjs from 'dayjs'
 
 export const PromotionsTableBody = (props: any) => {
   const {listData, setListData} = props
@@ -49,13 +50,19 @@ export const PromotionsTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.name}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.effective_from}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.effective_from).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.effective_to}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.effective_to).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.updated_at}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.updated_at).format('DD-MM-YYYY HH:mm:ss')}
+                </span>
               </td>
               <td>
                 <div className='d-flex justify-content-end flex-shrink-0'>

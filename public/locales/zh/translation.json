@@ -97,6 +97,7 @@
   "common.no-input-mobile-validate": "手机号码必须是数字, 长度必须在8到11个字母之间。",
   "common.no-input-address": "請輸入交收地址",
   "common.no-input-address-length": "地址必須少於 250 個字母。",
+  "common.no-input-date-error": "请修正以上错误",
   "common.no-input-password": "請輸入密碼",
   "common.no-input-password-length": "密碼長度必須在 8 到 16 個字母之間。",
   "common.no-input-university": "請輸入所讀大學/大專",

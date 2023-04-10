@@ -54,8 +54,6 @@ export const ExtendStorage = () => {
   }, [initial])
 
   useEffect(() => {
-    console.log('extendDate', extendDate)
-
     if (extendDate !== undefined && order !== undefined) {
       if (extendDate === '') {
         let expired_date = dayjs(order?.storage_expired_date)

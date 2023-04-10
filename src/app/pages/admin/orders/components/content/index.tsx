@@ -10,6 +10,11 @@ import {useNavigate} from 'react-router-dom'
 import {showNotification} from '../../../components/notification'
 import Select from 'react-select'
 import {searchClientApi} from '../../../../../store/apis/admin'
+import {createTheme, ThemeProvider} from '@mui/material'
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker'
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
+import TextField from '@mui/material/TextField'
 
 type propState = {
   orderInfo: {
@@ -122,6 +127,15 @@ const ContentOrder = (props: propState) => {
           showNotification('error', 'Error', "Please enter the item's price.")
           return
         }
+      }
+      if (
+        dayjs(formik.values.checkin_date_other) >
+          dayjs(formik.values.emptyout_date_other).add(14, 'day') ||
+        dayjs(formik.values.checkin_date_other) < dayjs(formik.values.checkout_date_other) ||
+        dayjs(formik.values.checkout_date_other) > dayjs(order?.storage_expired_date)
+      ) {
+        showNotification('error', 'Error', 'Please fix the errors.')
+        return
       }
       setLoading(true)
       editOrderApi({
@@ -267,6 +281,8 @@ const ContentOrder = (props: propState) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values, orderItems])
 
+  const defaultMaterialTheme = createTheme({})
+
   return (
     <div>
       <div className='mx-auto mw-1300px'>
@@ -276,624 +292,708 @@ const ContentOrder = (props: propState) => {
           </div>
           <div className='mx-5 mx-xl-15 my-7'>
             <div className='card mb-5 mb-xl-10'>
-              <div id='kt_account_profile_details' className='collapse show'>
-                <form onSubmit={formik.handleSubmit} noValidate className='form'>
-                  <div className='card-body border-top p-9'>
-                    <div className='row'>
-                      <div className='col-lg-6 px-8'>
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>Code</label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              disabled
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Code'
-                              value={order?.code}
-                            />
-                          </div>
-                        </div>
+              <ThemeProvider theme={defaultMaterialTheme}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div id='kt_account_profile_details' className='collapse show'>
+                    <form onSubmit={formik.handleSubmit} noValidate className='form'>
+                      <div className='card-body border-top p-9'>
+                        <div className='row'>
+                          <div className='col-lg-6 px-8'>
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>Code</label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  disabled
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Code'
+                                  value={order?.code}
+                                />
+                              </div>
+                            </div>
 
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
-                          <div className='col-lg-8 fv-row'>
-                            {/* <input
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
+                              <div className='col-lg-8 fv-row'>
+                                {/* <input
                               type='text'
                               disabled
                               className='form-control form-control-lg form-control-solid'
                               placeholder='Name'
                               value={order?.client?.name}
                             /> */}
-                            <Select
-                              className='basic-single'
-                              classNamePrefix='select'
-                              isDisabled={false}
-                              isLoading={false}
-                              isClearable={true}
-                              isRtl={false}
-                              isSearchable={true}
-                              value={selectedClient}
-                              onChange={(value) => {
-                                setSelectedClient(value)
-                              }}
-                              onInputChange={(value) => {
-                                changeTime = Date.now()
-                                setTimeout(() => {
-                                  if (Date.now() - changeTime >= 500) {
-                                    if (value === '') return
-                                    searchClientApi({name: value}).then((res) => {
-                                      let __data = res.data.result
-                                      __data.forEach((item: any) => {
-                                        __options.push({
-                                          value: item.id.toString(),
-                                          label: item.name,
+                                <Select
+                                  className='basic-single'
+                                  classNamePrefix='select'
+                                  isDisabled={false}
+                                  isLoading={false}
+                                  isClearable={true}
+                                  isRtl={false}
+                                  isSearchable={true}
+                                  value={selectedClient}
+                                  onChange={(value) => {
+                                    setSelectedClient(value)
+                                  }}
+                                  onInputChange={(value) => {
+                                    changeTime = Date.now()
+                                    setTimeout(() => {
+                                      if (Date.now() - changeTime >= 500) {
+                                        if (value === '') return
+                                        searchClientApi({name: value}).then((res) => {
+                                          let __data = res.data.result
+                                          __data.forEach((item: any) => {
+                                            __options.push({
+                                              value: item.id.toString(),
+                                              label: item.name,
+                                            })
+                                          })
+                                          setSearchClients(__options)
                                         })
-                                      })
-                                      setSearchClients(__options)
-                                    })
+                                      }
+                                    }, 500)
+                                  }}
+                                  options={[...searchClients]}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-4'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Empty box location</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Empty box location'
+                                  {...formik.getFieldProps('emptyout_location_other')}
+                                />
+                                {formik.touched.emptyout_location_other &&
+                                  formik.errors.emptyout_location_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.emptyout_location_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Empty box date</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <DesktopDatePicker
+                                  inputFormat='DD-MM-YYYY'
+                                  maxDate={dayjs(formik.values.checkin_date_other).format(
+                                    'DD-MM-YYYY'
+                                  )}
+                                  onChange={(value) =>
+                                    formik.setFieldValue(
+                                      'emptyout_date_other',
+                                      dayjs(value).format('YYYY-MM-DD'),
+                                      true
+                                    )
                                   }
-                                }, 500)
-                              }}
-                              options={[...searchClients]}
-                            />
-                          </div>
-                        </div>
-
-                        <div className='row py-4'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Empty box location</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Empty box location'
-                              {...formik.getFieldProps('emptyout_location_other')}
-                            />
-                            {formik.touched.emptyout_location_other &&
-                              formik.errors.emptyout_location_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.emptyout_location_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Empty box date</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='date'
-                              onKeyDown={(e) => e.preventDefault()}
-                              max={dayjs(formik.errors.checkin_date_other).format('YYYY-MM-DD')}
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Empty box date'
-                              {...formik.getFieldProps('emptyout_date_other')}
-                            />
-                            {formik.touched.emptyout_date_other &&
-                              formik.errors.emptyout_date_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.emptyout_date_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Empty box time</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='string'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Empty box time'
-                              {...formik.getFieldProps('emptyout_time_other')}
-                            />
-                            {formik.touched.emptyout_time_other &&
-                              formik.errors.emptyout_time_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.emptyout_time_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Storage location</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Storage location'
-                              {...formik.getFieldProps('checkin_location_other')}
-                            />
-                            {formik.touched.checkin_location_other &&
-                              formik.errors.checkin_location_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.checkin_location_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Storage date</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='date'
-                              onKeyDown={(e) => e.preventDefault()}
-                              min={dayjs(formik.errors.emptyout_date_other).format('YYYY-MM-DD')}
-                              max={dayjs(formik.errors.checkout_date_other).format('YYYY-MM-DD')}
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Storage date'
-                              {...formik.getFieldProps('checkin_date_other')}
-                            />
-                            {formik.touched.checkin_date_other && formik.errors.checkin_date_other && (
-                              <div className='fv-plugins-message-container'>
-                                <div className='fv-help-block'>
-                                  {formik.errors.checkin_date_other}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Storage time</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Storage time'
-                              {...formik.getFieldProps('checkin_time_other')}
-                            />
-                            {formik.touched.checkin_time_other && formik.errors.checkin_time_other && (
-                              <div className='fv-plugins-message-container'>
-                                <div className='fv-help-block'>
-                                  {formik.errors.checkin_time_other}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Pickup location</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Pickup location'
-                              {...formik.getFieldProps('checkout_location_other')}
-                            />
-                            {formik.touched.checkout_location_other &&
-                              formik.errors.checkout_location_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.checkout_location_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Pickup date</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='date'
-                              min={dayjs(formik.errors.checkin_date_other).format('YYYY-MM-DD')}
-                              onKeyDown={(e) => e.preventDefault()}
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Pickup date'
-                              {...formik.getFieldProps('checkout_date_other')}
-                            />
-                            {formik.touched.checkout_date_other &&
-                              formik.errors.checkout_date_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.checkout_date_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Pickup time</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Pickup time'
-                              {...formik.getFieldProps('checkout_time_other')}
-                            />
-                            {formik.touched.checkout_time_other &&
-                              formik.errors.checkout_time_other && (
-                                <div className='fv-plugins-message-container'>
-                                  <div className='fv-help-block'>
-                                    {formik.errors.checkout_time_other}
-                                  </div>
-                                </div>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            Special requirement
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='text'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Special requirement'
-                              value={specialInstruction}
-                              onChange={(e) => {
-                                setSpecialInstruction(e.target.value)
-                              }}
-                            />
-                          </div>
-                        </div>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Order status</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <select
-                              className='form-select form-select-solid'
-                              value={orderStatusId}
-                              onChange={(e) => {
-                                setOrderStatusId(e.target.value)
-                              }}
-                            >
-                              <option>Select order status</option>
-                              {orderStatus &&
-                                orderStatus.length > 0 &&
-                                orderStatus.map((element: any, index: number) => (
-                                  <option value={element.id} key={index}>
-                                    {element.description}
-                                  </option>
-                                ))}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>QR Code</label>
-                          <div className='col-lg-8 fv-row'>
-                            <textarea
-                              className='form-control form-control-lg form-control-solid h-100px'
-                              placeholder='QR Code'
-                              value={qrCode}
-                              onChange={(e) => {
-                                setQrCode(e.target.value)
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className='col-lg-6 px-8'>
-                        <>
-                          {orderItems?.length > 0 &&
-                            orderItems.map((item: any, index) => (
-                              <div className='row py-4 border-bottom' key={index}>
-                                <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
-                                {item.added_item ? (
-                                  <div className='col-lg-8 fv-row mb-3'>
-                                    <select
-                                      className='form-select form-select-solid'
-                                      value={item.id}
-                                      disabled={!item.added_item}
-                                      onChange={(e) => {
-                                        console.log('target', e.target.value)
-                                        let __item = orderItems.filter(
-                                          (element) => element.id === parseInt(e.target.value)
-                                        )
-                                        console.log('item', __item)
-                                        if (e.target.value === 'default' || __item?.length > 0) {
-                                          item.id = 'default'
-                                          setOrderItems([...orderItems])
-                                          return
-                                        } else {
-                                          let __new_item = newItemsList.filter(
-                                            (element: any) =>
-                                              element.id === parseInt(e.target.value)
-                                          )[0]
-                                          item.id = parseInt(e.target.value)
-                                          item.category = __new_item.category
-                                          item.price = __new_item.price
-                                          setOrderItems([...orderItems])
-                                          // let __newItemsList = newItemsList.filter(
-                                          //   (element) => element.id !== parseInt(e.target.value)
-                                          // )
-                                          // setNewItemsList([...__newItemsList])
-                                        }
-                                      }}
-                                    >
-                                      <option value={'default'}>Select item's name</option>
-                                      {newItemsList &&
-                                        newItemsList?.length > 0 &&
-                                        newItemsList.map((element: any, index: number) => (
-                                          <option value={element.id} key={index}>
-                                            {element.display_name}
-                                          </option>
-                                        ))}
-                                    </select>
-                                  </div>
-                                ) : (
-                                  <div className='col-lg-8 fv-row mb-3'>
-                                    <select
-                                      className='form-select form-select-solid'
-                                      value={item.id}
-                                      disabled
-                                    >
-                                      <option>{item.name}</option>
-                                    </select>
-                                  </div>
-                                )}
-
-                                <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                                  Quantity
-                                </label>
-                                <div className='col-lg-8'>
-                                  <div className='input-group mb-3'>
-                                    <div className='input-group-prepend'>
-                                      <span
-                                        className='input-group-text btn btn-secondary'
-                                        onClick={(e) => {
-                                          let __qty = parseInt(item.quantity) - 1
-                                          if (__qty < 0) __qty = 0
-                                          item.quantity = __qty.toString()
-                                          setOrderItems([...orderItems])
-                                        }}
-                                      >
-                                        <MinusOutlined />
-                                      </span>
-                                    </div>
-                                    <input
-                                      type='number'
-                                      className='form-control form-control-lg form-control-solid text-center'
-                                      value={item.quantity}
-                                      onChange={(e) => {
-                                        item.quantity = e.target.value
-                                        setOrderItems([...orderItems])
-                                      }}
+                                  value={formik.values.emptyout_date_other}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      onKeyDown={(e) => e.preventDefault()}
+                                      variant='standard'
+                                      {...params}
+                                      sx={{input: {fontSize: 15}}}
                                     />
-                                    <div className='input-group-append'>
-                                      <span
-                                        className='input-group-text btn btn-secondary'
-                                        onClick={(e) => {
-                                          let __qty = parseInt(item.quantity) + 1
-                                          item.quantity = __qty.toString()
+                                  )}
+                                />
+                                {formik.touched.emptyout_date_other &&
+                                  formik.errors.emptyout_date_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.emptyout_date_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Empty box time</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Empty box time'
+                                  {...formik.getFieldProps('emptyout_time_other')}
+                                />
+                                {formik.touched.emptyout_time_other &&
+                                  formik.errors.emptyout_time_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.emptyout_time_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Storage location</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Storage location'
+                                  {...formik.getFieldProps('checkin_location_other')}
+                                />
+                                {formik.touched.checkin_location_other &&
+                                  formik.errors.checkin_location_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.checkin_location_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Storage date</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <DesktopDatePicker
+                                  inputFormat='DD-MM-YYYY'
+                                  minDate={dayjs(formik.values.emptyout_date_other).format(
+                                    'YYYY-MM-DD'
+                                  )}
+                                  maxDate={dayjs(formik.values.emptyout_date_other)
+                                    .add(14, 'day')
+                                    .format('YYYY-MM-DD')}
+                                  onChange={(value) =>
+                                    formik.setFieldValue(
+                                      'checkin_date_other',
+                                      dayjs(value).format('YYYY-MM-DD'),
+                                      true
+                                    )
+                                  }
+                                  value={formik.values.checkin_date_other}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      onKeyDown={(e) => e.preventDefault()}
+                                      variant='standard'
+                                      {...params}
+                                      sx={{input: {fontSize: 15}}}
+                                    />
+                                  )}
+                                />
+                                {/* <input
+                                  type='date'
+                                  onKeyDown={(e) => e.preventDefault()}
+                                  min={dayjs(formik.errors.emptyout_date_other).format(
+                                    'YYYY-MM-DD'
+                                  )}
+                                  max={dayjs(formik.errors.checkout_date_other).format(
+                                    'YYYY-MM-DD'
+                                  )}
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Storage date'
+                                  {...formik.getFieldProps('checkin_date_other')}
+                                /> */}
+                                {formik.touched.checkin_date_other &&
+                                  formik.errors.checkin_date_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.checkin_date_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Storage time</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Storage time'
+                                  {...formik.getFieldProps('checkin_time_other')}
+                                />
+                                {formik.touched.checkin_time_other &&
+                                  formik.errors.checkin_time_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.checkin_time_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Pickup location</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Pickup location'
+                                  {...formik.getFieldProps('checkout_location_other')}
+                                />
+                                {formik.touched.checkout_location_other &&
+                                  formik.errors.checkout_location_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.checkout_location_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Pickup date</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <DesktopDatePicker
+                                  inputFormat='DD-MM-YYYY'
+                                  minDate={dayjs(formik.values.checkin_date_other).format(
+                                    'YYYY-MM-DD'
+                                  )}
+                                  onChange={(value) =>
+                                    formik.setFieldValue(
+                                      'checkout_date_other',
+                                      dayjs(value).format('YYYY-MM-DD'),
+                                      true
+                                    )
+                                  }
+                                  value={formik.values.checkout_date_other}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      required
+                                      fullWidth
+                                      onKeyDown={(e) => e.preventDefault()}
+                                      variant='standard'
+                                      {...params}
+                                      sx={{input: {fontSize: 15}}}
+                                    />
+                                  )}
+                                />
+                                {/* <input
+                                  type='date'
+                                  min={dayjs(formik.errors.checkin_date_other).format('YYYY-MM-DD')}
+                                  onKeyDown={(e) => e.preventDefault()}
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Pickup date'
+                                  {...formik.getFieldProps('checkout_date_other')}
+                                /> */}
+                                {formik.touched.checkout_date_other &&
+                                  formik.errors.checkout_date_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.checkout_date_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Pickup time</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Pickup time'
+                                  {...formik.getFieldProps('checkout_time_other')}
+                                />
+                                {formik.touched.checkout_time_other &&
+                                  formik.errors.checkout_time_other && (
+                                    <div className='fv-plugins-message-container'>
+                                      <div className='fv-help-block'>
+                                        {formik.errors.checkout_time_other}
+                                      </div>
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                Special requirement
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='text'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Special requirement'
+                                  value={specialInstruction}
+                                  onChange={(e) => {
+                                    setSpecialInstruction(e.target.value)
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Order status</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <select
+                                  className='form-select form-select-solid'
+                                  value={orderStatusId}
+                                  onChange={(e) => {
+                                    setOrderStatusId(e.target.value)
+                                  }}
+                                >
+                                  <option>Select order status</option>
+                                  {orderStatus &&
+                                    orderStatus.length > 0 &&
+                                    orderStatus.map((element: any, index: number) => (
+                                      <option value={element.id} key={index}>
+                                        {element.description}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                QR Code
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <textarea
+                                  className='form-control form-control-lg form-control-solid h-100px'
+                                  placeholder='QR Code'
+                                  value={qrCode}
+                                  onChange={(e) => {
+                                    setQrCode(e.target.value)
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='col-lg-6 px-8'>
+                            <>
+                              {orderItems?.length > 0 &&
+                                orderItems.map((item: any, index) => (
+                                  <div className='row py-4 border-bottom' key={index}>
+                                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                      Name
+                                    </label>
+                                    {item.added_item ? (
+                                      <div className='col-lg-8 fv-row mb-3'>
+                                        <select
+                                          className='form-select form-select-solid'
+                                          value={item.id}
+                                          disabled={!item.added_item}
+                                          onChange={(e) => {
+                                            console.log('target', e.target.value)
+                                            let __item = orderItems.filter(
+                                              (element) => element.id === parseInt(e.target.value)
+                                            )
+                                            console.log('item', __item)
+                                            if (
+                                              e.target.value === 'default' ||
+                                              __item?.length > 0
+                                            ) {
+                                              item.id = 'default'
+                                              setOrderItems([...orderItems])
+                                              return
+                                            } else {
+                                              let __new_item = newItemsList.filter(
+                                                (element: any) =>
+                                                  element.id === parseInt(e.target.value)
+                                              )[0]
+                                              item.id = parseInt(e.target.value)
+                                              item.category = __new_item.category
+                                              item.price = __new_item.price
+                                              setOrderItems([...orderItems])
+                                              // let __newItemsList = newItemsList.filter(
+                                              //   (element) => element.id !== parseInt(e.target.value)
+                                              // )
+                                              // setNewItemsList([...__newItemsList])
+                                            }
+                                          }}
+                                        >
+                                          <option value={'default'}>Select item's name</option>
+                                          {newItemsList &&
+                                            newItemsList?.length > 0 &&
+                                            newItemsList.map((element: any, index: number) => (
+                                              <option value={element.id} key={index}>
+                                                {element.display_name}
+                                              </option>
+                                            ))}
+                                        </select>
+                                      </div>
+                                    ) : (
+                                      <div className='col-lg-8 fv-row mb-3'>
+                                        <select
+                                          className='form-select form-select-solid'
+                                          value={item.id}
+                                          disabled
+                                        >
+                                          <option>{item.name}</option>
+                                        </select>
+                                      </div>
+                                    )}
+
+                                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                      Quantity
+                                    </label>
+                                    <div className='col-lg-8'>
+                                      <div className='input-group mb-3'>
+                                        <div className='input-group-prepend'>
+                                          <span
+                                            className='input-group-text btn btn-secondary'
+                                            onClick={(e) => {
+                                              let __qty = parseInt(item.quantity) - 1
+                                              if (__qty < 0) __qty = 0
+                                              item.quantity = __qty.toString()
+                                              setOrderItems([...orderItems])
+                                            }}
+                                          >
+                                            <MinusOutlined />
+                                          </span>
+                                        </div>
+                                        <input
+                                          type='number'
+                                          className='form-control form-control-lg form-control-solid text-center'
+                                          value={item.quantity}
+                                          onChange={(e) => {
+                                            item.quantity = e.target.value
+                                            setOrderItems([...orderItems])
+                                          }}
+                                        />
+                                        <div className='input-group-append'>
+                                          <span
+                                            className='input-group-text btn btn-secondary'
+                                            onClick={(e) => {
+                                              let __qty = parseInt(item.quantity) + 1
+                                              item.quantity = __qty.toString()
+                                              setOrderItems([...orderItems])
+                                            }}
+                                          >
+                                            <PlusOutlined />
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                      Price
+                                    </label>
+                                    <div className='col-lg-8 fv-row'>
+                                      <input
+                                        type='number'
+                                        className='form-control form-control-lg form-control-solid'
+                                        placeholder='Enter price'
+                                        value={item.price}
+                                        onChange={(e) => {
+                                          let __price = parseFloat(e.target.value)
+                                          if (__price < 0) __price = 0
+                                          item.price = __price.toString()
                                           setOrderItems([...orderItems])
                                         }}
-                                      >
-                                        <PlusOutlined />
-                                      </span>
+                                      />
                                     </div>
+                                    {item.added_item && (
+                                      <div className='flex flex-end py-3'>
+                                        <div
+                                          className='btn btn-sm bg-danger'
+                                          onClick={() => {
+                                            orderItems.pop()
+                                            setOrderItems([...orderItems])
+                                          }}
+                                        >
+                                          <span className='text-white'>Delete Item</span>
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
-                                </div>
-                                <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                                  Price
-                                </label>
-                                <div className='col-lg-8 fv-row'>
-                                  <input
-                                    type='number'
-                                    className='form-control form-control-lg form-control-solid'
-                                    placeholder='Enter price'
-                                    value={item.price}
-                                    onChange={(e) => {
-                                      let __price = parseFloat(e.target.value)
-                                      if (__price < 0) __price = 0
-                                      item.price = __price.toString()
-                                      setOrderItems([...orderItems])
-                                    }}
-                                  />
-                                </div>
-                                {item.added_item && (
-                                  <div className='flex flex-end py-3'>
-                                    <div
-                                      className='btn btn-sm bg-danger'
-                                      onClick={() => {
-                                        orderItems.pop()
-                                        setOrderItems([...orderItems])
-                                      }}
-                                    >
-                                      <span className='text-white'>Delete Item</span>
-                                    </div>
+                                ))}
+                              <div className='py-3'>
+                                <span
+                                  className={`btn btn-sm text-white ${
+                                    orderItems?.length === products?.length
+                                      ? `bg-secondary`
+                                      : `bg-success`
+                                  } `}
+                                  onClick={() => {
+                                    if (orderItems?.length === products?.length) return
+                                    let __item = {
+                                      id: undefined,
+                                      item_id: null,
+                                      order_id: order.id,
+                                      category: '',
+                                      quantity: 0,
+                                      price: 0,
+                                      added_item: true,
+                                    }
+                                    orderItems.push(__item)
+                                    setOrderItems([...orderItems])
+                                  }}
+                                >
+                                  Add item
+                                </span>
+                              </div>
+                            </>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Payment Method</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <select
+                                  className='form-select form-select-solid'
+                                  value={paymentMethodId}
+                                  onChange={(e) => {
+                                    setPaymentMethodId(e.target.value)
+                                  }}
+                                >
+                                  <option value=''>Select payment method</option>
+                                  {paymentMethod &&
+                                    paymentMethod?.length > 0 &&
+                                    paymentMethod.map((element: any, index: number) => (
+                                      <option value={element.id} key={index}>
+                                        {element.description}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Payment status</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <select
+                                  className='form-select form-select-solid'
+                                  value={paymentStatusId}
+                                  onChange={(e) => {
+                                    setPaymentStatusId(e.target.value)
+                                  }}
+                                >
+                                  <option value=''>Select payment status</option>
+                                  {paymentStatus &&
+                                    paymentStatus?.length > 0 &&
+                                    paymentStatus.map((element: any, index: number) => (
+                                      <option value={element.id} key={index}>
+                                        {element.description}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className=''>Storage month</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  disabled
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Storage month'
+                                  value={storageMonth}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className=''>Storage expire date</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  disabled
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Storage expire date'
+                                  value={storageExpireDate}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className=''>Lump sum</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  disabled
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Lump sum'
+                                  value={lumpSum}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Paid amount</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Paid amount'
+                                  {...formik.getFieldProps('paid_fee')}
+                                />
+                                {formik.touched.paid_fee && formik.errors.paid_fee && (
+                                  <div className='fv-plugins-message-container'>
+                                    <div className='fv-help-block'>{formik.errors.paid_fee}</div>
                                   </div>
                                 )}
                               </div>
-                            ))}
-                          <div className='py-3'>
-                            <span
-                              className={`btn btn-sm text-white ${
-                                orderItems?.length === products?.length
-                                  ? `bg-secondary`
-                                  : `bg-success`
-                              } `}
-                              onClick={() => {
-                                if (orderItems?.length === products?.length) return
-                                let __item = {
-                                  id: undefined,
-                                  item_id: null,
-                                  order_id: order.id,
-                                  category: '',
-                                  quantity: 0,
-                                  price: 0,
-                                  added_item: true,
-                                }
-                                orderItems.push(__item)
-                                setOrderItems([...orderItems])
-                              }}
-                            >
-                              Add item
-                            </span>
-                          </div>
-                        </>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Payment Method</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <select
-                              className='form-select form-select-solid'
-                              value={paymentMethodId}
-                              onChange={(e) => {
-                                setPaymentMethodId(e.target.value)
-                              }}
-                            >
-                              <option value=''>Select payment method</option>
-                              {paymentMethod &&
-                                paymentMethod?.length > 0 &&
-                                paymentMethod.map((element: any, index: number) => (
-                                  <option value={element.id} key={index}>
-                                    {element.description}
-                                  </option>
-                                ))}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Payment status</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <select
-                              className='form-select form-select-solid'
-                              value={paymentStatusId}
-                              onChange={(e) => {
-                                setPaymentStatusId(e.target.value)
-                              }}
-                            >
-                              <option value=''>Select payment status</option>
-                              {paymentStatus &&
-                                paymentStatus?.length > 0 &&
-                                paymentStatus.map((element: any, index: number) => (
-                                  <option value={element.id} key={index}>
-                                    {element.description}
-                                  </option>
-                                ))}
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className=''>Storage month</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='string'
-                              disabled
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Storage month'
-                              value={storageMonth}
-                            />
-                          </div>
-                        </div>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className=''>Storage expire date</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='string'
-                              disabled
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Storage expire date'
-                              value={storageExpireDate}
-                            />
-                          </div>
-                        </div>
-
-                        <div className='row py-3 flex items-center'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className=''>Lump sum</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='string'
-                              disabled
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Lump sum'
-                              value={lumpSum}
-                            />
-                          </div>
-                        </div>
-
-                        <div className='row py-4 flex'>
-                          <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                            <span className='required'>Paid amount</span>
-                          </label>
-                          <div className='col-lg-8 fv-row'>
-                            <input
-                              type='string'
-                              className='form-control form-control-lg form-control-solid'
-                              placeholder='Paid amount'
-                              {...formik.getFieldProps('paid_fee')}
-                            />
-                            {formik.touched.paid_fee && formik.errors.paid_fee && (
-                              <div className='fv-plugins-message-container'>
-                                <div className='fv-help-block'>{formik.errors.paid_fee}</div>
-                              </div>
-                            )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <div className='card-footer d-flex justify-content-end py-6 px-9'>
-                    <span
-                      className='btn btn-secondary mx-7'
-                      onClick={(e) => {
-                        navigateTo(-1)
-                      }}
-                    >
-                      Cancel
-                    </span>
-                    <button type='submit' className='btn btn-primary' disabled={loading}>
-                      {!loading && 'Save Changes'}
-                      {loading && (
-                        <span className='indicator-progress' style={{display: 'block'}}>
-                          Please wait...{' '}
-                          <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                      <div className='card-footer d-flex justify-content-end py-6 px-9'>
+                        <span
+                          className='btn btn-secondary mx-7'
+                          onClick={(e) => {
+                            navigateTo(-1)
+                          }}
+                        >
+                          Cancel
                         </span>
-                      )}
-                    </button>
+                        <button type='submit' className='btn btn-primary' disabled={loading}>
+                          {!loading && 'Save Changes'}
+                          {loading && (
+                            <span className='indicator-progress' style={{display: 'block'}}>
+                              Please wait...{' '}
+                              <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                </form>
-              </div>
+                </LocalizationProvider>
+              </ThemeProvider>
             </div>
           </div>
         </div>

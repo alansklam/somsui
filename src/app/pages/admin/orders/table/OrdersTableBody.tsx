@@ -5,6 +5,7 @@ import {notification} from 'antd'
 import {useNavigate} from 'react-router-dom'
 import {RootState} from '../../../../store/reducers'
 import {useSelector} from 'react-redux'
+import dayjs from 'dayjs'
 
 export const OrdersTableBody = (props: any) => {
   const {listData, setListData} = props
@@ -167,16 +168,24 @@ export const OrdersTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.storage_month}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.emptyout_date_other}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.emptyout_date_other).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.checkin_date_other}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.checkin_date_other).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.checkout_date_other}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.checkout_date_other).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.storage_expired_date}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.storage_expired_date).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.address1}</span>

@@ -1,6 +1,7 @@
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {useListView} from '../core/PeriodsListViewProvider'
 import {useNavigate} from 'react-router-dom'
+import dayjs from 'dayjs'
 
 export const PeriodsTableBody = (props: any) => {
   const {listData, setListData} = props
@@ -54,7 +55,9 @@ export const PeriodsTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.max}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.updated_at}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.updated_at).format('DD-MM-YYYY HH:mm:ss')}
+                </span>
               </td>
               <td>
                 <div className='d-flex flex-end flex-shrink-0'>

@@ -3,6 +3,7 @@ import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 import {RootState} from '../../../../store/reducers'
+import dayjs from 'dayjs'
 
 export const RetrievalOrdersTableBody = (props: any) => {
   const {listData, setListData} = props
@@ -151,11 +152,13 @@ export const RetrievalOrdersTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.walkup}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.checkout_date_other}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.checkout_date_other).format('DD-MM-YYYY')}
+                </span>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>
-                  {data.empty_return_date_other}
+                  {dayjs(data.empty_return_date_other).format('DD-MM-YYYY')}
                 </span>
               </td>
               <td className='text-center'>

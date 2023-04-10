@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom'
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {useClientsListView} from '../core/ClientsListViewProvider'
 import {useNavigate} from 'react-router-dom'
+import dayjs from 'dayjs'
 
 export const ClientsTableBody = (props: any) => {
   const {listData, setListData} = props
@@ -75,7 +76,9 @@ export const ClientsTableBody = (props: any) => {
                 </Link>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.updated_at}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {dayjs(data.updated_at).format('DD-MM-YYYY HH:mm:ss')}
+                </span>
               </td>
               <td>
                 <div className='d-flex justify-content-end flex-shrink-0'>

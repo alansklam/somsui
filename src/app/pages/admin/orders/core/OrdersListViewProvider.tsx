@@ -225,10 +225,24 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
   }
 
   useEffect(() => {
-    let __filterData = filter
+    let __filterData = {
+      ...filter,
+      status: {
+        ...initialListView.filterData.status,
+        new: statusId === '1' ? true : false,
+        checkin: statusId === '16' ? true : false,
+        schedCheckout: statusId === '20' ? true : false,
+      },
+    }
     if (__filterData.menu !== 'orders') {
       __filterData = {
         ...filterData,
+        status: {
+          ...initialListView.filterData.status,
+          new: statusId === '1' ? true : false,
+          checkin: statusId === '16' ? true : false,
+          schedCheckout: statusId === '20' ? true : false,
+        },
         menu: 'orders',
       }
       dispatch(updateFilterData(__filterData))
@@ -236,6 +250,12 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
       if (page.code !== uid) {
         __filterData = {
           ...initialListView.filterData,
+          status: {
+            ...initialListView.filterData.status,
+            new: statusId === '1' ? true : false,
+            checkin: statusId === '16' ? true : false,
+            schedCheckout: statusId === '20' ? true : false,
+          },
           menu: 'orders',
         }
         dispatch(updateFilterData(__filterData))
@@ -261,7 +281,7 @@ const OrdersListViewProvider: FC<WithChildren> = ({children}) => {
       ...__filterData,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uid, clientId])
+  }, [uid, clientId, statusId])
 
   useEffect(() => {
     setPagination({

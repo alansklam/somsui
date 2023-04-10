@@ -174,8 +174,6 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
           menu: 'payments',
         }
       }
-      console.log('filterData', __filterData)
-
       dispatch(updateFilterData(__filterData))
     } else {
       if (page.code !== paymentRemarkId) {
@@ -189,7 +187,6 @@ const PaymentsListViewProvider: FC<WithChildren> = ({children, paymentRemarkId})
           menu: 'payments',
         }
       }
-      console.log('filterData', __filterData)
       dispatch(updateFilterData(__filterData))
     }
     let __page = page

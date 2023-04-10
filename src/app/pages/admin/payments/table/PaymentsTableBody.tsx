@@ -1,6 +1,7 @@
 import {usePaymentsListView} from '../core/PaymentsListViewProvider'
 import {paymentPaidApi, paymentCancelledApi} from '../../../../store/apis/admin'
 import {useNavigate} from 'react-router-dom'
+import dayjs from 'dayjs'
 
 export const PaymentsTableBody = (props: any) => {
   const {listData, setListData, paymentRemarkId} = props
@@ -97,7 +98,9 @@ export const PaymentsTableBody = (props: any) => {
                 <span className='text-dark fw-bold d-block fs-6'>{data.status.description}</span>
               </td>
               <td className='text-center'>
-                <span className='text-dark fw-bold d-block fs-6'>{data.completed_at}</span>
+                <span className='text-dark fw-bold d-block fs-6'>
+                  {data.completed_at ? dayjs(data.completed_at).format('DD-MM-YYYY HH:mm:ss') : ''}
+                </span>
               </td>
               {!data.completed_at && (
                 <td>

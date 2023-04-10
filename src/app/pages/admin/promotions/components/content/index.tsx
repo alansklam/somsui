@@ -9,6 +9,11 @@ import {editPromotionItemApi} from '../../../../../store/apis/admin'
 import {RootState} from '../../../../../store/reducers'
 import {showNotification} from '../../../components/notification'
 import dayjs from 'dayjs'
+import {createTheme, ThemeProvider} from '@mui/material'
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker'
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs'
+import TextField from '@mui/material/TextField'
 
 type propState = {
   promotionInfo: {
@@ -117,6 +122,8 @@ const ContentPromotion = (props: propState) => {
     },
   })
 
+  const defaultMaterialTheme = createTheme({})
+
   return (
     <>
       <div className='mx-auto mw-800px'>
@@ -157,93 +164,145 @@ const ContentPromotion = (props: propState) => {
                     <div className='card mb-5 mb-xl-10'>
                       <div id='kt_account_profile_details' className='collapse show'>
                         <form onSubmit={formik.handleSubmit} noValidate className='form'>
-                          <div className='card-body border-top p-9'>
-                            <div className='row mb-6'>
-                              <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                                Code
-                              </label>
+                          <ThemeProvider theme={defaultMaterialTheme}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <div className='card-body border-top p-9'>
+                                <div className='row mb-6'>
+                                  <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                                    Code
+                                  </label>
 
-                              <div className='col-lg-8 fv-row'>
-                                <input
-                                  type='text'
-                                  className='form-control form-control-lg form-control-solid'
-                                  placeholder='Code'
-                                  {...formik.getFieldProps('code')}
-                                />
-                                {formik.touched.code && formik.errors.code && (
-                                  <div className='fv-plugins-message-container'>
-                                    <div className='fv-help-block'>{formik.errors.code}</div>
+                                  <div className='col-lg-8 fv-row'>
+                                    <input
+                                      type='text'
+                                      className='form-control form-control-lg form-control-solid'
+                                      placeholder='Code'
+                                      {...formik.getFieldProps('code')}
+                                    />
+                                    {formik.touched.code && formik.errors.code && (
+                                      <div className='fv-plugins-message-container'>
+                                        <div className='fv-help-block'>{formik.errors.code}</div>
+                                      </div>
+                                    )}
                                   </div>
-                                )}
-                              </div>
-                            </div>
+                                </div>
 
-                            <div className='row mb-6'>
-                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                                <span className='required'>Name</span>
-                              </label>
+                                <div className='row mb-6'>
+                                  <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                    <span className='required'>Name</span>
+                                  </label>
 
-                              <div className='col-lg-8 fv-row'>
-                                <input
-                                  type='text'
-                                  className='form-control form-control-lg form-control-solid'
-                                  placeholder='Name'
-                                  {...formik.getFieldProps('name')}
-                                />
-                                {formik.touched.name && formik.errors.name && (
-                                  <div className='fv-plugins-message-container'>
-                                    <div className='fv-help-block'>{formik.errors.name}</div>
+                                  <div className='col-lg-8 fv-row'>
+                                    <input
+                                      type='text'
+                                      className='form-control form-control-lg form-control-solid'
+                                      placeholder='Name'
+                                      {...formik.getFieldProps('name')}
+                                    />
+                                    {formik.touched.name && formik.errors.name && (
+                                      <div className='fv-plugins-message-container'>
+                                        <div className='fv-help-block'>{formik.errors.name}</div>
+                                      </div>
+                                    )}
                                   </div>
-                                )}
-                              </div>
-                            </div>
+                                </div>
 
-                            <div className='row mb-6'>
-                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                                <span className='required'>Expiry date(by)</span>
-                              </label>
+                                <div className='row mb-6'>
+                                  <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                    <span className='required'>Expiry date(by)</span>
+                                  </label>
 
-                              <div className='col-lg-8 fv-row'>
-                                <input
-                                  type='date'
-                                  onKeyDown={(e) => e.preventDefault()}
-                                  className='form-control form-control-lg form-control-solid'
-                                  placeholder='From'
-                                  {...formik.getFieldProps('effective_from')}
-                                />
-                                {formik.touched.effective_from && formik.errors.effective_from && (
-                                  <div className='fv-plugins-message-container'>
-                                    <div className='fv-help-block'>
-                                      {formik.errors.effective_from}
-                                    </div>
+                                  <div className='col-lg-8 fv-row'>
+                                    <DesktopDatePicker
+                                      inputFormat='DD-MM-YYYY'
+                                      onChange={(value) =>
+                                        formik.setFieldValue(
+                                          'effective_from',
+                                          dayjs(value).format('YYYY-MM-DD'),
+                                          true
+                                        )
+                                      }
+                                      maxDate={dayjs(formik.values.effective_to).format(
+                                        'YYYY-MM-DD'
+                                      )}
+                                      value={formik.values.effective_from}
+                                      renderInput={(params) => (
+                                        <TextField
+                                          required
+                                          fullWidth
+                                          onKeyDown={(e) => e.preventDefault()}
+                                          variant='standard'
+                                          {...params}
+                                          sx={{input: {fontSize: 15}}}
+                                        />
+                                      )}
+                                    />
+                                    {/* <input
+                                      type='date'
+                                      onKeyDown={(e) => e.preventDefault()}
+                                      className='form-control form-control-lg form-control-solid'
+                                      placeholder='From'
+                                      {...formik.getFieldProps('effective_from')}
+                                    /> */}
+                                    {formik.touched.effective_from && formik.errors.effective_from && (
+                                      <div className='fv-plugins-message-container'>
+                                        <div className='fv-help-block'>
+                                          {formik.errors.effective_from}
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
-                                )}
-                              </div>
-                            </div>
+                                </div>
 
-                            <div className='row mb-6'>
-                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                                <span className='required'>Valid(until)</span>
-                              </label>
+                                <div className='row mb-6'>
+                                  <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                    <span className='required'>Valid(until)</span>
+                                  </label>
 
-                              <div className='col-lg-8 fv-row'>
-                                <input
-                                  type='date'
-                                  onKeyDown={(e) => e.preventDefault()}
-                                  className='form-control form-control-lg form-control-solid'
-                                  placeholder='To'
-                                  {...formik.getFieldProps('effective_to')}
-                                />
-                                {formik.touched.effective_to && formik.errors.effective_to && (
-                                  <div className='fv-plugins-message-container'>
-                                    <div className='fv-help-block'>
-                                      {formik.errors.effective_to}
-                                    </div>
+                                  <div className='col-lg-8 fv-row'>
+                                    <DesktopDatePicker
+                                      inputFormat='DD-MM-YYYY'
+                                      onChange={(value) =>
+                                        formik.setFieldValue(
+                                          'effective_to',
+                                          dayjs(value).format('YYYY-MM-DD'),
+                                          true
+                                        )
+                                      }
+                                      minDate={dayjs(formik.values.effective_from).format(
+                                        'YYYY-MM-DD'
+                                      )}
+                                      value={formik.values.effective_to}
+                                      renderInput={(params) => (
+                                        <TextField
+                                          required
+                                          fullWidth
+                                          onKeyDown={(e) => e.preventDefault()}
+                                          variant='standard'
+                                          {...params}
+                                          sx={{input: {fontSize: 15}}}
+                                        />
+                                      )}
+                                    />
+                                    {/* <input
+                                      type='date'
+                                      onKeyDown={(e) => e.preventDefault()}
+                                      className='form-control form-control-lg form-control-solid'
+                                      placeholder='To'
+                                      {...formik.getFieldProps('effective_to')}
+                                    /> */}
+                                    {formik.touched.effective_to && formik.errors.effective_to && (
+                                      <div className='fv-plugins-message-container'>
+                                        <div className='fv-help-block'>
+                                          {formik.errors.effective_to}
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
-                                )}
+                                </div>
                               </div>
-                            </div>
-                          </div>
+                            </LocalizationProvider>
+                          </ThemeProvider>
 
                           <div className='card-footer d-flex justify-content-end py-6 px-9'>
                             <span
