@@ -19,12 +19,20 @@ const timelist = [
 ]
 export default function ContentPage3(props) {
   const {onChangeStep, onNotification, stuffInfo, setStuffInfo} = props
-  const additionalDay = process.env.REACT_APP_ADDTIONAL_DATE
+  const additionalDay = process.env.REACT_APP_ADDITIONAL_DATE
   // for day after (+2 days) order - Alan
-  const [deliveryDate, setDeliveryDate] = useState(dayjs().add(additionalDay, 'day'))
-  const [ladenReturnDate, setLadenReturnDate] = useState(dayjs().add(additionalDay, 'day'))
-  const [tentativeDate, setTentativeDate] = useState(dayjs().add(additionalDay, 'day'))
-  const [expirationDate, setExpirationDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [deliveryDate, setDeliveryDate] = useState(
+    dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+  )
+  const [ladenReturnDate, setLadenReturnDate] = useState(
+    dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+  )
+  const [tentativeDate, setTentativeDate] = useState(
+    dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+  )
+  const [expirationDate, setExpirationDate] = useState(
+    dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+  )
   const deliveryMinDate = dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
 
   //
@@ -71,12 +79,14 @@ export default function ContentPage3(props) {
       setTentativeDate(
         __stuffInfo.tentativeDate
           ? __stuffInfo.tentativeDate
-          : __deliveryDate.add(props.storage_month, 'month')
+          : __deliveryDate.add(props.storage_month, 'month').format('YYYY-MM-DD')
       )
       setExpirationDate(
         __stuffInfo.expirationDate
-          ? dayjs(__stuffInfo.ladenReturnDate).add(props.storage_month, 'month')
-          : __deliveryDate.add(props.storage_month, 'month')
+          ? dayjs(__stuffInfo.ladenReturnDate)
+              .add(props.storage_month, 'month')
+              .format('YYYY-MM-DD')
+          : __deliveryDate.add(props.storage_month, 'month').format('YYYY-MM-DD')
       )
       setDeliveryTimeIndex(__stuffInfo.deliveryTimeIndex ? __stuffInfo.deliveryTimeIndex : '0')
       setLadenReturnTimeIndex(
