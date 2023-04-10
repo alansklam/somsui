@@ -216,7 +216,7 @@ const ContentRetrievalOrder = (props: propState) => {
                             min={dayjs(retrievalOrder.order.checkin_date_other).format(
                               'YYYY-MM-DD'
                             )}
-                            max={dayjs(formik.values.checkout_date_other).format('YYYY-MM-DD')}
+                            max={dayjs(formik.values.empty_return_date_other).format('YYYY-MM-DD')}
                             onKeyDown={(e) => e.preventDefault()}
                             className='form-control form-control-lg form-control-solid'
                             placeholder='Pickup date'
@@ -260,7 +260,7 @@ const ContentRetrievalOrder = (props: propState) => {
                         <div className='col-lg-8 fv-row'>
                           <input
                             type='date'
-                            min={dayjs(formik.values.empty_return_date_other).format('YYYY-MM-DD')}
+                            min={dayjs(formik.values.checkout_date_other).format('YYYY-MM-DD')}
                             max={dayjs(retrievalOrder.order.storage_expired_date).format(
                               'YYYY-MM-DD'
                             )}
