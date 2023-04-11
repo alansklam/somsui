@@ -184,7 +184,9 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>
-                  {dayjs(data.storage_expired_date).format('DD-MM-YYYY')}
+                  {data.storage_expired_date
+                    ? dayjs(data.storage_expired_date).format('DD-MM-YYYY')
+                    : ''}
                 </span>
               </td>
               <td className='text-center'>

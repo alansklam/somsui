@@ -203,13 +203,13 @@ const UsersListFilter = () => {
 
             <div className='col-lg-6'>
               <div className='row mb-6'>
-                <label className='col-lg-4 col-form-label fw-bold fs-6'>Emptybox date start</label>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Emptybox date end</label>
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='date'
                     onKeyDown={(e) => e.preventDefault()}
                     className='form-control form-control-lg form-control-solid'
-                    placeholder='Emptybox date start'
+                    placeholder='Emptybox date end'
                     value={filterData.emptyDateEnd}
                     onChange={(e) => {
                       setFilterData({...filterData, emptyDateEnd: e.target.value})

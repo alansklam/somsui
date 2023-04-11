@@ -926,7 +926,11 @@ const ContentOrder = (props: propState) => {
                                   disabled
                                   className='form-control form-control-lg form-control-solid'
                                   placeholder='Storage expire date'
-                                  value={dayjs(storageExpireDate).format('DD-MM-YYYY')}
+                                  value={
+                                    storageExpireDate
+                                      ? dayjs(storageExpireDate).format('DD-MM-YYYY')
+                                      : ''
+                                  }
                                 />
                               </div>
                             </div>
