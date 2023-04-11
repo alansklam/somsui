@@ -131,8 +131,7 @@ const ContentOrder = (props: propState) => {
       if (
         dayjs(formik.values.checkin_date_other) >
           dayjs(formik.values.emptyout_date_other).add(14, 'day') ||
-        dayjs(formik.values.checkin_date_other) < dayjs(formik.values.checkout_date_other) ||
-        dayjs(formik.values.checkout_date_other) > dayjs(order?.storage_expired_date)
+        dayjs(formik.values.checkin_date_other) > dayjs(formik.values.checkout_date_other)
       ) {
         showNotification('error', 'Error', 'Please fix the errors.')
         return
@@ -279,7 +278,7 @@ const ContentOrder = (props: propState) => {
     }
     setLumpSum(__totalFee.toFixed(2))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values, orderItems])
+  }, [formik.values, orderItems, storageExpireDate])
 
   const defaultMaterialTheme = createTheme({})
 
@@ -387,7 +386,7 @@ const ContentOrder = (props: propState) => {
                                 <DesktopDatePicker
                                   inputFormat='DD-MM-YYYY'
                                   maxDate={dayjs(formik.values.checkin_date_other).format(
-                                    'DD-MM-YYYY'
+                                    'YYYY-MM-DD'
                                   )}
                                   onChange={(value) =>
                                     formik.setFieldValue(
@@ -706,11 +705,9 @@ const ContentOrder = (props: propState) => {
                                           value={item.id}
                                           disabled={!item.added_item}
                                           onChange={(e) => {
-                                            console.log('target', e.target.value)
                                             let __item = orderItems.filter(
                                               (element) => element.id === parseInt(e.target.value)
                                             )
-                                            console.log('item', __item)
                                             if (
                                               e.target.value === 'default' ||
                                               __item?.length > 0
@@ -929,7 +926,7 @@ const ContentOrder = (props: propState) => {
                                   disabled
                                   className='form-control form-control-lg form-control-solid'
                                   placeholder='Storage expire date'
-                                  value={storageExpireDate}
+                                  value={dayjs(storageExpireDate).format('DD-MM-YYYY')}
                                 />
                               </div>
                             </div>
