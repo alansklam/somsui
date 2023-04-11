@@ -1,18 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {FC, useEffect, useState} from 'react'
 import {useIntl} from 'react-intl'
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 // import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import {PageTitle} from '../../../../_metronic/layout/core'
 import {RootState} from '../../../store/reducers'
 import {UniversityWidget} from './UniversityWidget'
 import {LoadingSpinner} from '../components/spinner/LoadingSpinner'
 import {fetchDashboardDataApi} from '../../../store/apis/admin'
+import {updateFilterData} from '../../../store/actions/admin'
 
 const DashboardPage: FC = () => {
   // const universities = useSelector((state: RootState) => state.admin.universities)
   const isLoading = useSelector((state: RootState) => state.admin.loading)
   const [dashboardData, setDashboardData] = useState<any[]>([])
+  const dispatch = useDispatch()
 
   const getColor = (index: number) => {
     switch (index) {
@@ -42,10 +44,12 @@ const DashboardPage: FC = () => {
   }
 
   useEffect(() => {
+    dispatch(updateFilterData({}))
     fetchDashboardDataApi().then((res) => {
       let __data = res.data
       setDashboardData(__data)
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
