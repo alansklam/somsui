@@ -12,9 +12,11 @@ import {payConfirm} from '../../store/apis/ordering'
 import {PaymentType} from '../../constants/payment-type'
 import {getPaymentMethod} from '../../store/actions/order'
 import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 
 export default function ContentPage5(props) {
   const {onNotification, cartInfo, setCartInfo, stuffInfo, accountInfo, order, setOrder} = props
+  const navigateTo = useNavigate()
   const [paymentType, setPaymentType] = useState(PaymentType.CREDITCARD)
   const [isLoading, setIsLoading] = useState(false)
   const {t} = useTranslation()
@@ -68,20 +70,30 @@ export default function ContentPage5(props) {
             }
           })
           .catch((err) => {
-            setIsLoading(false)
+            onNotification({
+              title: 'error',
+              message: 'Error on payment',
+              visible: true,
+              status: Math.floor(Math.random() * 100000),
+            })
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
             console.log('error', err)
           })
       }, 3000)
       setTimeout(() => {
         if (isLoading) {
           clearInterval(payConfirmTimer)
-          setIsLoading(false)
           onNotification({
             title: 'error',
             message: 'Expired time.',
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         }
       }, 60000)
     } else {
@@ -142,7 +154,9 @@ export default function ContentPage5(props) {
               visible: true,
               status: Math.floor(Math.random() * 100000),
             })
-            setIsLoading(false)
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
           }
         })
         .catch((err) => {
@@ -153,6 +167,9 @@ export default function ContentPage5(props) {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         })
     }
   }
