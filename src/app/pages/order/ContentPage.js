@@ -28,7 +28,13 @@ const ContentPage = (props) => {
   } = props
   const [initial, setInitial] = useState(false)
   const [universities, setUniversities] = useState([])
-  const [notify, setNotify] = useState({title: '', message: '', visible: false, status: 0})
+  const [notify, setNotify] = useState({
+    title: '',
+    message: '',
+    visible: false,
+    status: 0,
+    variable: {},
+  })
 
   useEffect(() => {
     setInitial(true)
@@ -56,8 +62,8 @@ const ContentPage = (props) => {
       stepChange(step === StepType.SUCCESS ? step : step + 1)
     }
   }
-  const showNotification = ({title, message, visible, status}) => {
-    setNotify({title, message, visible, status})
+  const showNotification = ({title, message, visible, status, variable}) => {
+    setNotify({title, message, visible, status, variable})
   }
   const closeNotify = () => {
     setNotify({
@@ -70,6 +76,7 @@ const ContentPage = (props) => {
       <ShowNotification
         title={notify.title}
         message={notify.message}
+        variable={notify.variable}
         visible={notify.visible}
         status={notify.status}
         closeNotify={closeNotify}

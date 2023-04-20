@@ -1,36 +1,37 @@
-import React from "react"
-import { useDispatch } from "react-redux"
-import { Pagination } from "antd"
-import { useClientsListView } from "../../core/ClientsListViewProvider"
-import { fetchClients } from "../../../../../store/actions/admin"
+import React from 'react'
+import {useDispatch} from 'react-redux'
+import {Pagination} from 'antd'
+import {useClientsListView} from '../../core/ClientsListViewProvider'
+import {fetchClients} from '../../../../../store/actions/admin'
 
 export const ClientsPagination: React.FC = () => {
+  const dispatch = useDispatch()
+  const {pagination, filterData} = useClientsListView()
 
-  const dispatch = useDispatch();
-  const {pagination, filterData} = useClientsListView();
+  const onChangeHandler = (page: number, pageSize: number) => {
+    dispatch(
+      fetchClients({
+        filterData,
+        ...pagination,
+        page: page,
+        perPage: pageSize,
+      })
+    )
+  }
 
-  const onChangeHandler = (page: number, pageSize:number) => {
-    dispatch(fetchClients({
-      filterData,
-      ...pagination,
-      page: page,
-      perPage: pageSize,
-    }))
-  };
-
-  const showTotalHandler = (total:number, range:[number, number]) => {
+  const showTotalHandler = (total: number, range: [number, number]) => {
     return `${range[0]}-${range[1]} of ${total} items`
-  };
+  }
 
   return (
     <>
-      <Pagination 
-        defaultCurrent={1} 
-        total={pagination.total} 
+      <Pagination
+        defaultCurrent={1}
+        total={pagination.total}
         current={pagination.page}
         pageSize={pagination.perPage}
-        showSizeChanger 
-        pageSizeOptions={[10, 15, 20, 30]}
+        showSizeChanger
+        pageSizeOptions={[20, 50, 100, 200]}
         onChange={onChangeHandler}
         showTotal={showTotalHandler}
       />

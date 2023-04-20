@@ -220,16 +220,14 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex justify-content-end flex-shrink-0'>
-                  {parseInt(data.balance) !== 0 && (
-                    <button
-                      className='btn btn-primary'
-                      onClick={() => {
-                        onSendInvoiceHandler(data.id)
-                      }}
-                    >
-                      Send invoice
-                    </button>
-                  )}
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => {
+                      onSendInvoiceHandler(data.id)
+                    }}
+                  >
+                    Send invoice
+                  </button>
                 </div>
               </td>
             </tr>

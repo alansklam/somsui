@@ -79,7 +79,6 @@ export default function ContentPage5(props) {
             setTimeout(() => {
               navigateTo('/client/dashboard')
             }, 3000)
-            console.log('error', err)
           })
       }, 3000)
       setTimeout(() => {
@@ -240,7 +239,7 @@ export default function ContentPage5(props) {
     }
   }
 
-  const openCheckoutUrl = (url) => window.open(url, '_blank')?.focus()
+  const openCheckoutUrl = (url) => window.open(url, '_self')
 
   return (
     <>

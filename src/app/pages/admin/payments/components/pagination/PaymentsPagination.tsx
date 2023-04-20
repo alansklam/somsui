@@ -38,7 +38,7 @@ export const PaymentsPagination = (props: propState) => {
         current={pagination.page}
         pageSize={pagination.perPage}
         showSizeChanger
-        pageSizeOptions={[10, 15, 20, 30]}
+        pageSizeOptions={[20, 50, 100, 200]}
         onChange={onChangeHandler}
         showTotal={showTotalHandler}
       />

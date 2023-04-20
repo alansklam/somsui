@@ -35,6 +35,7 @@ type propState = {
 
 const ContentOrder = (props: propState) => {
   const {orderInfo, order} = props
+  const orderLimit = process.env.REACT_APP_ORDER_ITEMS_LIMIT
   const navigateTo = useNavigate()
   const products = useSelector((state: RootState) => state.admin.ref.orderItems)
   const paymentMethod = useSelector((state: RootState) => state.admin.ref.paymentMethod)
@@ -116,7 +117,9 @@ const ContentOrder = (props: propState) => {
       } else {
         let __state_id = false
         let __state_price = false
+        let __items_count = 0
         orderItems.forEach((item) => {
+          __items_count += parseInt(item.quantity)
           if (item.id === undefined) __state_id = true
           if (item.price === '0') __state_price = true
         })
@@ -125,6 +128,9 @@ const ContentOrder = (props: propState) => {
           return
         } else if (__state_price) {
           showNotification('error', 'Error', "Please enter the item's price.")
+          return
+        } else if (__items_count < parseInt(orderLimit ? orderLimit : '0')) {
+          showNotification('error', 'Error', `Please add the items more than ${orderLimit}`)
           return
         }
       }

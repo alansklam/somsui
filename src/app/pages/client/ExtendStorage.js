@@ -18,11 +18,13 @@ import ContentPage6 from '../order/ContentPage6'
 import {ShowNotification} from '../../components/notification'
 import {getPaymentMethod} from '../../store/actions/order'
 import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 
 export const ExtendStorage = () => {
   const {id} = useParams()
   const {t} = useTranslation()
   const dispatch = useDispatch()
+  const navigateTo = useNavigate()
   const order = useSelector((state) => state.client.currentOrder)
   const isDispatchLoading = useSelector((state) => state.client.loading)
   const extendDate = useSelector((state) => state.client.extendDate)
@@ -134,25 +136,31 @@ export const ExtendStorage = () => {
         payConfirm({code: paymentCode})
           .then((res) => {
             if (res.data.success === true) {
-              setIsLoading(false)
               clearInterval(payConfirmTimer)
               setPayStatus(true)
+              setTimeout(() => {
+                navigateTo('/client/dashboard')
+              }, 3000)
             }
           })
           .catch((err) => {
-            setIsLoading(false)
             console.log('error', err)
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
           })
       }, 3000)
       setTimeout(() => {
         if (isLoading) {
-          setIsLoading(false)
           showNotification({
             title: 'warning',
             message: 'No connect.',
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
           clearInterval(payConfirmTimer)
         }
       }, 60000)
@@ -217,10 +225,12 @@ export const ExtendStorage = () => {
               visible: true,
               status: Math.floor(Math.random() * 100000),
             })
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
           }
         })
         .catch((err) => {
-          setIsLoading(false)
           console.log('errors_message', err)
           showNotification({
             title: 'error',
@@ -228,6 +238,9 @@ export const ExtendStorage = () => {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         })
     }
   }
@@ -298,7 +311,7 @@ export const ExtendStorage = () => {
     }
   }
 
-  const openCheckoutUrl = (url) => window.open(url, '_blank')?.focus()
+  const openCheckoutUrl = (url) => window.open(url, '_self')
 
   return (
     <>

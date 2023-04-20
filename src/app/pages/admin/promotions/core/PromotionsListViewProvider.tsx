@@ -71,7 +71,7 @@ const initialListView = {
   setItemIdForDelete: () => {},
   pagination: {
     total: 10,
-    perPage: 10,
+    perPage: 20,
     page: 1,
     orderBy: undefined,
     sort: undefined,

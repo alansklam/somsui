@@ -14,10 +14,12 @@ import ContentPage6 from '../../order/ContentPage6'
 import {PaymentType} from '../../../constants/payment-type'
 import {useDispatch, useSelector} from 'react-redux'
 import {getPaymentMethod} from '../../../store/actions/order'
+import {useNavigate} from 'react-router-dom'
 
 export const PaymentDetail = (props) => {
   const {orderId} = props
   const [isLoading, setIsLoading] = useState(false)
+  const navigateTo = useNavigate()
   const [paymentType, setPaymentType] = useState(PaymentType.CREDITCARD)
   const {t} = useTranslation()
   const [paymentCode, setPaymentCode] = useState('')
@@ -48,25 +50,31 @@ export const PaymentDetail = (props) => {
         payConfirm({code: paymentCode})
           .then((res) => {
             if (res.data.success === true) {
-              setIsLoading(false)
               clearInterval(payConfirmTimer)
               setPayStatus(true)
+              setTimeout(() => {
+                navigateTo('/client/dashboard')
+              }, 3000)
             }
           })
           .catch((err) => {
-            setIsLoading(false)
             console.log('error', err)
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
           })
       }, 3000)
       setTimeout(() => {
         if (isLoading) {
-          setIsLoading(false)
           showNotification({
             title: 'warning',
             message: 'No connect.',
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         }
       }, 60000)
     } else {
@@ -130,11 +138,12 @@ export const PaymentDetail = (props) => {
               visible: true,
               status: Math.floor(Math.random() * 100000),
             })
-            setIsLoading(false)
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
           }
         })
         .catch((err) => {
-          setIsLoading(false)
           console.log('errors_message', err)
           showNotification({
             title: 'error',
@@ -142,6 +151,9 @@ export const PaymentDetail = (props) => {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         })
     }
   }
@@ -209,7 +221,7 @@ export const PaymentDetail = (props) => {
     }
   }
 
-  const openCheckoutUrl = (url) => window.open(url, '_blank')?.focus()
+  const openCheckoutUrl = (url) => window.open(url, '_self')
 
   return (
     <>

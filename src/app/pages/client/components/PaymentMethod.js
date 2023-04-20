@@ -13,10 +13,12 @@ import {ShowNotification} from '../../../components/notification'
 import {PaymentType} from '../../../constants/payment-type'
 import {getPaymentMethod} from '../../../store/actions/order'
 import {retrievalPayApi} from '../../../store/apis/client'
+import {useNavigate} from 'react-router-dom'
 
 export default function PaymentMethod(props) {
   const {orderId, cartInfo, retrievalOrder, confirmOrder, setComfirmOrder, setOrderState} = props
   const [isLoading, setIsLoading] = useState(false)
+  const navigateTo = useNavigate()
   const [paymentType, setPaymentType] = useState(PaymentType.CREDITCARD)
   const {t} = useTranslation()
   const [paymentCode, setPaymentCode] = useState('')
@@ -47,7 +49,6 @@ export default function PaymentMethod(props) {
         payConfirm({code: paymentCode})
           .then((res) => {
             if (res.data.success === true) {
-              setIsLoading(false)
               clearInterval(payConfirmTimer)
               setPayStatus(true)
               if (res.data.payment_status === 'PAID') {
@@ -66,10 +67,25 @@ export default function PaymentMethod(props) {
                   status: Math.floor(Math.random() * 100000),
                 })
               }
+              setTimeout(() => {
+                navigateTo('/client/dashboard')
+              }, 3000)
+            } else {
+              showNotification({
+                title: 'warning',
+                message: 'No connect.',
+                visible: true,
+                status: Math.floor(Math.random() * 100000),
+              })
+              setTimeout(() => {
+                navigateTo('/client/dashboard')
+              }, 3000)
             }
           })
           .catch((err) => {
-            setIsLoading(false)
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
             console.log('error', err)
           })
       }, 3000)
@@ -83,7 +99,9 @@ export default function PaymentMethod(props) {
           //   status: Math.floor(Math.random() * 100000),
           // })
           clearInterval()
-          setIsLoading(false)
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         }
       }, 60000)
     } else {
@@ -151,11 +169,12 @@ export default function PaymentMethod(props) {
               visible: true,
               status: Math.floor(Math.random() * 100000),
             })
-            setIsLoading(false)
+            setTimeout(() => {
+              navigateTo('/client/dashboard')
+            }, 3000)
           }
         })
         .catch((err) => {
-          setIsLoading(false)
           console.log('errors_message', err)
           showNotification({
             title: 'error',
@@ -163,6 +182,9 @@ export default function PaymentMethod(props) {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
+          setTimeout(() => {
+            navigateTo('/client/dashboard')
+          }, 3000)
         })
     }
   }
@@ -235,7 +257,7 @@ export default function PaymentMethod(props) {
     }
   }
 
-  const openCheckoutUrl = (url) => window.open(url, '_blank')?.focus()
+  const openCheckoutUrl = (url) => window.open(url, '_self')
 
   return (
     <>

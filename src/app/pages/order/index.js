@@ -29,6 +29,7 @@ export default function Home() {
   const [products, setProducts] = useState([])
   const [materials, setMaterials] = useState([])
   const [order, setOrder] = useState({})
+  const minmum_count = process.env.REACT_APP_ORDER_ITEMS_LIMIT
 
   useEffect(() => {
     const v = JSON.parse(localStorage.getItem('ubox-is-authenticated'))
@@ -253,6 +254,15 @@ export default function Home() {
     if (carts_data === undefined || carts_data == null) return StepType.STOREITEM // step=1
     const carts_info = cartInfo
     if (carts_info.stores_total === 0) return StepType.STOREITEM // step=1
+    let __stores = cartInfo.stores
+    let __count_items = 0
+    __stores &&
+      Object.keys(__stores).forEach((iter, index) => {
+        if (__stores[iter] && __stores[iter].count && __stores[iter].count > 0) {
+          __count_items += parseInt(__stores[iter].count)
+        }
+      })
+    if (__count_items < minmum_count) return StepType.STOREITEM // step=1
     const stuff_data = stuffInfo
     if (stuff_data === undefined || stuff_data == null) return StepType.STUFF // step=3
     const stuff_info = stuffInfo

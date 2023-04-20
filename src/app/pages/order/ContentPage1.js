@@ -11,6 +11,7 @@ export default function ContentPage1(props) {
   const [open, setOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const {t, i18n} = useTranslation()
+  const minmum_count = process.env.REACT_APP_ORDER_ITEMS_LIMIT
 
   const handleSliderChange = (event, newValue) => {
     const value = newValue
@@ -23,6 +24,7 @@ export default function ContentPage1(props) {
 
   const onNextHandler = () => {
     let flag = false
+    let __count_items = 0
     props.selectedItems &&
       Object.keys(props.selectedItems).forEach((iter, index) => {
         if (
@@ -30,14 +32,22 @@ export default function ContentPage1(props) {
           props.selectedItems[iter].count &&
           props.selectedItems[iter].count > 0
         ) {
-          flag = true
+          __count_items += parseInt(props.selectedItems[iter].count)
         }
       })
 
-    if (flag === false) {
+    if (__count_items === 0) {
       onNotification({
         title: 'warning',
         message: 'common.no-select-item',
+        visible: true,
+        status: Math.floor(Math.random() * 100000),
+      })
+    } else if (parseInt(__count_items) < parseInt(minmum_count)) {
+      onNotification({
+        title: 'warning',
+        message: 'common.no-less-minimum-item',
+        variable: {minimum: minmum_count},
         visible: true,
         status: Math.floor(Math.random() * 100000),
       })
