@@ -109,7 +109,7 @@ const ContentRetrievalOrder = (props: propState) => {
     let __retrievalOrderItems: any[] = []
     let __orderItems = retrievalOrder.order.items
     __orderItems.forEach((item: any) => {
-      if (item.item_category === 'box') {
+      if (item.item_category !== 'bag') {
         retrievalOrder.items.forEach((element: any) => {
           if (element.item_id === item.item_id) {
             __retrievalOrderItems.push({
@@ -558,6 +558,27 @@ const ContentRetrievalOrder = (props: propState) => {
                                     </option>
                                   ))}
                               </select>
+                            </div>
+                          </div>
+
+                          <div className='row py-4 flex items-center'>
+                            <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                              <span className='required'>RetrievalOrder payments</span>
+                            </label>
+                            <div className='col-lg-8 fv-row'>
+                              <input
+                                type='string'
+                                readOnly
+                                onClick={() => {
+                                  navigateTo(
+                                    `/admin/payments?retrieval_order_id=${retrievalOrder.id}`
+                                  )
+                                }}
+                                className='form-control form-control-lg form-control-solid text-blue-600 cursor-pointer'
+                                style={{color: '#4488EE'}}
+                                placeholder='RetrievalOrder payments'
+                                value={'RetrievalOrder payments'}
+                              />
                             </div>
                           </div>
 

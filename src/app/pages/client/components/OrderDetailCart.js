@@ -49,7 +49,7 @@ export const OrderDetailCart = (props) => {
       <div>
         {order.items?.map((item, index) => {
           if (item.item_qty === 0) return <div key={index}></div>
-          if (item.item_category === 'box') {
+          if (item.item_category !== 'bag') {
             return (
               <div className='flex space-between mt-[20px]' key={index}>
                 <div>

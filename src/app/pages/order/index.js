@@ -207,7 +207,7 @@ export default function Home() {
     let __material_total = 0
     let __materials = cartInfo.materials
     let __storage_month = cartInfo.storage_month
-    if (item.category === 'box') {
+    if (item.category !== 'bag' && item.category !== 'storage_month') {
       __stores[item.id] = {...item, count: value}
     }
     if (item.category === 'bag') {
@@ -256,13 +256,31 @@ export default function Home() {
     if (carts_info.stores_total === 0) return StepType.STOREITEM // step=1
     let __stores = cartInfo.stores
     let __count_items = 0
+    let __count_packages = 0
     __stores &&
       Object.keys(__stores).forEach((iter, index) => {
-        if (__stores[iter] && __stores[iter].count && __stores[iter].count > 0) {
+        if (
+          __stores[iter] &&
+          __stores[iter].count &&
+          __stores[iter].category === 'box' &&
+          __stores[iter].count > 0
+        ) {
           __count_items += parseInt(__stores[iter].count)
         }
+        if (
+          __stores[iter] &&
+          __stores[iter].count &&
+          __stores[iter].category === 'package' &&
+          __stores[iter].count > 0
+        ) {
+          __count_packages += parseInt(__stores[iter].count)
+        }
       })
-    if (__count_items < minmum_count) return StepType.STOREITEM // step=1
+    if (__count_items < minmum_count) {
+      if (!__count_packages > 0) {
+        return StepType.STOREITEM // step=1
+      }
+    }
     const stuff_data = stuffInfo
     if (stuff_data === undefined || stuff_data == null) return StepType.STUFF // step=3
     const stuff_info = stuffInfo

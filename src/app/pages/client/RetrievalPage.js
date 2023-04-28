@@ -66,7 +66,7 @@ export default function RetrievalPage(props) {
     let __min_delivery_fee = parseInt(products.min_delivery_service.price)
     let __per_delivery_fee = parseInt(products.delivery_service.price)
 
-    if (item.category === 'box') {
+    if (item.category !== 'bag') {
       __delivery_items[item.id] = {...item, count: value}
     }
 

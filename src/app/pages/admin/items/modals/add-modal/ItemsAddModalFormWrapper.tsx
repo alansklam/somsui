@@ -174,6 +174,7 @@ export const ItemsAddModalFormWrapper = () => {
                     }}
                   >
                     <option value={'box'}>{'Box'}</option>
+                    <option value={'package'}>{'Package'}</option>
                     <option value={'bag'}>{'Bag'}</option>
                   </select>
                 </div>

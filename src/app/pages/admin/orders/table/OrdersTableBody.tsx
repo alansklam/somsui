@@ -6,6 +6,7 @@ import {useNavigate} from 'react-router-dom'
 import {RootState} from '../../../../store/reducers'
 import {useSelector} from 'react-redux'
 import dayjs from 'dayjs'
+import {OrderActionList} from '../components/action'
 
 export const OrdersTableBody = (props: any) => {
   const {listData, setListData} = props
@@ -220,14 +221,7 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex justify-content-end flex-shrink-0'>
-                  <button
-                    className='btn btn-primary'
-                    onClick={() => {
-                      onSendInvoiceHandler(data.id)
-                    }}
-                  >
-                    Send invoice
-                  </button>
+                  <OrderActionList id={data.id} sendInvoice={onSendInvoiceHandler} data={data} />
                 </div>
               </td>
             </tr>

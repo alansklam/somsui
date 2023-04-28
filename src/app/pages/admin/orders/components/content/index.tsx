@@ -47,12 +47,14 @@ const ContentOrder = (props: propState) => {
   const [specialInstruction, setSpecialInstruction] = useState('')
   const [lumpSum, setLumpSum] = useState('')
   const [storageMonth, setStorageMonth] = useState('')
+  const [storageLocation, setStorageLocation] = useState('')
   // const [clients, setClients] = useState<any[]>([])
   const [selectedClient, setSelectedClient] = useState<any>({})
   const [orderItems, setOrderItems] = useState<any[]>([])
   const [newItemsList, setNewItemsList] = useState<any[]>([])
   const [storageExpireDate, setStorageExpireDate] = useState<string>('')
   const [qrCode, setQrCode] = useState('')
+  const [remark, setRemark] = useState('')
   let changeTime = 0
   let __options: any[] = []
   const [searchClients, setSearchClients] = useState<any[]>([])
@@ -155,8 +157,10 @@ const ContentOrder = (props: propState) => {
           storage_month: storageMonth,
           product_total_fee: productTotalFee,
           total_fee: lumpSum,
+          remark_location: storageLocation,
           remark_qrcode: qrCode,
           storage_expired_date: storageExpireDate,
+          remark: remark,
         },
         id: order.id ? order.id : '',
       })
@@ -215,6 +219,8 @@ const ContentOrder = (props: propState) => {
       value: order.client?.id ? order.client?.id : undefined,
       label: order.client?.name ? order.client?.name : undefined,
     })
+    setStorageLocation(order.remark_location ? order.remark_location : '')
+    setRemark(order.remark ? order.remark : '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
 
@@ -255,7 +261,7 @@ const ContentOrder = (props: propState) => {
     let __packageFee = 0
     let __months = parseInt(storageMonth)
     orderItems.forEach((item) => {
-      if (item.category === 'box') {
+      if (item.category !== 'bag') {
         __subTotalFee += parseFloat(item.price) * parseInt(item.quantity)
       } else if (item.category === 'bag') {
         __packageFee += parseFloat(item.price) * parseInt(item.quantity)
@@ -678,22 +684,6 @@ const ContentOrder = (props: propState) => {
                                 </select>
                               </div>
                             </div>
-
-                            <div className='row py-4 flex'>
-                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                                QR Code
-                              </label>
-                              <div className='col-lg-8 fv-row'>
-                                <textarea
-                                  className='form-control form-control-lg form-control-solid h-100px'
-                                  placeholder='QR Code'
-                                  value={qrCode}
-                                  onChange={(e) => {
-                                    setQrCode(e.target.value)
-                                  }}
-                                />
-                              </div>
-                            </div>
                           </div>
 
                           <div className='col-lg-6 px-8'>
@@ -909,6 +899,25 @@ const ContentOrder = (props: propState) => {
 
                             <div className='row py-3 flex items-center'>
                               <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className='required'>Order payments</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  readOnly
+                                  onClick={() => {
+                                    navigateTo(`/admin/payments?order_id=${order.id}`)
+                                  }}
+                                  className='form-control form-control-lg form-control-solid text-blue-600 cursor-pointer'
+                                  style={{color: '#4488EE'}}
+                                  placeholder='Order payments'
+                                  value={'Order payments'}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
                                 <span className=''>Storage month</span>
                               </label>
                               <div className='col-lg-8 fv-row'>
@@ -972,6 +981,53 @@ const ContentOrder = (props: propState) => {
                                     <div className='fv-help-block'>{formik.errors.paid_fee}</div>
                                   </div>
                                 )}
+                              </div>
+                            </div>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className=''>Storage location</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  onChange={(e) => {
+                                    setStorageLocation(e.target.value)
+                                  }}
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Storage location'
+                                  value={storageLocation}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                QR Code
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <textarea
+                                  className='form-control form-control-lg form-control-solid h-100px'
+                                  placeholder='QR Code'
+                                  value={qrCode}
+                                  onChange={(e) => {
+                                    setQrCode(e.target.value)
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            <div className='row py-4 flex'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>Remark</label>
+                              <div className='col-lg-8 fv-row'>
+                                <textarea
+                                  className='form-control form-control-lg form-control-solid h-100px'
+                                  placeholder='Remark'
+                                  value={remark}
+                                  onChange={(e) => {
+                                    setRemark(e.target.value)
+                                  }}
+                                />
                               </div>
                             </div>
                           </div>

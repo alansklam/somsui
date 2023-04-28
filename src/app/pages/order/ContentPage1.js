@@ -23,34 +23,40 @@ export default function ContentPage1(props) {
   }
 
   const onNextHandler = () => {
-    let flag = false
     let __count_items = 0
+    let __count_packages = 0
     props.selectedItems &&
       Object.keys(props.selectedItems).forEach((iter, index) => {
         if (
           props.selectedItems[iter] &&
           props.selectedItems[iter].count &&
+          props.selectedItems[iter].category === 'box' &&
           props.selectedItems[iter].count > 0
         ) {
           __count_items += parseInt(props.selectedItems[iter].count)
         }
+        if (
+          props.selectedItems[iter] &&
+          props.selectedItems[iter].count &&
+          props.selectedItems[iter].category === 'package' &&
+          props.selectedItems[iter].count > 0
+        ) {
+          __count_packages += parseInt(props.selectedItems[iter].count)
+        }
       })
 
-    if (__count_items === 0) {
-      onNotification({
-        title: 'warning',
-        message: 'common.no-select-item',
-        visible: true,
-        status: Math.floor(Math.random() * 100000),
-      })
-    } else if (parseInt(__count_items) < parseInt(minmum_count)) {
-      onNotification({
-        title: 'warning',
-        message: 'common.no-less-minimum-item',
-        variable: {minimum: minmum_count},
-        visible: true,
-        status: Math.floor(Math.random() * 100000),
-      })
+    if (parseInt(__count_items) < parseInt(minmum_count)) {
+      if (parseInt(__count_packages) > 0) {
+        onChangeStep()
+      } else {
+        onNotification({
+          title: 'warning',
+          message: 'common.no-less-minimum-item',
+          variable: {minimum: minmum_count},
+          visible: true,
+          status: Math.floor(Math.random() * 100000),
+        })
+      }
     } else onChangeStep()
   }
 
