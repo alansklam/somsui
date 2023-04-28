@@ -66,15 +66,19 @@ const OrderActionList = (props: PropState) => {
         </div>
         <div className='menu-item px-3'>
           <a
-            href={`https://api.whatsapp.com/send?phone=${props.data.client.contact}&text=${`姓名: ${
-              props.data.client.name
-            } 香港手機號碼: ${
+            href={`https://api.whatsapp.com/send?phone=${
               props.data.client.contact
-            } 儲存箱數量: ${getProductsCounter()} 標準箱 ${getProductsCounter()} 行李箱, ${getMaterialCounter()} 真空袋: ${
+            }&text=${` 姓名: ${props.data.client.name} \n 香港手機號碼: ${
+              props.data.client.contact
+            } \n 儲存箱數量: ${getProductsCounter()} 標準箱 ${getProductsCounter()} 行李箱, ${getMaterialCounter()} \n 真空袋: ${
               props.data.order_status_id > 8 ? '<存箱入倉>' : '<取吉箱>'
-            } 日期 : ${props.data.emptyout_date_other + props.data.emptyout_time_other} 地點: ${
+            } \n 日期 : ${
+              props.data.emptyout_date_other + ' ' + props.data.emptyout_time_other
+            } \n 地點: ${
               props.data.client.address1 ? props.data.client.address1 : ''
-            } 特別指示: ${props.data.special_instruction ? props.data.special_instruction : ''}`}`}
+            } \n 特別指示: ${
+              props.data.special_instruction ? props.data.special_instruction : ''
+            }`}`}
             target='_blank'
             rel='noopener noreferrer'
             className='menu-link px-3 justify-center fw-bold fs-6'
@@ -87,13 +91,17 @@ const OrderActionList = (props: PropState) => {
             className='menu-link px-3 justify-center fw-bold fs-6'
             onClick={() => {
               navigator.clipboard.writeText(
-                `姓名: ${props.data.client.name} 香港手機號碼: ${
+                ` 姓名: ${props.data.client.name} \n 香港手機號碼: ${
                   props.data.client.contact
-                } 儲存箱數量: ${getProductsCounter()} 標準箱 ${getProductsCounter()} 行李箱, ${getMaterialCounter()} 真空袋: ${
+                } \n 儲存箱數量: ${getProductsCounter()} 標準箱 ${getProductsCounter()} 行李箱, ${getMaterialCounter()} 真空袋: ${
                   props.data.order_status_id > 8 ? '<存箱入倉>' : '<取吉箱>'
-                } 日期 : ${props.data.emptyout_date_other + props.data.emptyout_time_other} 地點: ${
+                } \n 日期 : ${
+                  props.data.emptyout_date_other + ' ' + props.data.emptyout_time_other
+                } \n 地點: ${
                   props.data.client.address1 ? props.data.client.address1 : ''
-                } 特別指示: ${props.data.special_instruction ? props.data.special_instruction : ''}`
+                } \n 特別指示: ${
+                  props.data.special_instruction ? props.data.special_instruction : ''
+                }`
               )
 
               notification.success({
