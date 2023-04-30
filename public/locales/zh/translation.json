@@ -108,7 +108,7 @@
   "common.no-input-wechatID-validate": "微信號長度必須小於50個字母。",
   "common.no-input-instructions": "請輸入您的特別要求",
   "common.no-select-item": "請選擇項目",
-  "common.no-less-minimum-item": "請至少選擇 {{minimum}} 項目",
+  "common.no-less-minimum-item": "請至少選擇 {{minimum}} 個項目",
   "common.no-update-account-success": "賬戶更新成功",
   "common.no-update-order-success": "訂單更新成功",
   "oder-detail.no-title": "訂單 {{order}} 於 {{date}} 訂購，訂單狀態為 {{orderState}}。",
