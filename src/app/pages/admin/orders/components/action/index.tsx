@@ -16,26 +16,49 @@ const OrderActionList = (props: PropState) => {
     MenuComponent.reinitialization()
   }, [])
 
-  const getProductsCounter = () => {
-    let __items = props.data.items
-    let __product_count = 0
-    __items.forEach((item: any) => {
-      if (item.item_category !== 'bag') {
-        __product_count += item.item_qty
-      }
-    })
-    return __product_count.toString()
+  const getMessage = (addNextLine: boolean, isLink: boolean) => {
+    let __message = ` 姓名: ${props.data.client.name} ${addNextLine ? '\n' : ''} 香港手機號碼: ${
+      props.data.client.contact
+    } ${addNextLine ? '\n' : ''} 儲存箱數量: ${getProductsCounter()} ${
+      addNextLine ? '\n' : ''
+    } ${getOrderStatus()} ${addNextLine ? '\n' : ''} 日期 : ${
+      props.data.emptyout_date_other + ' ' + props.data.emptyout_time_other
+    } ${addNextLine ? '\n' : ''} 地點: ${
+      props.data.client.address1 ? props.data.client.address1 : ''
+    } ${addNextLine ? '\n' : ''} 特別指示: ${
+      props.data.special_instruction ? props.data.special_instruction : ''
+    }`
+
+    let __link = `https://api.whatsapp.com/send?phone=${props.data.client.contact}&text=${__message}`
+
+    if (isLink) {
+      return __link
+    } else {
+      return __message
+    }
   }
 
-  const getMaterialCounter = () => {
+  const getProductsCounter = () => {
     let __items = props.data.items
-    let __material_count = 0
+    let __message = ''
     __items.forEach((item: any) => {
-      if (item.item_category === 'bag') {
-        __material_count += item.item_qty
+      if (item.item_qty > 0) {
+        __message += item.item_qty + ' ' + item.item.name_cn + ' '
       }
     })
-    return __material_count.toString()
+    return __message.toString()
+  }
+
+  const getOrderStatus = () => {
+    let __status = props.data.order_status_id
+    switch (__status) {
+      case 8:
+        return '<存箱入倉>'
+      case 1:
+        return '<取吉箱>'
+      default:
+        return '<取吉箱>'
+    }
   }
 
   return (
@@ -66,19 +89,7 @@ const OrderActionList = (props: PropState) => {
         </div>
         <div className='menu-item px-3'>
           <a
-            href={`https://api.whatsapp.com/send?phone=${
-              props.data.client.contact
-            }&text=${` 姓名: ${props.data.client.name} \n 香港手機號碼: ${
-              props.data.client.contact
-            } \n 儲存箱數量: ${getProductsCounter()} 標準箱 ${getProductsCounter()} 行李箱, ${getMaterialCounter()} \n 真空袋: ${
-              props.data.order_status_id > 8 ? '<存箱入倉>' : '<取吉箱>'
-            } \n 日期 : ${
-              props.data.emptyout_date_other + ' ' + props.data.emptyout_time_other
-            } \n 地點: ${
-              props.data.client.address1 ? props.data.client.address1 : ''
-            } \n 特別指示: ${
-              props.data.special_instruction ? props.data.special_instruction : ''
-            }`}`}
+            href={getMessage(false, true)}
             target='_blank'
             rel='noopener noreferrer'
             className='menu-link px-3 justify-center fw-bold fs-6'
@@ -90,20 +101,7 @@ const OrderActionList = (props: PropState) => {
           <div
             className='menu-link px-3 justify-center fw-bold fs-6'
             onClick={() => {
-              navigator.clipboard.writeText(
-                ` 姓名: ${props.data.client.name} \n 香港手機號碼: ${
-                  props.data.client.contact
-                } \n 儲存箱數量: ${getProductsCounter()} 標準箱 ${getProductsCounter()} 行李箱, ${getMaterialCounter()} 真空袋: ${
-                  props.data.order_status_id > 8 ? '<存箱入倉>' : '<取吉箱>'
-                } \n 日期 : ${
-                  props.data.emptyout_date_other + ' ' + props.data.emptyout_time_other
-                } \n 地點: ${
-                  props.data.client.address1 ? props.data.client.address1 : ''
-                } \n 特別指示: ${
-                  props.data.special_instruction ? props.data.special_instruction : ''
-                }`
-              )
-
+              navigator.clipboard.writeText(getMessage(true, false))
               notification.success({
                 message: 'Success',
                 description: 'Copy Message!',
