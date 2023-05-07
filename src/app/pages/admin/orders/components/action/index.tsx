@@ -17,9 +17,9 @@ const OrderActionList = (props: PropState) => {
   }, [])
 
   const getMessage = (addNextLine: boolean, isLink: boolean) => {
-    let __message = ` 姓名: ${props.data.client.name} ${addNextLine ? '\n' : ''} 香港手機號碼: ${
+    let __message = `姓名: ${props.data.client.name} ${addNextLine ? '\n' : ''} 手機號碼: ${
       props.data.client.contact
-    } ${addNextLine ? '\n' : ''} 儲存箱數量: ${getProductsCounter()} ${
+    } ${addNextLine ? '\n' : ''} 數量: ${getProductsCounter()} ${
       addNextLine ? '\n' : ''
     } ${getOrderStatus()} ${addNextLine ? '\n' : ''} 日期 : ${
       props.data.emptyout_date_other + ' ' + props.data.emptyout_time_other
@@ -29,7 +29,7 @@ const OrderActionList = (props: PropState) => {
       props.data.special_instruction ? props.data.special_instruction : ''
     }`
 
-    let __link = `https://api.whatsapp.com/send?phone=${props.data.client.contact}&text=${__message}`
+    let __link = `https://api.whatsapp.com/send?phone=852${props.data.client.contact}&text=${__message}`
 
     if (isLink) {
       return __link
