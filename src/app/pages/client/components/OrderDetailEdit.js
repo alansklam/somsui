@@ -449,6 +449,7 @@ export const OrderDetailEdit = (props) => {
                     label={t('common.wd-retrieval-date')}
                     inputFormat='DD/MM/YYYY'
                     value={retrievalDate}
+                    disabled
                     minDate={
                       dayjs() > dayjs(order?.emptyout_date_other)
                         ? dayjs()
@@ -456,7 +457,6 @@ export const OrderDetailEdit = (props) => {
                     }
                     maxDate={dayjs(order?.storage_expired_date)}
                     onChange={handleRetrievalDateChange}
-                    disabled={!permitEdit.permitRetrieval}
                     renderInput={(params) => (
                       <CssTextField
                         required

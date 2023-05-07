@@ -120,8 +120,14 @@ const ContentOrder = (props: propState) => {
         let __state_id = false
         let __state_price = false
         let __items_count = 0
+        let __package_itmes_count = 0
         orderItems.forEach((item) => {
-          __items_count += parseInt(item.quantity)
+          if (item.category === 'box') {
+            __items_count += parseInt(item.quantity)
+          }
+          if (item.category === 'package') {
+            __package_itmes_count += parseInt(item.quantity)
+          }
           if (item.id === undefined) __state_id = true
           if (item.price === '0') __state_price = true
         })
@@ -131,7 +137,10 @@ const ContentOrder = (props: propState) => {
         } else if (__state_price) {
           showNotification('error', 'Error', "Please enter the item's price.")
           return
-        } else if (__items_count < parseInt(orderLimit ? orderLimit : '0')) {
+        } else if (
+          __items_count < parseInt(orderLimit ? orderLimit : '0') &&
+          __package_itmes_count === 0
+        ) {
           showNotification('error', 'Error', `Please add the items more than ${orderLimit}`)
           return
         }

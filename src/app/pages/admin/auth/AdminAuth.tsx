@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 import clsx from 'clsx'
 import {useFormik} from 'formik'
-import { adminLoginApi } from '../../../store/apis/admin'
+import {adminLoginApi} from '../../../store/apis/admin'
 
 const loginSchema = Yup.object().shape({
   userName: Yup.string()
@@ -19,9 +19,7 @@ const initialValues = {
   password: '',
 }
 
-
 export const AdminAuth = () => {
-  
   const formik = useFormik({
     initialValues,
     validationSchema: loginSchema,
@@ -34,11 +32,11 @@ export const AdminAuth = () => {
           password: values.password,
         })
           .then((res) => {
-            localStorage.setItem("admin-user", JSON.stringify(res.data.user));
-            window.location.href = "/admin";
+            localStorage.setItem('admin-user', JSON.stringify(res.data.user))
+            window.location.href = '/admin'
           })
           .catch((err) => {
-            console.log("err", err);
+            console.log('err', err)
             setStatus('The login details are incorrect')
           })
       } catch (error) {
@@ -50,7 +48,6 @@ export const AdminAuth = () => {
   })
 
   return (
-   
     <div className='w-400px' style={{marginRight: 'auto', marginLeft: 'auto'}}>
       <div style={{marginTop: '150px'}}>
         <h1 className='text-center fs-2tx'>ubox SOMS</h1>
@@ -61,7 +58,7 @@ export const AdminAuth = () => {
           autoComplete='off'
           id='kt_login_signin_form'
         >
-        {/* begin::Form group */}
+          {/* begin::Form group */}
           <div className='fv-row mb-8'>
             <label className='form-label fs-6 fw-bolder text-dark'>User Name</label>
             <input
@@ -135,11 +132,8 @@ export const AdminAuth = () => {
             <div className='alert-text font-weight-bold'>{formik.status}</div>
           </div>
         ) : (
-          <div className='mb-lg-15 bg-light-info p-8 rounded'>
-            <div className='text-info'>
-              Use username <strong>demo</strong> and password <strong>demo</strong> to
-              continue.
-            </div>
+          <div className='mb-lg-15 bg-light-info p-8 rounded' style={{display: 'none'}}>
+            <div className='text-info'></div>
           </div>
         )}
       </div>

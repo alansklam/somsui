@@ -14,10 +14,11 @@ export default function RetrievalEdit(props) {
   const {order, products, retrievalOrder, setRetrievalOrder, cartInfo, setCartInfo, onCartHandler} =
     props
   const {t} = useTranslation()
+  const additionalDay = parseInt(process.env.REACT_APP_RETRIEVAL_ADDITIONAL_DATE)
 
-  const [retrievalDate, setRetrievalDate] = useState(dayjs())
+  const [retrievalDate, setRetrievalDate] = useState(dayjs().add(additionalDay, 'day'))
   const [retrievalTimeIndex, setRetrievalTimeIndex] = useState(0)
-  const [emptyBoxRetrunDate, setEmptyBoxRetrunDate] = useState(dayjs())
+  const [emptyBoxRetrunDate, setEmptyBoxRetrunDate] = useState(dayjs().add(additionalDay, 'day'))
   const [emptyBoxReturnTimeIndex, setEmptyBoxReturnTimeIndex] = useState(0)
   const [isSameDay, setIsSameDay] = useState(1)
   const [needWalk, setNeedWalk] = useState(0)
@@ -25,10 +26,14 @@ export default function RetrievalEdit(props) {
 
   useEffect(() => {
     if (order.emptyout_date_other) {
+      if (order.order_status_id >= 20) {
+        window.location.href = '/client/order'
+      }
+
       let __storage_month = dayjs() - dayjs(order.emptyout_date_other)
       __storage_month = dayjs(__storage_month).format('MM')
 
-      if (dayjs() <= dayjs(order?.checkin_date_other)) {
+      if (dayjs().add(2, 'day') <= dayjs(order?.checkin_date_other)) {
         setRetrievalDate(order?.checkin_date_other)
         setEmptyBoxRetrunDate(order?.checkin_date_other)
 
@@ -48,9 +53,9 @@ export default function RetrievalEdit(props) {
       setRetrievalOrder({
         ...retrievalOrder,
         storage_month: parseInt(__storage_month),
-        retrieval_date: dayjs().format('YYYY-MM-DD'),
+        retrieval_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
         retrieval_time: getTime(0),
-        empty_box_return_date: dayjs().format('YYYY-MM-DD'),
+        empty_box_return_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
         empty_box_return_time: getTime(0),
         retrieval_address: order.emptyout_location_other,
         special_instruction: order.special_instruction,
@@ -217,7 +222,7 @@ export default function RetrievalEdit(props) {
                 <DesktopDatePicker
                   label={t('common.wd-retrieval-date')}
                   inputFormat='DD/MM/YYYY'
-                  minDate={order?.checkin_date_other}
+                  minDate={dayjs().add(additionalDay, 'day')}
                   maxDate={order?.storage_expired_date}
                   value={retrievalDate}
                   onChange={handleRetrievalDateChange}
@@ -438,7 +443,7 @@ export default function RetrievalEdit(props) {
               order.items &&
               order.items.map((item, index) =>
                 item.item_qty === 0 || item.item_category === 'bag' ? (
-                  <div key={index}></div>
+                  <div key={index} style={{width: '0px', padding: '0px', display: 'none'}}></div>
                 ) : (
                   <div
                     className='col-md-3 col-sm-6 col-6 flex-col align-items-center mt-[25px] min-w-[120px]'
