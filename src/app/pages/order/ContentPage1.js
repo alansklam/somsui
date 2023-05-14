@@ -176,7 +176,7 @@ export default function ContentPage1(props) {
                   value={duration}
                   aria-label='pretto slider'
                   valueLabelDisplay='auto'
-                  min={2}
+                  min={4}
                   max={18}
                   sx={PrettoSliderStyle}
                   onChange={handleSliderChange}
