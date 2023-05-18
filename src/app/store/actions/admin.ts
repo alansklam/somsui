@@ -9,6 +9,7 @@ import {
   fetchPaymentsApi,
   fetchOrdersApi,
   fetchRetrievalOrdersApi,
+  fetchRetrievalDatesApi,
   fetchProductsApi,
   fetchRefApi,
 } from '../apis/admin'
@@ -19,10 +20,10 @@ export const fetchUniversities = (): any => {
       dispatch({type: AdminActionTypes.FETCH_DATA_ADMIN})
       const response = fetchUniversitiesApi()
       const payloadData = (await response).data
-      dispatch({type: AdminActionTypes.FETCH_UNVERSITIES, payload: payloadData})
+      dispatch({type: AdminActionTypes.FETCH_UNIVERSITIES, payload: payloadData})
     } catch (e) {
       dispatch({
-        type: AdminActionTypes.FETCH_UNVERSITIES,
+        type: AdminActionTypes.FETCH_UNIVERSITIES,
         payload: [],
       })
     }
@@ -183,6 +184,22 @@ export const fetchRetrievalOrders = (params: any): any => {
     } catch (e) {
       dispatch({
         type: AdminActionTypes.FETCH_RETRIEVAL_ORDERS,
+        payload: [],
+      })
+    }
+  }
+}
+
+export const fetchRetrievalDates = (params: any): any => {
+  return async (dispatch: Dispatch<AdminAction>) => {
+    try {
+      dispatch({type: AdminActionTypes.FETCH_DATA_ADMIN})
+      const response = fetchRetrievalDatesApi(params)
+      const payloadData = (await response).data
+      dispatch({type: AdminActionTypes.FETCH_RETRIEVAL_DATES, payload: payloadData})
+    } catch (e) {
+      dispatch({
+        type: AdminActionTypes.FETCH_RETRIEVAL_DATES,
         payload: [],
       })
     }

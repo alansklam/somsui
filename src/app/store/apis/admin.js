@@ -408,6 +408,42 @@ export function deleteRetrievalOrderApi(params) {
   )
 }
 
+export function fetchRetrievalDatesApi(params) {
+  return axios.post(
+    `/admin/fetchRetrievalDates`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function editRetrievalDateApi(params) {
+  return axios.post(
+    `/admin/editRetrievalDate`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function deleteRetrievalDateApi(params) {
+  return axios.post(
+    `/admin/deleteRetrievalDate`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
 export function sendInvoiceApi(params) {
   return axios.post(
     `/admin/sendInvoice`,

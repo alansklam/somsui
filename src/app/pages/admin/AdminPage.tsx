@@ -9,6 +9,7 @@ import {PaymentsList} from './payments/PaymentsList'
 import {OrdersList} from './orders/OrdersList'
 import {AdminAuth} from './auth/AdminAuth'
 import {RetrievalOrdersList} from './retrieval_orders/RetrievalOrdersList'
+import {RetrievalDateList} from './retrieval_dates/RetrievalOrderDate'
 import AddCustomer from './customers/add-customer'
 import EditCustomer from './customers/edit-customer'
 import EditOrder from './orders/edit-order'
@@ -68,6 +69,9 @@ export const AdminPage = () => {
             <Route path='/retrieval-order'>
               <Route index element={<RetrievalOrdersList />} />
               <Route path='edit' element={<EditRetrievalOrder />} />
+            </Route>
+            <Route path='/retrieval-date'>
+              <Route index element={<RetrievalDateList />} />
             </Route>
           </Route>
           <Route path='/*' element={<ErrorsPage />} />

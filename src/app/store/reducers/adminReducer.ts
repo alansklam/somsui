@@ -82,6 +82,17 @@ const initialState: AdminState = {
     },
     filterData: {},
   },
+  retrievalDates: {
+    data: [],
+    pagination: {
+      total: 10,
+      perPage: 20,
+      page: 1,
+      orderBy: undefined,
+      sort: undefined,
+    },
+    filterData: {},
+  },
   pagination: {},
   filterData: {},
   error: null,
@@ -92,7 +103,7 @@ export const adminReducer = (state = initialState, action: AdminAction): AdminSt
   switch (action.type) {
     case AdminActionTypes.FETCH_DATA_ADMIN:
       return {...state, loading: true}
-    case AdminActionTypes.FETCH_UNVERSITIES:
+    case AdminActionTypes.FETCH_UNIVERSITIES:
       return {...state, loading: false, universities: action.payload}
     case AdminActionTypes.FETCH_REF:
       return {...state, loading: false, ref: action.payload}
@@ -235,6 +246,24 @@ export const adminReducer = (state = initialState, action: AdminAction): AdminSt
         ...state,
         retrievalOrders: {
           ...state.retrievalOrders,
+          filterData: action.payload,
+        },
+      }
+    case AdminActionTypes.FETCH_RETRIEVAL_DATES:
+      return {
+        ...state,
+        loading: false,
+        retrievalDates: {
+          ...state.retrievalDates,
+          data: action.payload.data,
+          pagination: action.payload.pagination,
+        },
+      }
+    case AdminActionTypes.UPDATE_RETRIEVAL_DATE_FILTER_DATA:
+      return {
+        ...state,
+        retrievalDates: {
+          ...state.retrievalDates,
           filterData: action.payload,
         },
       }

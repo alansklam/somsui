@@ -80,6 +80,12 @@ const SidebarMenuMain = () => {
         title='Item List'
         fontIcon='bi-app-indicator'
       />
+      <SidebarMenuItem
+        to='/admin/retrieval-date'
+        icon='/media/icons/duotune/general/gen019.svg'
+        title='Retrieval Date List'
+        fontIcon='bi-app-indicator'
+      />
     </>
   )
 }
