@@ -2,16 +2,17 @@ import React from 'react'
 import {useDispatch} from 'react-redux'
 import {Pagination} from 'antd'
 import {useListView} from '../../core/RetrievalDateListViewProvider'
-import {fetchPeriods} from '../../../../../store/actions/admin'
+import {fetchRetrievalDates} from '../../../../../store/actions/admin'
 
 export const RetrievalDatePagination: React.FC = () => {
   const dispatch = useDispatch()
-  const {pagination, filterData} = useListView()
+  const {uid, pagination, filterData} = useListView()
 
   const onChangeHandler = (page: number, pageSize: number) => {
     dispatch(
-      fetchPeriods({
+      fetchRetrievalDates({
         filterData,
+        uid,
         ...pagination,
         page: page,
         perPage: pageSize,

@@ -20,6 +20,7 @@ export default function RetrievalPage(props) {
   const [initial, setInitial] = useState(false)
   const [cartInfo, setCartInfo] = useState({
     delivery_items: [],
+    free_delivery_state: false,
     per_delivery_fee: 0,
     min_delivery_fee: 0,
     min_delivery_state: false,
@@ -43,7 +44,7 @@ export default function RetrievalPage(props) {
     qr_code: '',
   })
   const [orderState, setOrderState] = useState(false)
-  const [confirmOrder, setComfirmOrder] = useState({})
+  const [confirmOrder, setConfirmOrder] = useState({})
 
   useEffect(() => {
     setInitial(true)
@@ -58,15 +59,19 @@ export default function RetrievalPage(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial])
 
-  const onCartHandler = (item, value) => {
+  const onCartHandler = (item, value, isFree) => {
     let __delivery_items = cartInfo.delivery_items
     let __delivery_fee = 0
     let __total_fee = 0
     let __min_delivery_state = false
     let __min_delivery_fee = parseInt(products.min_delivery_service.price)
     let __per_delivery_fee = parseInt(products.delivery_service.price)
-
-    if (item.category !== 'bag') {
+    let __isFreeDeliveryFee = false
+    if (isFree && isFree === true) {
+      __per_delivery_fee = 0
+      __isFreeDeliveryFee = true
+    }
+    if (item && item?.category !== 'bag') {
       __delivery_items[item.id] = {...item, count: value}
     }
 
@@ -88,6 +93,7 @@ export default function RetrievalPage(props) {
     setCartInfo({
       ...cartInfo,
       payment_type: 3,
+      free_delivery_state: __isFreeDeliveryFee,
       per_delivery_fee: __per_delivery_fee,
       per_floor_fee: parseInt(products.floor_service.price),
       min_delivery_fee: __min_delivery_fee,
@@ -139,7 +145,7 @@ export default function RetrievalPage(props) {
                   retrievalOrder={retrievalOrder}
                   orderId={id}
                   confirmOrder={confirmOrder}
-                  setComfirmOrder={setComfirmOrder}
+                  setConfirmOrder={setConfirmOrder}
                   setOrderState={setOrderState}
                 />
               </>

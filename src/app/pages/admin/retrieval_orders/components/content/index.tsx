@@ -42,6 +42,7 @@ const ContentRetrievalOrder = (props: propState) => {
   const paymentMethod = useSelector((state: RootState) => state.admin.ref.paymentMethod)
   const paymentStatus = useSelector((state: RootState) => state.admin.ref.paymentStatus)
   const [retrievalOrderItems, setRetrievalOrderItems] = useState<any[]>([])
+  const [freeDeliveryState, setFreeDeliveryState] = useState('')
   const [paymentMethodId, setPaymentMethodId] = useState('')
   const [paymentStatusId, setPaymentStatusId] = useState('')
   const [lumpSum, setLumpSum] = useState('')
@@ -85,6 +86,7 @@ const ContentRetrievalOrder = (props: propState) => {
           items: retrievalOrderItems,
           ...values,
           special_instruction: specialInstruction,
+          free_delivery_state: freeDeliveryState,
           payment_status_id: paymentStatusId,
           payment_type_id: paymentMethodId,
           walkup: walkup,
@@ -126,6 +128,7 @@ const ContentRetrievalOrder = (props: propState) => {
       }
     })
     setRetrievalOrderItems([...__retrievalOrderItems])
+    setFreeDeliveryState(retrievalOrder?.free_delivery_state.toString())
     setPaymentMethodId(retrievalOrder.payment_type_id)
     setPaymentStatusId(retrievalOrder.payment_status_id)
     setSpecialInstruction(
@@ -145,9 +148,20 @@ const ContentRetrievalOrder = (props: propState) => {
   useEffect(() => {
     let __subTotalFee = 0
 
-    retrievalOrderItems.forEach((item) => {
-      __subTotalFee += (parseInt(item.quantity) + 1) * parseFloat(item.price)
-    })
+    if (freeDeliveryState === '1') {
+      retrievalOrderItems.forEach((item) => {
+        __subTotalFee += (parseInt(item.quantity) + 0) * parseFloat(item.price)
+      })
+    } else {
+      retrievalOrderItems.forEach((item) => {
+        __subTotalFee += (parseInt(item.quantity) + 1) * parseFloat(item.price)
+      })
+    }
+
+    if (__subTotalFee < 116) {
+      __subTotalFee = 116
+    }
+
     retrievalOrderItems.forEach((item) => {
       if (walkup !== 0 && !isNaN(walkup) && item.quantity > 0) {
         __subTotalFee += walkup * parseFloat(floorFee)
@@ -157,7 +171,7 @@ const ContentRetrievalOrder = (props: propState) => {
     let __totalFee = __subTotalFee
     setLumpSum(__totalFee.toFixed(2))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values, walkup, retrievalOrderItems])
+  }, [formik.values, walkup, retrievalOrderItems, freeDeliveryState])
 
   const defaultMaterialTheme = createTheme({})
 
@@ -512,6 +526,24 @@ const ContentRetrievalOrder = (props: propState) => {
                                 </div>
                               ))}
                           </>
+
+                          <div className='row py-4 flex items-center'>
+                            <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                              <span className='required'>Free Delivery Status</span>
+                            </label>
+                            <div className='col-lg-8 fv-row'>
+                              <select
+                                className='form-select form-select-solid'
+                                value={freeDeliveryState}
+                                onChange={(e) => {
+                                  setFreeDeliveryState(e.target.value)
+                                }}
+                              >
+                                <option value={'1'}>{'True'}</option>
+                                <option value={'0'}>{'False'}</option>
+                              </select>
+                            </div>
+                          </div>
 
                           <div className='row py-4 flex items-center'>
                             <label className='col-lg-4 col-form-label fw-bold fs-6'>

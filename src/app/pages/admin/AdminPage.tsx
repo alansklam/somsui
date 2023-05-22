@@ -16,7 +16,7 @@ import EditOrder from './orders/edit-order'
 import EditStoragePeriodItemPrice from './periods/edit-period-item'
 import EditPromotion from './promotions/edit-promotion'
 import AddPromotion from './promotions/add-promotion'
-import EditRetrievalOrder from './retrieval_orders/edit-retireval-order'
+import EditRetrievalOrder from './retrieval_orders/edit-retrieval-order'
 import {ItemsList} from './items'
 
 const useAuth = () => {

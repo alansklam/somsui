@@ -9,7 +9,7 @@ import {fetchRetrievalDates} from '../../../../store/actions/admin'
 
 const RetrievalDateTable = () => {
   const dispatch = useDispatch()
-  const {data, setSelected, isAllSelected, pagination, filterData} = useListView()
+  const {uid, data, setSelected, isAllSelected, pagination, filterData} = useListView()
   const [listData, setListData] = useState(Array(0))
 
   const onSortHandler = (order: string) => {
@@ -27,6 +27,7 @@ const RetrievalDateTable = () => {
     dispatch(
       fetchRetrievalDates({
         filterData,
+        uid,
         ...pagination,
         sort: __sort,
         orderBy: order,
@@ -76,27 +77,13 @@ const RetrievalDateTable = () => {
                     />
                   </div>
                 </th>
-                <th className='min-w-150px'>
-                  <div
-                    className={
-                      pagination.orderBy === 'name'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    onClick={() => onSortHandler('name')}
-                    style={{cursor: 'pointer'}}
-                  >
-                    Name
-                  </div>
+                <th className='min-w-50px'>
+                  <div>No</div>
                 </th>
                 <th className='min-w-100px text-center'>
                   <div
                     className={
-                      pagination.orderBy === 'university_id'
+                      pagination.orderBy === 'retrieval_date'
                         ? pagination.sort
                           ? pagination.sort === 'asc'
                             ? 'table-sort-asc'
@@ -104,27 +91,27 @@ const RetrievalDateTable = () => {
                           : ''
                         : ''
                     }
-                    onClick={() => onSortHandler('university_id')}
-                    style={{cursor: 'pointer'}}
-                  >
-                    University
-                  </div>
-                </th>
-                <th className='min-w-100px text-center'>
-                  <div
-                    className={
-                      pagination.orderBy === 'date'
-                        ? pagination.sort
-                          ? pagination.sort === 'asc'
-                            ? 'table-sort-asc'
-                            : 'table-sort-desc'
-                          : ''
-                        : ''
-                    }
-                    onClick={() => onSortHandler('date')}
+                    onClick={() => onSortHandler('retrieval_date')}
                     style={{cursor: 'pointer'}}
                   >
                     Retrieval Date
+                  </div>
+                </th>
+                <th className='min-w-100px text-center'>
+                  <div
+                    className={
+                      pagination.orderBy === 'day'
+                        ? pagination.sort
+                          ? pagination.sort === 'asc'
+                            ? 'table-sort-asc'
+                            : 'table-sort-desc'
+                          : ''
+                        : ''
+                    }
+                    onClick={() => onSortHandler('day')}
+                    style={{cursor: 'pointer'}}
+                  >
+                    Retrieval Day
                   </div>
                 </th>
 

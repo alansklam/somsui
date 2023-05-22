@@ -4,9 +4,12 @@ import {useIntl} from 'react-intl'
 // import {KTSVG} from '../../../../helpers'
 import {SidebarMenuItemWithSub} from './SidebarMenuItemWithSub'
 import {SidebarMenuItem} from './SidebarMenuItem'
+import {useSelector} from 'react-redux'
+import {RootState} from '../../../../../app/store/reducers'
 
 const SidebarMenuMain = () => {
   const intl = useIntl()
+  const universities = useSelector((state: RootState) => state.admin.universities)
 
   return (
     <>
@@ -58,15 +61,16 @@ const SidebarMenuMain = () => {
         icon='/media/icons/duotune/general/gen049.svg'
       >
         <SidebarMenuItem to='/admin/orders?uid=90' title='All' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=1' title='HKU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=2' title='PolyU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=3' title='CityU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=8' title='SYU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=4' title='CHCHE' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=5' title='LU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=6' title='UST' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=7' title='HKBU' hasBullet={true} />
-        <SidebarMenuItem to='/admin/orders?uid=10' title='ubox Group' hasBullet={true} />
+        {universities &&
+          universities.length > 0 &&
+          universities.map((university, index) => (
+            <SidebarMenuItem
+              key={index}
+              to={'/admin/orders?uid=' + university.id}
+              title={university.university_alias}
+              hasBullet={true}
+            />
+          ))}
       </SidebarMenuItemWithSub>
       <SidebarMenuItem
         to='/admin/retrieval-order'
@@ -80,12 +84,22 @@ const SidebarMenuMain = () => {
         title='Item List'
         fontIcon='bi-app-indicator'
       />
-      <SidebarMenuItem
+      <SidebarMenuItemWithSub
         to='/admin/retrieval-date'
-        icon='/media/icons/duotune/general/gen019.svg'
         title='Retrieval Date List'
-        fontIcon='bi-app-indicator'
-      />
+        icon='/media/icons/duotune/general/gen049.svg'
+      >
+        {universities &&
+          universities.length > 0 &&
+          universities.map((university, index) => (
+            <SidebarMenuItem
+              key={index}
+              to={'/admin/retrieval-date?uid=' + university.id}
+              title={university.university_alias}
+              hasBullet={true}
+            />
+          ))}
+      </SidebarMenuItemWithSub>
     </>
   )
 }

@@ -21,9 +21,9 @@ const UsersListFilter = () => {
 
   const resetHandler = () => {
     setFilterData({
-      name: '',
-      code: '',
-      menu: 'periods',
+      retrieval_date: '',
+      day: '',
+      menu: 'retrieval_date',
     })
   }
 
@@ -59,15 +59,32 @@ const UsersListFilter = () => {
           <div className='row'>
             <div className='col-lg-6'>
               <div className='row mb-6'>
-                <label className='col-lg-4 col-form-label fw-bold fs-6'>Name</label>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Retrieval Date</label>
+                <div className='col-lg-8 fv-row'>
+                  <input
+                    type='date'
+                    className='form-control form-control-lg form-control-solid'
+                    placeholder='Retrieval date'
+                    value={filterData.retrieval_date}
+                    onChange={(e) => {
+                      setFilterData({...filterData, retrieval_date: e.target.value})
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className='col-lg-6'>
+              <div className='row mb-6'>
+                <label className='col-lg-4 col-form-label fw-bold fs-6'>Retrieval Day</label>
                 <div className='col-lg-8 fv-row'>
                   <input
                     type='text'
                     className='form-control form-control-lg form-control-solid'
-                    placeholder='Name'
-                    value={filterData.name}
+                    placeholder='Day'
+                    value={filterData.day}
                     onChange={(e) => {
-                      setFilterData({...filterData, name: e.target.value})
+                      setFilterData({...filterData, day: e.target.value})
                     }}
                   />
                 </div>

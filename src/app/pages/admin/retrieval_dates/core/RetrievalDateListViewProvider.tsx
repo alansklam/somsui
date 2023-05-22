@@ -13,6 +13,7 @@ import {WithChildren} from '../../../../../_metronic/helpers'
 import {RootState} from '../../../../store/reducers'
 import {fetchRetrievalDates} from '../../../../store/actions/admin'
 import {updateFilterData} from '../../../../store/actions/admin'
+import {useSearchParams} from 'react-router-dom'
 
 type pagination = {
   total: number
@@ -23,10 +24,11 @@ type pagination = {
 }
 
 type ListViewContextProps = {
+  uid: string | undefined | null
   data: {
     id?: number
-    name?: string
-    date: number
+    retrieval_date?: string
+    day: number
     university_id?: number
   }[]
   selected: any[]
@@ -42,18 +44,19 @@ type ListViewContextProps = {
   isAllSelected: boolean
   isLoading: boolean
   filterData: {
-    name: string
-    university_id: string
+    retrieval_date: string
+    day: string
   }
   setFilterData: Dispatch<SetStateAction<any>>
   fetchRetrievalDatesFunc: Function
 }
 
 const initialListView = {
+  uid: '',
   data: [
     {
-      name: '',
-      date: 0,
+      retrieval_date: '',
+      day: 0,
       university_id: 0,
     },
   ],
@@ -76,8 +79,8 @@ const initialListView = {
   isAllSelected: false,
   isLoading: false,
   filterData: {
-    name: '',
-    university_id: '',
+    retrieval_date: '',
+    day: '',
   },
   setFilterData: () => {},
   fetchRetrievalDatesFunc: () => {},
@@ -94,6 +97,8 @@ const calculateIsAllDataSelected = (__data: any[], __selected: any[]) => {
 
 const ListViewProvider: FC<WithChildren> = ({children}) => {
   const dispatch = useDispatch()
+  const [searchParams] = useSearchParams()
+  const uid = searchParams.get('uid')
 
   const [selected, setSelected] = useState(Array(0))
   const [itemIdForUpdate, setItemIdForUpdate] = useState<undefined | null | number>(
@@ -125,6 +130,7 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
     dispatch(
       fetchRetrievalDates({
         filterData: __filterData,
+        uid,
         ...page,
       })
     )
@@ -133,7 +139,7 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
       ...__filterData,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [uid])
 
   useEffect(() => {
     setPagination({
@@ -147,6 +153,7 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
     dispatch(
       fetchRetrievalDates({
         filterData,
+        uid,
         ...pagination,
       })
     )
@@ -155,6 +162,7 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
   return (
     <ListViewContext.Provider
       value={{
+        uid,
         data,
         selected,
         setSelected,

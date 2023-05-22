@@ -9,20 +9,30 @@ import CssFormControlLabel from '../../../components/custom-components/FormContr
 import CustomColorRadio from '../../../components/custom-components/RadioButton'
 import CssTextField from '../../../components/custom-components/TextField'
 import Quantity from '../../../components/quantity'
+import {useDispatch, useSelector} from 'react-redux'
+import {fetchRetrievalDates} from '../../../store/actions/client'
 
 export default function RetrievalEdit(props) {
   const {order, products, retrievalOrder, setRetrievalOrder, cartInfo, setCartInfo, onCartHandler} =
     props
   const {t} = useTranslation()
+  const dispatch = useDispatch()
+  const freeRetrievalDates = useSelector((state) => state.client.retrievalDates)
+  const client = useSelector((state) => state.client.client)
   const additionalDay = parseInt(process.env.REACT_APP_RETRIEVAL_ADDITIONAL_DATE)
 
   const [retrievalDate, setRetrievalDate] = useState(dayjs().add(additionalDay, 'day'))
   const [retrievalTimeIndex, setRetrievalTimeIndex] = useState(0)
-  const [emptyBoxRetrunDate, setEmptyBoxRetrunDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [emptyBoxReturnDate, setEmptyBoxReturnDate] = useState(dayjs().add(additionalDay, 'day'))
   const [emptyBoxReturnTimeIndex, setEmptyBoxReturnTimeIndex] = useState(0)
   const [isSameDay, setIsSameDay] = useState(1)
   const [needWalk, setNeedWalk] = useState(0)
   const allReturn = 1
+
+  useEffect(() => {
+    dispatch(fetchRetrievalDates())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (order.emptyout_date_other) {
@@ -35,7 +45,7 @@ export default function RetrievalEdit(props) {
 
       if (dayjs().add(2, 'day') <= dayjs(order?.checkin_date_other)) {
         setRetrievalDate(order?.checkin_date_other)
-        setEmptyBoxRetrunDate(order?.checkin_date_other)
+        setEmptyBoxReturnDate(order?.checkin_date_other)
 
         setRetrievalOrder({
           ...retrievalOrder,
@@ -72,6 +82,22 @@ export default function RetrievalEdit(props) {
   }
 
   const handleRetrievalDateChange = (newValue) => {
+    let __university_id = client.university_id
+    let __retrievalDates = freeRetrievalDates.filter((item) => item.id === __university_id)
+    let __isFree = false
+    if (__retrievalDates && __retrievalDates.length > 0) {
+      __retrievalDates[0].retrieval_dates?.forEach((item) => {
+        let __startDate = dayjs(item.retrieval_date).add(-item.day, 'day')
+        if (__startDate > dayjs()) {
+          if (
+            dayjs(newValue).format('YYYY-MM-DD') === dayjs(item.retrieval_date).format('YYYY-MM-DD')
+          ) {
+            __isFree = true
+          }
+        }
+      })
+    }
+    onCartHandler(null, null, __isFree)
     let __storage_month = dayjs(newValue) - dayjs(order.emptyout_date_other)
     __storage_month = dayjs(__storage_month).format('MM')
     setRetrievalDate(newValue)
@@ -82,11 +108,11 @@ export default function RetrievalEdit(props) {
         empty_box_return_date: dayjs(newValue).format('YYYY-MM-DD'),
         storage_month: parseInt(__storage_month),
       })
-      setEmptyBoxRetrunDate(newValue)
+      setEmptyBoxReturnDate(newValue)
     } else {
       if (
-        dayjs(newValue) > dayjs(emptyBoxRetrunDate) ||
-        dayjs(newValue).add(14, 'day') < dayjs(emptyBoxRetrunDate)
+        dayjs(newValue) > dayjs(emptyBoxReturnDate) ||
+        dayjs(newValue).add(14, 'day') < dayjs(emptyBoxReturnDate)
       ) {
         setRetrievalOrder({
           ...retrievalOrder,
@@ -94,7 +120,7 @@ export default function RetrievalEdit(props) {
           empty_box_return_date: dayjs(newValue).format('YYYY-MM-DD'),
           storage_month: parseInt(__storage_month),
         })
-        setEmptyBoxRetrunDate(newValue)
+        setEmptyBoxReturnDate(newValue)
       } else {
         setRetrievalOrder({
           ...retrievalOrder,
@@ -104,6 +130,7 @@ export default function RetrievalEdit(props) {
       }
     }
   }
+
   const handleRetrievalTimeChange = (e) => {
     setRetrievalTimeIndex(e.target.value)
     if (isSameDay) {
@@ -120,13 +147,15 @@ export default function RetrievalEdit(props) {
       })
     }
   }
+
   const handleEmptyBoxReturnDateChange = (newValue) => {
-    setEmptyBoxRetrunDate(newValue)
+    setEmptyBoxReturnDate(newValue)
     setRetrievalOrder({
       ...retrievalOrder,
       empty_box_return_date: dayjs(newValue).format('YYYY-MM-DD'),
     })
   }
+
   const handleEmptyBoxReturnTimeChange = (e) => {
     setEmptyBoxReturnTimeIndex(e.target.value)
     setRetrievalOrder({
@@ -134,6 +163,7 @@ export default function RetrievalEdit(props) {
       empty_box_return_time: getTime(e.target.value),
     })
   }
+
   const handleIsSameDayRadioChange = (e) => {
     setIsSameDay(Number(e.target.value))
     if (Number(e.target.value)) {
@@ -148,7 +178,7 @@ export default function RetrievalEdit(props) {
         empty_box_return_date: retrievalOrder.retrieval_date,
         empty_box_return_time: retrievalOrder.retrieval_time,
       })
-      setEmptyBoxRetrunDate(dayjs(retrievalDate))
+      setEmptyBoxReturnDate(dayjs(retrievalDate))
       setEmptyBoxReturnTimeIndex(retrievalTimeIndex)
     } else {
       setCartInfo({
@@ -159,6 +189,7 @@ export default function RetrievalEdit(props) {
       })
     }
   }
+
   const handleIsNeedWalkRadioChange = (e) => {
     setNeedWalk(Number(e.target.value))
     if (Number(e.target.value) === 0) {
@@ -169,6 +200,7 @@ export default function RetrievalEdit(props) {
       })
     }
   }
+
   // const handleIsAllReturnRadioChange = (e) => {
   //   setAllReturn(Number(e.target.value))
   // }
@@ -293,7 +325,7 @@ export default function RetrievalEdit(props) {
                         ? order?.storage_expired_date
                         : dayjs(retrievalDate).add(14, 'day')
                     }
-                    value={emptyBoxRetrunDate}
+                    value={emptyBoxReturnDate}
                     onChange={handleEmptyBoxReturnDateChange}
                     renderInput={(params) => (
                       <CssTextField

@@ -87,3 +87,11 @@ export function extendDateApi(params) {
     },
   })
 }
+
+export function fetchRetrievalDatesApi() {
+  return axios.get('client/retrieval-dates', {
+    headers: {
+      'content-type': 'text/json',
+    },
+  })
+}

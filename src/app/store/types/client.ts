@@ -1,14 +1,15 @@
 export interface ClientState {
-  client: any;
-  orders: any[];
-  products: any[];
-  currentOrder: any;
-  extendDate: string;
-  loading: boolean;
-  error: null | string;
-  page: number;
-  total: number;
-  limit: number;
+  client: any
+  orders: any[]
+  products: any[]
+  currentOrder: any
+  retrievalDates: any
+  extendDate: string
+  loading: boolean
+  error: null | string
+  page: number
+  total: number
+  limit: number
 }
 
 export enum ClientActionTypes {
@@ -20,41 +21,46 @@ export enum ClientActionTypes {
   GET_PRODUCTS = 'GET_PRODUCTS',
   FETCH_CURRENT_ORDER = 'FETCH_CURRENT_ORDER',
   SET_EXTEND_DATE = 'SET_EXTEND_DATE',
+  FETCH_RETRIEVAL_DATES = 'FETCH_RETRIEVAL_DATES',
 }
 interface FetchDataAction {
-  type: ClientActionTypes.FETCH_DATA;
+  type: ClientActionTypes.FETCH_DATA
 }
 interface UpdateAccountAction {
-  type: ClientActionTypes.UPDATE_ACCOUNT;
-  payload: any;
+  type: ClientActionTypes.UPDATE_ACCOUNT
+  payload: any
 }
 interface FetchAccountAction {
-  type: ClientActionTypes.FETCH_ACCOUNT;
-  payload: any;
+  type: ClientActionTypes.FETCH_ACCOUNT
+  payload: any
 }
 interface FetchOrdersAction {
-  type: ClientActionTypes.FETCH_ORDERS;
-  payload: any;
+  type: ClientActionTypes.FETCH_ORDERS
+  payload: any
 }
 interface UpdateOrder {
-  type: ClientActionTypes.UPDATE_ORDER;
-  payload: any;
+  type: ClientActionTypes.UPDATE_ORDER
+  payload: any
 }
 interface GetProducts {
-  type: ClientActionTypes.GET_PRODUCTS;
-  payload: any;
+  type: ClientActionTypes.GET_PRODUCTS
+  payload: any
 }
 interface FetchCurrentOrder {
-  type: ClientActionTypes.FETCH_CURRENT_ORDER;
-  payload: any;
+  type: ClientActionTypes.FETCH_CURRENT_ORDER
+  payload: any
 }
 interface setStoreExtendDate {
-  type: ClientActionTypes.SET_EXTEND_DATE;
-  payload: any;
+  type: ClientActionTypes.SET_EXTEND_DATE
+  payload: any
+}
+interface FetchRetrievalDates {
+  type: ClientActionTypes.FETCH_RETRIEVAL_DATES
+  payload: any
 }
 
 export type ClientAction =
-  FetchDataAction
+  | FetchDataAction
   | UpdateAccountAction
   | FetchAccountAction
   | FetchOrdersAction
@@ -62,3 +68,4 @@ export type ClientAction =
   | GetProducts
   | FetchCurrentOrder
   | setStoreExtendDate
+  | FetchRetrievalDates

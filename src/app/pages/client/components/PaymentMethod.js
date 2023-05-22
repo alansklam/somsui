@@ -16,7 +16,7 @@ import {retrievalPayApi} from '../../../store/apis/client'
 import {useNavigate} from 'react-router-dom'
 
 export default function PaymentMethod(props) {
-  const {orderId, cartInfo, retrievalOrder, confirmOrder, setComfirmOrder, setOrderState} = props
+  const {orderId, cartInfo, retrievalOrder, confirmOrder, setConfirmOrder, setOrderState} = props
   const [isLoading, setIsLoading] = useState(false)
   const navigateTo = useNavigate()
   const [paymentType, setPaymentType] = useState(PaymentType.CREDITCARD)
@@ -159,7 +159,7 @@ export default function PaymentMethod(props) {
           if (res.data.success === true) {
             openCheckoutUrl(res.data.data)
             setPaymentCode(res.data.code)
-            setComfirmOrder(res.data.retrieval_order)
+            setConfirmOrder(res.data.retrieval_order)
           } else {
             setPaymentCode('')
             console.log('responseError', res.data)
@@ -210,7 +210,7 @@ export default function PaymentMethod(props) {
             visible: true,
             status: Math.floor(Math.random() * 100000),
           })
-          setComfirmOrder(res.data.retrieval_order)
+          setConfirmOrder(res.data.retrieval_order)
           setOrderState(true)
           setPayStatus(true)
         } else if (res.data.code === 'error') {
