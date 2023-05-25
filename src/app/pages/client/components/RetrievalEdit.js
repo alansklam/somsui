@@ -27,6 +27,8 @@ export default function RetrievalEdit(props) {
   const [emptyBoxReturnTimeIndex, setEmptyBoxReturnTimeIndex] = useState(0)
   const [isSameDay, setIsSameDay] = useState(1)
   const [needWalk, setNeedWalk] = useState(0)
+  const [freeDates, setFreeDates] = useState([])
+  const [freeDeliveryState, setFreeDeliveryState] = useState(false)
   const allReturn = 1
 
   useEffect(() => {
@@ -75,29 +77,59 @@ export default function RetrievalEdit(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
 
+  useEffect(() => {
+    let __dates = []
+    let __university_id = client.university_id
+    if (freeRetrievalDates.length > 0) {
+      let __retrievalDates = freeRetrievalDates.filter((item) => item.id === __university_id)
+      if (__retrievalDates && __retrievalDates.length > 0) {
+        __retrievalDates[0].retrieval_dates?.forEach((item) => {
+          let __startDate = dayjs(item.retrieval_date).add(-item.day, 'day')
+          if (__startDate > dayjs()) {
+            __dates.push(dayjs(item.retrieval_date).format('YYYY-MM-DD'))
+          }
+        })
+      }
+    }
+    setFreeDates([...__dates])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [freeRetrievalDates, client])
+
+  useEffect(() => {
+    if (freeDeliveryState) {
+      // let __isFree = false
+      // let __university_id = client.university_id
+      // let __retrievalDates = freeRetrievalDates.filter((item) => item.id === __university_id)
+      // if (__retrievalDates && __retrievalDates.length > 0) {
+      //   __retrievalDates[0].retrieval_dates?.forEach((item) => {
+      //     let __startDate = dayjs(item.retrieval_date).add(-item.day, 'day')
+      //     if (__startDate > dayjs()) {
+      //       if (
+      //         dayjs(retrievalDate).format('YYYY-MM-DD') ===
+      //         dayjs(item.retrieval_date).format('YYYY-MM-DD')
+      //       ) {
+      //         __isFree = true
+      //       }
+      //     }
+      //   })
+      // }
+      onCartHandler(null, null, true)
+      handleRetrievalDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
+    } else {
+      onCartHandler(null, null, false)
+      handleRetrievalDateChange(dayjs().add(additionalDay, 'day'))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [freeDeliveryState])
+
   const getQrcode = () => {
     let __qr_code = order?.remark_qrcode ? order?.remark_qrcode : ''
     __qr_code = __qr_code.replace(/\n/g, ' ')
     return __qr_code
   }
 
-  const handleRetrievalDateChange = (newValue) => {
-    let __university_id = client.university_id
-    let __retrievalDates = freeRetrievalDates.filter((item) => item.id === __university_id)
-    let __isFree = false
-    if (__retrievalDates && __retrievalDates.length > 0) {
-      __retrievalDates[0].retrieval_dates?.forEach((item) => {
-        let __startDate = dayjs(item.retrieval_date).add(-item.day, 'day')
-        if (__startDate > dayjs()) {
-          if (
-            dayjs(newValue).format('YYYY-MM-DD') === dayjs(item.retrieval_date).format('YYYY-MM-DD')
-          ) {
-            __isFree = true
-          }
-        }
-      })
-    }
-    onCartHandler(null, null, __isFree)
+  const handleRetrievalDateChange = (value) => {
+    let newValue = dayjs(value).format('YYYY-MM-DD')
     let __storage_month = dayjs(newValue) - dayjs(order.emptyout_date_other)
     __storage_month = dayjs(__storage_month).format('MM')
     setRetrievalDate(newValue)
@@ -249,8 +281,88 @@ export default function RetrievalEdit(props) {
             <div className='text-normal text-black'>
               {t('customer-retrieval.wd-indicate-retrieval')}
             </div>
+            {freeDates && freeDates.length > 0 && (
+              <div className='mt-[10px]'>
+                <Grid container>
+                  <Grid item xs={12} sm={8} md={8} className='align-items-center'>
+                    <span className='text-normal'>
+                      {t('customer-retrieval.an-do-you-retrieve-free')}
+                    </span>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={4}>
+                    <RadioGroup
+                      row
+                      aria-labelledby='demo-radio-buttons-group-label'
+                      name='radio-buttons-group'
+                      value={freeDeliveryState}
+                      onChange={(e) => {
+                        setFreeDeliveryState(!freeDeliveryState)
+                      }}
+                    >
+                      <CssFormControlLabel
+                        value={true}
+                        control={<CustomColorRadio />}
+                        label='Yes'
+                      />
+                      <CssFormControlLabel
+                        value={false}
+                        control={<CustomColorRadio />}
+                        label='No'
+                      />
+                    </RadioGroup>
+                  </Grid>
+                </Grid>
+              </div>
+            )}
+
             <Grid container className='mx-[-8px]'>
-              <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
+              {freeDeliveryState === true ? (
+                <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
+                  <CssTextField
+                    id='standard-select-currency1'
+                    select
+                    fullWidth
+                    label=''
+                    value={dayjs(retrievalDate).format('YYYY-MM-DD')}
+                    onChange={(e) => {
+                      handleRetrievalDateChange(e.target.value)
+                    }}
+                    className='mt-17'
+                    helperText=''
+                    variant='standard'
+                  >
+                    {freeDates.map((date, index) => (
+                      <MenuItem key={index} value={date} style={{fontSize: '16px'}}>
+                        {dayjs(date).format('DD/MM/YYYY')}
+                      </MenuItem>
+                    ))}
+                  </CssTextField>
+                </Grid>
+              ) : (
+                <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
+                  <DesktopDatePicker
+                    label={t('common.wd-retrieval-date')}
+                    inputFormat='DD/MM/YYYY'
+                    minDate={dayjs().add(additionalDay, 'day')}
+                    maxDate={order?.storage_expired_date}
+                    value={retrievalDate}
+                    onChange={handleRetrievalDateChange}
+                    renderInput={(params) => (
+                      <CssTextField
+                        required
+                        fullWidth
+                        onKeyDown={(e) => e.preventDefault()}
+                        id='standard-required1'
+                        label={t('common.wd-retrieval-date')}
+                        variant='standard'
+                        {...params}
+                        sx={{svg: {color: '#FFBE3D'}, button: {fontSize: 16}}}
+                      />
+                    )}
+                  />
+                </Grid>
+              )}
+              {/* <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
                 <DesktopDatePicker
                   label={t('common.wd-retrieval-date')}
                   inputFormat='DD/MM/YYYY'
@@ -271,7 +383,7 @@ export default function RetrievalEdit(props) {
                     />
                   )}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={6} md={5} className='px-[8px] py-[15px]'>
                 <CssTextField
                   id='standard-select-currency1'
@@ -414,6 +526,7 @@ export default function RetrievalEdit(props) {
                     value={cartInfo.floors}
                     onChange={(e) => {
                       let __floors = e.target.value ? parseInt(e.target.value) : 0
+                      if (__floors > 1000) __floors = 1000
                       let __floor_fee = 0
                       cartInfo.delivery_items.forEach((item) => {
                         __floor_fee = __floor_fee + item.count * __floors * cartInfo.per_floor_fee

@@ -27,7 +27,7 @@ const StoragePeriodsListPage = () => {
 export const StoragePeriodsList = () => {
   return (
     <>
-      <PageTitle>{'Storage Periods List'}</PageTitle>
+      <PageTitle>Storage Periods List</PageTitle>
       <ListViewProvider>
         <StoragePeriodsListPage />
       </ListViewProvider>

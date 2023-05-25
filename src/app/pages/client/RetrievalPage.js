@@ -64,13 +64,10 @@ export default function RetrievalPage(props) {
     let __delivery_fee = 0
     let __total_fee = 0
     let __min_delivery_state = false
-    let __min_delivery_fee = parseInt(products.min_delivery_service.price)
-    let __per_delivery_fee = parseInt(products.delivery_service.price)
+    let __min_delivery_fee = parseInt(products?.min_delivery_service?.price)
+    let __per_delivery_fee = parseInt(products?.delivery_service?.price)
     let __isFreeDeliveryFee = false
-    if (isFree && isFree === true) {
-      __per_delivery_fee = 0
-      __isFreeDeliveryFee = true
-    }
+
     if (item && item?.category !== 'bag') {
       __delivery_items[item.id] = {...item, count: value}
     }
@@ -88,6 +85,14 @@ export default function RetrievalPage(props) {
     }
 
     __delivery_fee = Math.round(__delivery_fee * 100) / 100
+
+    if (isFree && isFree === true) {
+      __delivery_fee = 0
+      __per_delivery_fee = 0
+      __isFreeDeliveryFee = true
+      __min_delivery_state = false
+    }
+
     __total_fee = __total_fee + __delivery_fee
 
     setCartInfo({
@@ -95,7 +100,7 @@ export default function RetrievalPage(props) {
       payment_type: 3,
       free_delivery_state: __isFreeDeliveryFee,
       per_delivery_fee: __per_delivery_fee,
-      per_floor_fee: parseInt(products.floor_service.price),
+      per_floor_fee: parseInt(products?.floor_service?.price),
       min_delivery_fee: __min_delivery_fee,
       min_delivery_state: __min_delivery_state,
       delivery_items: __delivery_items,
@@ -126,7 +131,6 @@ export default function RetrievalPage(props) {
             })}
           </span>
         </div>
-
         <Grid container spacing={1}>
           <Grid item xs={12} sm={12} md={7} className='pr-[20px]'>
             {orderState === false ? (

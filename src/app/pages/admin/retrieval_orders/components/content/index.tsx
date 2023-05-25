@@ -150,21 +150,20 @@ const ContentRetrievalOrder = (props: propState) => {
 
     if (freeDeliveryState === '1') {
       retrievalOrderItems.forEach((item) => {
-        __subTotalFee += (parseInt(item.quantity) + 0) * parseFloat(item.price)
+        __subTotalFee = 0
       })
     } else {
       retrievalOrderItems.forEach((item) => {
         __subTotalFee += (parseInt(item.quantity) + 1) * parseFloat(item.price)
       })
-    }
-
-    if (__subTotalFee < 116) {
-      __subTotalFee = 116
+      if (__subTotalFee < 116) {
+        __subTotalFee = 116
+      }
     }
 
     retrievalOrderItems.forEach((item) => {
       if (walkup !== 0 && !isNaN(walkup) && item.quantity > 0) {
-        __subTotalFee += walkup * parseFloat(floorFee)
+        __subTotalFee += walkup * parseFloat(floorFee) * item.quantity
       }
     })
     if (nextdayState) __subTotalFee += 116

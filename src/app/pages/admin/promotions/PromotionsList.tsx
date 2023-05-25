@@ -25,7 +25,7 @@ const PromotionsListPage = () => {
 export const PromotionsList = () => {
   return (
     <>
-      <PageTitle>{'Promotions List'}</PageTitle>
+      <PageTitle>Promotions List</PageTitle>
       <PromotionsListViewProvider>
         <PromotionsListPage />
       </PromotionsListViewProvider>

@@ -48,7 +48,10 @@ export default function RetrievalCart(props) {
                   </div>
                   <div className='my-auto'>
                     <span className='text-normal text-black'>
-                      ${Math.round(item.count * parseFloat(item.delivery_fee) * 100) / 100}
+                      $
+                      {cartInfo.free_delivery_state
+                        ? 0
+                        : Math.round(item.count * parseFloat(item.delivery_fee) * 100) / 100}
                     </span>
                   </div>
                 </div>

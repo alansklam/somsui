@@ -110,6 +110,14 @@ export default function PaymentMethod(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentCode])
 
+  useEffect(() => {
+    if (cartInfo.total_fee === 0) {
+      setPaymentType(PaymentType.CASH)
+    } else {
+      setPaymentType(PaymentType.CREDITCARD)
+    }
+  }, [cartInfo.total_fee])
+
   const showNotification = ({title, message, visible, status}) => {
     setNotify({title, message, visible, status})
   }
@@ -262,70 +270,80 @@ export default function PaymentMethod(props) {
   return (
     <>
       <div>
-        <div className='text-normal text-black py-[0px]'>
-          <span className='text-header text-black'>{t('page5.qu-which-payment')}</span>
-        </div>
-        <div className='mt-[33px]'>
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={12}>
-              <RadioGroup
-                aria-labelledby='payment-type-radio-buttons-group'
-                name='radio-buttons-group'
-                value={paymentType}
-                onChange={handleRadioChange}
-              >
-                {paymentMethod.map((element, index) => {
-                  switch (element.id) {
-                    case PaymentType.CREDITCARD:
-                      return (
-                        <div key={index}>
-                          <CssFormControlLabel
-                            value={PaymentType.CREDITCARD}
-                            control={<CustomColorRadio />}
-                            label={__lang === 'en' ? element?.description : element?.description_cn}
-                          />
-                          <Grid item xs={12} sm={12} md={12}>
-                            <div className='flex items-center'>
-                              {paymentType === PaymentType.CREDITCARD && (
-                                <div className='h-[20px] w-[100%] my-[10px]'>
-                                  <Elements stripe={getStripe()}>
-                                    <PaymentForm onCallbackHandler={onCallbackFunc} />
-                                  </Elements>
+        {cartInfo.total_fee !== 0 && (
+          <div>
+            <div className='text-normal text-black py-[0px]'>
+              <span className='text-header text-black'>{t('page5.qu-which-payment')}</span>
+            </div>
+            <div className='mt-[33px]'>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={12} md={12}>
+                  <RadioGroup
+                    aria-labelledby='payment-type-radio-buttons-group'
+                    name='radio-buttons-group'
+                    value={paymentType}
+                    onChange={handleRadioChange}
+                  >
+                    {paymentMethod.map((element, index) => {
+                      switch (element.id) {
+                        case PaymentType.CREDITCARD:
+                          return (
+                            <div key={index}>
+                              <CssFormControlLabel
+                                value={PaymentType.CREDITCARD}
+                                control={<CustomColorRadio />}
+                                label={
+                                  __lang === 'en' ? element?.description : element?.description_cn
+                                }
+                              />
+                              <Grid item xs={12} sm={12} md={12}>
+                                <div className='flex items-center'>
+                                  {paymentType === PaymentType.CREDITCARD && (
+                                    <div className='h-[20px] w-[100%] my-[10px]'>
+                                      <Elements stripe={getStripe()}>
+                                        <PaymentForm onCallbackHandler={onCallbackFunc} />
+                                      </Elements>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
+                              </Grid>
                             </div>
-                          </Grid>
-                        </div>
-                      )
-                    case PaymentType.WECHATPAY:
-                      return (
-                        <CssFormControlLabel
-                          value={PaymentType.WECHATPAY}
-                          control={<CustomColorRadio />}
-                          label={__lang === 'en' ? element?.description : element?.description_cn}
-                          key={index}
-                        />
-                      )
-                    case PaymentType.ALIPAY:
-                      return (
-                        <CssFormControlLabel
-                          value={PaymentType.ALIPAY}
-                          control={<CustomColorRadio />}
-                          label={__lang === 'en' ? element?.description : element?.description_cn}
-                          key={index}
-                        />
-                      )
-                    default:
-                      return <div key={index}></div>
-                  }
-                })}
-              </RadioGroup>
-            </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={9}>
-              <div className='text-lg'>{t('common.wd-checkout-note')}</div>
-            </Grid>
-          </Grid>
-        </div>
+                          )
+                        case PaymentType.WECHATPAY:
+                          return (
+                            <CssFormControlLabel
+                              value={PaymentType.WECHATPAY}
+                              control={<CustomColorRadio />}
+                              label={
+                                __lang === 'en' ? element?.description : element?.description_cn
+                              }
+                              key={index}
+                            />
+                          )
+                        case PaymentType.ALIPAY:
+                          return (
+                            <CssFormControlLabel
+                              value={PaymentType.ALIPAY}
+                              control={<CustomColorRadio />}
+                              label={
+                                __lang === 'en' ? element?.description : element?.description_cn
+                              }
+                              key={index}
+                            />
+                          )
+                        default:
+                          return <div key={index}></div>
+                      }
+                    })}
+                  </RadioGroup>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12} lg={9}>
+                  <div className='text-lg'>{t('common.wd-checkout-note')}</div>
+                </Grid>
+              </Grid>
+            </div>
+          </div>
+        )}
         {!payStatus && (
           <div className='flex item-center my-[30px]'>
             <span className='custom-btn hand' onClick={onNextHandler}>

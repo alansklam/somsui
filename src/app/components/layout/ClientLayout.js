@@ -39,7 +39,7 @@ const ClientLayout = () => {
         <div className='sidebar-client'>
           <AccountSidebar />
         </div>
-        <div className='content-client'>
+        <div className='content-client bg-white'>
           <Outlet />
         </div>
       </main>

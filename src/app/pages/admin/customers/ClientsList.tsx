@@ -24,7 +24,7 @@ const ClientsListPage = () => {
 export const ClientsList = () => {
   return (
     <>
-      <PageTitle>{'Customer List'}</PageTitle>
+      <PageTitle>Customer List</PageTitle>
       <ClientsListViewProvider>
         <ClientsListPage />
       </ClientsListViewProvider>

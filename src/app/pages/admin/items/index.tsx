@@ -28,7 +28,7 @@ const ItemsListPage = () => {
 export const ItemsList = () => {
   return (
     <>
-      <PageTitle>{'Item List'}</PageTitle>
+      <PageTitle>Item List</PageTitle>
       <ListViewProvider>
         <ItemsListPage />
       </ListViewProvider>

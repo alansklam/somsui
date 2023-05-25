@@ -30,7 +30,7 @@ const RetrievalOrdersListPage = () => {
 export const RetrievalOrdersList = () => {
   return (
     <>
-      <PageTitle>{'Retrieval Orders List'}</PageTitle>
+      <PageTitle>Retrieval Orders List</PageTitle>
       <RetrievalOrdersListViewProvider>
         <RetrievalOrdersListPage />
       </RetrievalOrdersListViewProvider>

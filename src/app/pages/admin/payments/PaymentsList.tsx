@@ -29,7 +29,7 @@ export const PaymentsList = (props: any) => {
   const {paymentRemarkId} = props
   return (
     <>
-      <PageTitle>{'Payments List'}</PageTitle>
+      <PageTitle>Payments List</PageTitle>
       <PaymentsListViewProvider paymentRemarkId={paymentRemarkId}>
         <PaymentsListPage paymentRemarkId={paymentRemarkId} />
       </PaymentsListViewProvider>

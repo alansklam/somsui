@@ -26,7 +26,7 @@ const RetrievalDate = () => {
 export const RetrievalDateList = () => {
   return (
     <>
-      <PageTitle>{'Retrieval Order Date List'}</PageTitle>
+      <PageTitle>Retrieval Order Date List</PageTitle>
       <ListViewProvider>
         <RetrievalDate />
       </ListViewProvider>
