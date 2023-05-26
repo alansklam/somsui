@@ -230,6 +230,18 @@ export default function RetrievalEdit(props) {
         floor_fee: 0,
         total_fee: cartInfo.delivery_fee + cartInfo.next_day_fee + 0,
       })
+    } else {
+      let __floor_fee = 0
+      let __floors = cartInfo.floors
+      cartInfo.delivery_items.forEach((item) => {
+        __floor_fee = __floor_fee + item.count * __floors * cartInfo.per_floor_fee
+      })
+      let __total_fee = cartInfo.delivery_fee + cartInfo.next_day_fee + __floor_fee
+      setCartInfo({
+        ...cartInfo,
+        floor_fee: __floor_fee,
+        total_fee: __total_fee,
+      })
     }
   }
 

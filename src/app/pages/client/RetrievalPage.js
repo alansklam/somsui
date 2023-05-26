@@ -67,6 +67,8 @@ export default function RetrievalPage(props) {
     let __min_delivery_fee = parseInt(products?.min_delivery_service?.price)
     let __per_delivery_fee = parseInt(products?.delivery_service?.price)
     let __isFreeDeliveryFee = false
+    let __next_day_fee = cartInfo.next_day_fee
+    let __floor_fee = cartInfo.floor_fee
 
     if (item && item?.category !== 'bag') {
       __delivery_items[item.id] = {...item, count: value}
@@ -93,7 +95,7 @@ export default function RetrievalPage(props) {
       __min_delivery_state = false
     }
 
-    __total_fee = __total_fee + __delivery_fee
+    __total_fee = __total_fee + __delivery_fee + __next_day_fee + __floor_fee
 
     setCartInfo({
       ...cartInfo,
