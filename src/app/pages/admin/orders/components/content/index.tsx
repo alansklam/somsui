@@ -147,7 +147,7 @@ const ContentOrder = (props: propState) => {
       }
       if (
         dayjs(formik.values.checkin_date_other) >
-          dayjs(formik.values.emptyout_date_other).add(14, 'day') ||
+          dayjs(formik.values.emptyout_date_other).add(30, 'day') ||
         dayjs(formik.values.checkin_date_other) > dayjs(formik.values.checkout_date_other)
       ) {
         showNotification('error', 'Error', 'Please fix the errors.')
@@ -494,7 +494,7 @@ const ContentOrder = (props: propState) => {
                                     'YYYY-MM-DD'
                                   )}
                                   maxDate={dayjs(formik.values.emptyout_date_other)
-                                    .add(14, 'day')
+                                    .add(30, 'day')
                                     .format('YYYY-MM-DD')}
                                   onChange={(value) =>
                                     formik.setFieldValue(
