@@ -63,20 +63,20 @@ const ContentOrder = (props: propState) => {
   const profileDetailsSchema = Yup.object().shape({
     emptyout_location_other: Yup.string()
       .required('Emptyout location is required')
-      .min(3, 'Emptyout location should be 3 letters at least')
-      .max(50, 'Emptyout location should be 50 letters at maximum'),
+      .min(5, 'Emptyout location should be 5 letters at least')
+      .max(250, 'Emptyout location should be 250 letters at maximum'),
     emptyout_date_other: Yup.date().required('Emptyout Date is required'),
     emptyout_time_other: Yup.string().required('Emptyout Time is required'),
     checkin_location_other: Yup.string()
       .required('Checkin location is required')
-      .min(3, 'Checkin location 3 letters at least')
-      .max(50, 'Checkin location 50 letters at maximum'),
+      .min(5, 'Checkin location 5 letters at least')
+      .max(250, 'Checkin location 250 letters at maximum'),
     checkin_date_other: Yup.date().required('Checkin Date is required'),
     checkin_time_other: Yup.string().required('Checkin Time is required'),
     checkout_location_other: Yup.string()
       .required('Checkout location is required')
-      .min(3, 'Checkout location 3 letters at least')
-      .max(50, 'Checkout location 50 letters at maximum'),
+      .min(5, 'Checkout location 5 letters at least')
+      .max(250, 'Checkout location 250 letters at maximum'),
     checkout_date_other: Yup.date().required('Checkout Date is required'),
     checkout_time_other: Yup.string().required('Checkout Time is required'),
     paid_fee: Yup.string().required('Paid fee is required.'),
