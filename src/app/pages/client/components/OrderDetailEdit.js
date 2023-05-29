@@ -37,6 +37,8 @@ export const OrderDetailEdit = (props) => {
     permitExtend: true,
   })
 
+  const [permitRetrieve, setPermitRetrieve] = useState(true)
+
   const timelist = [
     {
       value: 0,
@@ -61,6 +63,12 @@ export const OrderDetailEdit = (props) => {
       setAddress(order.emptyout_location_other)
       getPermitEdit()
       dispatch(setStoreExtendDate(order?.storage_expired_date))
+
+      if (dayjs() <= dayjs(order?.storage_expired_date)) {
+        setPermitRetrieve(true)
+      } else {
+        setPermitRetrieve(false)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
@@ -450,11 +458,7 @@ export const OrderDetailEdit = (props) => {
                     inputFormat='DD/MM/YYYY'
                     value={retrievalDate}
                     disabled
-                    minDate={
-                      dayjs() > dayjs(order?.emptyout_date_other)
-                        ? dayjs()
-                        : dayjs(order?.emptyout_date_other)
-                    }
+                    minDate={dayjs(order?.emptyout_date_other)}
                     maxDate={dayjs(order?.storage_expired_date)}
                     onChange={handleRetrievalDateChange}
                     renderInput={(params) => (
@@ -476,13 +480,15 @@ export const OrderDetailEdit = (props) => {
                     <Link
                       to={
                         permitEdit.permitRetrieval &&
-                        dayjs(retrievalDate) <= dayjs(order?.storage_expired_date)
+                        dayjs(retrievalDate) <= dayjs(order?.storage_expired_date) &&
+                        permitRetrieve
                           ? '/client/order/retrieval/' + id
                           : '#'
                       }
                       className={
                         permitEdit.permitRetrieval &&
-                        dayjs(retrievalDate) <= dayjs(order?.storage_expired_date)
+                        dayjs(retrievalDate) <= dayjs(order?.storage_expired_date) &&
+                        permitRetrieve
                           ? 'custom-btn hand'
                           : 'custom-btn disabled-btn'
                       }
