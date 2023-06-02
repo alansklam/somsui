@@ -18,6 +18,7 @@ export const OrderDetailEdit = (props) => {
   const {t} = useTranslation()
   const dispatch = useDispatch()
   const isLoading = useSelector((state) => state.client.loading)
+  const settings = useSelector((state) => state.client.products.soms_settings)
   const [notify, setNotify] = useState({title: '', message: '', visible: false, status: 0})
   const [deliveryDate, setDeliveryDate] = useState('')
   const [ladenReturnDate, setLadenReturnDate] = useState('')
@@ -28,6 +29,7 @@ export const OrderDetailEdit = (props) => {
   const [retrievalDate, setRetrievalDate] = useState(dayjs())
   const [extendDate, setExtendDate] = useState(dayjs())
   const [address, setAddress] = useState('')
+  const [additionalDate, setAdditionalDate] = useState(0)
 
   const [permitEdit, setPermitEdit] = useState({
     permitDelivery: true,
@@ -49,6 +51,16 @@ export const OrderDetailEdit = (props) => {
       label: '13:00 - 18:00',
     },
   ]
+
+  useEffect(() => {
+    if (settings) {
+      settings.forEach((item) => {
+        if (item.code === 'ORDER_ADDITIONAL_DATE') {
+          setAdditionalDate(parseInt(item.value))
+        }
+      })
+    }
+  }, [settings])
 
   useEffect(() => {
     if (order.emptyout_date_other !== undefined) {
@@ -183,47 +195,30 @@ export const OrderDetailEdit = (props) => {
   })
 
   const handleDeliveryDateChange = (newValue) => {
-    // let __stuffInfo = stuffInfo;
-    // __stuffInfo = ({...__stuffInfo, deliveryDate: newValue.format("YYYY-MM-DD")});
     setDeliveryDate(newValue)
     if (newValue >= dayjs(ladenReturnDate)) {
       setLadenReturnDate(newValue)
-      // __stuffInfo = ({...__stuffInfo, ladenReturnDate: newValue.format("YYYY-MM-DD")});
-      // let __expirationDate = newValue.add(props.storage_month, 'month');
-      // setExpirationDate(__expirationDate);
-      // __stuffInfo = ({...__stuffInfo, expirationDate: newValue.format("YYYY-MM-DD")});
     }
-    // setStuffInfo(__stuffInfo);
   }
+
   const handleLadenReturnDateChange = (newValue) => {
-    // let __stuffInfo = stuffInfo;
-    // __stuffInfo = ({...__stuffInfo, ladenReturnDate: newValue.format("YYYY-MM-DD")});
     setLadenReturnDate(newValue)
-    // let __expirationDate = newValue.add(props.storage_month, 'month');
-    // setExpirationDate(__expirationDate);
-    // __stuffInfo = ({...__stuffInfo, expirationDate: __expirationDate.format("YYYY-MM-DD")});
     if (newValue >= dayjs(tentativeDate)) {
       setTentativeDate(newValue)
-      //   __stuffInfo = ({...__stuffInfo, tentativeDate: newValue.format("YYYY-MM-DD")});
     }
-    // setStuffInfo(__stuffInfo);
   }
+
   const handleTentativeDateChange = (newValue) => {
-    // let __stuffInfo = stuffInfo;
-    // __stuffInfo = ({...__stuffInfo, tentativeDate: newValue.format("YYYY-MM-DD")});
     setTentativeDate(newValue)
-    // if(newValue >= dayjs(expirationDate)) {
-    //     setExpirationDate(newValue);
-    //     __stuffInfo = ({...__stuffInfo, expirationDate: newValue.format("YYYY-MM-DD")});
-    // }
-    // setStuffInfo(__stuffInfo);
   }
+
   const handleRetrievalDateChange = (newValue) => {
     setRetrievalDate(newValue)
     if (newValue >= dayjs(extendDate)) {
       setExtendDate(newValue)
     }
   }
+
   const handleExtendDateChange = (newValue) => {
     setExtendDate(newValue)
     dispatch(setStoreExtendDate(newValue))
@@ -231,24 +226,14 @@ export const OrderDetailEdit = (props) => {
 
   const handleDeliveryTimeChange = (e) => {
     setDeliveryTimeIndex(e.target.value)
-    // setStuffInfo({...stuffInfo,
-    //     deliveryTimeIndex: e.target.value,
-    //     deliveryTime: timelist[e.target.value].label
-    // });
   }
+
   const handleLadenReturnTimeChange = (e) => {
     setLadenReturnTimeIndex(e.target.value)
-    // setStuffInfo({...stuffInfo,
-    //     ladenReturnTimeIndex: e.target.value,
-    //     ladenReturnTime: timelist[e.target.value].label
-    // });
   }
+
   const handleTentativeTimeChange = (e) => {
     setTentativeTimeIndex(e.target.value)
-    // setStuffInfo({...stuffInfo,
-    //     tentativeTimeIndex: e.target.value,
-    //     tentativeTime: timelist[e.target.value].label
-    // });
   }
 
   const updateOrderHandler = () => {
@@ -298,7 +283,9 @@ export const OrderDetailEdit = (props) => {
               <DesktopDatePicker
                 label={t('common.wd-empty-box-delivery')}
                 inputFormat='DD/MM/YYYY'
-                minDate={order?.emptyout_date_other}
+                minDate={
+                  dayjs().add(additionalDate + 1, 'day').format('YYYY-MM-DD')
+                }
                 maxDate={order?.storage_expired_date}
                 value={deliveryDate}
                 onChange={handleDeliveryDateChange}
@@ -342,7 +329,9 @@ export const OrderDetailEdit = (props) => {
                 label={t('common.wd-laden-return-date')}
                 inputFormat='DD/MM/YYYY'
                 value={ladenReturnDate}
-                minDate={deliveryDate}
+                minDate={
+                  dayjs().add(additionalDate + 1, 'day').format('YYYY-MM-DD')
+                }
                 maxDate={dayjs(deliveryDate).add(14, 'day')}
                 onChange={handleLadenReturnDateChange}
                 disabled={!permitEdit.permitLadenReturn}

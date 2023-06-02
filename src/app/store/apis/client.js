@@ -95,3 +95,11 @@ export function fetchRetrievalDatesApi() {
     },
   })
 }
+
+export function fetchRetrievalLimitApi(params) {
+  return axios.post('client/retrieval-limit', params, {
+    headers: {
+      'content-type': 'text/json',
+    },
+  })
+}

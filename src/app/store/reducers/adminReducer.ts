@@ -15,6 +15,17 @@ const initialState: AdminState = {
     },
     filterData: {},
   },
+  settings: {
+    data: [],
+    pagination: {
+      total: 10,
+      perPage: 20,
+      page: 1,
+      orderBy: undefined,
+      sort: undefined,
+    },
+    filterData: {},
+  },
   items: {
     data: [],
     pagination: {
@@ -115,6 +126,18 @@ export const adminReducer = (state = initialState, action: AdminAction): AdminSt
         loading: false,
         periods: {
           ...state.periods,
+          data: action.payload.data,
+          pagination: action.payload.pagination,
+        },
+        // periods: action.payload.data,
+        // pagination: action.payload.pagination,
+      }
+    case AdminActionTypes.FETCH_SETTINGS:
+      return {
+        ...state,
+        loading: false,
+        settings: {
+          ...state.settings,
           data: action.payload.data,
           pagination: action.payload.pagination,
         },

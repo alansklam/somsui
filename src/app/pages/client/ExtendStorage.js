@@ -467,7 +467,7 @@ export const ExtendStorage = () => {
                             />
                           )
                         default:
-                          return <></>
+                          return <div key={index}></div>
                       }
                     })}
                   </RadioGroup>

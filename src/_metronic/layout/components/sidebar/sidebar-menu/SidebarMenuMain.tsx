@@ -100,6 +100,12 @@ const SidebarMenuMain = () => {
             />
           ))}
       </SidebarMenuItemWithSub>
+      <SidebarMenuItem
+        to='/admin/settings'
+        icon='/media/icons/duotune/general/gen054.svg'
+        title={'Settings'}
+        fontIcon='bi-app-indicator'
+      />
     </>
   )
 }

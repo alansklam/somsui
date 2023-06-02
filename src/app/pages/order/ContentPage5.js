@@ -310,7 +310,7 @@ export default function ContentPage5(props) {
                           />
                         )
                       default:
-                        return <></>
+                        return <div key={index}></div>
                     }
                   })}
                 </RadioGroup>

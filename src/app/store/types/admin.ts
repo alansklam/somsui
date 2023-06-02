@@ -3,6 +3,7 @@ export interface AdminState {
   products: any[]
   ref: any
   periods: any
+  settings: any
   items: any
   clients: any
   promotions: any
@@ -23,6 +24,8 @@ export enum AdminActionTypes {
   FETCH_PRODUCTS = 'FETCH_PRODUCTS',
   FETCH_PERIODS = 'FETCH_PERIODS',
   UPDATE_PERIODS_FILTER_DATA = 'UPDATE_PERIODS_FILTER_DATA',
+  FETCH_SETTINGS = 'FETCH_SETTINGS',
+  UPDATE_SETTINGS_FILTER_DATA = 'UPDATE_SETTINGS_FILTER_DATA',
   FETCH_ITEMS = 'FETCH_ITEMS',
   UPDATE_ITEMS_FILTER_DATA = 'UPDATE_ITEMS_FILTER_DATA',
   FETCH_CLIENTS = 'FETCH_CLIENTS',
@@ -65,6 +68,14 @@ interface fetchPeriods {
 }
 interface UpdatePeriodsFilterData {
   type: AdminActionTypes.UPDATE_PERIODS_FILTER_DATA
+  payload: any
+}
+interface fetchSettings {
+  type: AdminActionTypes.FETCH_SETTINGS
+  payload: any
+}
+interface UpdateSettingsFilterData {
+  type: AdminActionTypes.UPDATE_SETTINGS_FILTER_DATA
   payload: any
 }
 interface fetchItems {
@@ -135,6 +146,8 @@ export type AdminAction =
   | FetchProducts
   | fetchPeriods
   | UpdatePeriodsFilterData
+  | fetchSettings
+  | UpdateSettingsFilterData
   | fetchItems
   | UpdateItemsFilterData
   | fetchClients

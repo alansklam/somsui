@@ -11,10 +11,20 @@ import CssTextField from '../../../components/custom-components/TextField'
 import Quantity from '../../../components/quantity'
 import {useDispatch, useSelector} from 'react-redux'
 import {fetchRetrievalDates} from '../../../store/actions/client'
+import {fetchRetrievalLimitApi} from '../../../store/apis/client'
+import {showNotification} from '../../admin/components/notification'
 
 export default function RetrievalEdit(props) {
-  const {order, products, retrievalOrder, setRetrievalOrder, cartInfo, setCartInfo, onCartHandler} =
-    props
+  const {
+    order,
+    products,
+    retrievalOrder,
+    setRetrievalOrder,
+    cartInfo,
+    setCartInfo,
+    onCartHandler,
+    setPermitRetrieve,
+  } = props
   const {t} = useTranslation()
   const dispatch = useDispatch()
   const freeRetrievalDates = useSelector((state) => state.client.retrievalDates)
@@ -121,6 +131,26 @@ export default function RetrievalEdit(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [freeDeliveryState])
+
+  useEffect(() => {
+    if (retrievalDate && typeof retrievalDate === 'string') {
+      fetchRetrievalLimitApi({date: dayjs(retrievalDate).format('YYYY-MM-DD')})
+        .then((res) => {
+          let __limit_retrieval = res.data.limit_retrieval
+          if (__limit_retrieval && __limit_retrieval.available_state === 0) {
+            setPermitRetrieve(true)
+          } else {
+            setPermitRetrieve(false)
+            showNotification(
+              'error',
+              'Error',
+              'Select the other date. The number of orders was over the max.'
+            )
+          }
+        })
+        .catch((err) => {})
+    }
+  }, [retrievalDate])
 
   const getQrcode = () => {
     let __qr_code = order?.remark_qrcode ? order?.remark_qrcode : ''

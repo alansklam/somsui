@@ -192,6 +192,42 @@ export function deletePeriodsApi(params) {
   )
 }
 
+export function fetchSettingsApi(params) {
+  return axios.post(
+    `/admin/fetchSettings`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function editSettingsApi(params) {
+  return axios.post(
+    `/admin/editSetting`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
+export function deleteSettingsApi(params) {
+  return axios.post(
+    `/admin/deleteSetting`,
+    {...params},
+    {
+      headers: {
+        'content-type': 'text/json',
+      },
+    }
+  )
+}
+
 export function fetchPaymentsApi(params) {
   return axios.post(
     `/admin/fetchPayments`,

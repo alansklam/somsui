@@ -294,7 +294,7 @@ export const PaymentDetail = (props) => {
                           />
                         )
                       default:
-                        return <></>
+                        return <div key={index}></div>
                     }
                   })}
                 </RadioGroup>

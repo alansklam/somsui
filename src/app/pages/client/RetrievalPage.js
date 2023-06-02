@@ -45,6 +45,7 @@ export default function RetrievalPage(props) {
   })
   const [orderState, setOrderState] = useState(false)
   const [confirmOrder, setConfirmOrder] = useState({})
+  const [permitRetrieve, setPermitRetrieve] = useState(true)
 
   useEffect(() => {
     setInitial(true)
@@ -145,15 +146,18 @@ export default function RetrievalPage(props) {
                   cartInfo={cartInfo}
                   setCartInfo={setCartInfo}
                   onCartHandler={onCartHandler}
+                  setPermitRetrieve={setPermitRetrieve}
                 />
-                <PaymentMethod
-                  cartInfo={cartInfo}
-                  retrievalOrder={retrievalOrder}
-                  orderId={id}
-                  confirmOrder={confirmOrder}
-                  setConfirmOrder={setConfirmOrder}
-                  setOrderState={setOrderState}
-                />
+                {permitRetrieve && (
+                  <PaymentMethod
+                    cartInfo={cartInfo}
+                    retrievalOrder={retrievalOrder}
+                    orderId={id}
+                    confirmOrder={confirmOrder}
+                    setConfirmOrder={setConfirmOrder}
+                    setOrderState={setOrderState}
+                  />
+                )}
               </>
             ) : (
               <div className='content-container thanks'>
