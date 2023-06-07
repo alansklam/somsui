@@ -1,12 +1,10 @@
 import {Link} from 'react-router-dom'
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {useClientsListView} from '../core/ClientsListViewProvider'
-import {useNavigate} from 'react-router-dom'
 import dayjs from 'dayjs'
 
 export const ClientsTableBody = (props: any) => {
   const {listData, setListData} = props
-  const navigateTo = useNavigate()
   const {setItemIdForUpdate, setItemIdForDelete} = useClientsListView()
 
   const selectHandler = (index: number, state: boolean) => {
@@ -35,16 +33,16 @@ export const ClientsTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex align-items-center'>
-                  <span
+                  <Link
+                    to={'edit?clientId=' + data.id}
                     className='text-blue fw-bold fs-6'
                     style={{cursor: 'pointer'}}
                     onClick={() => {
                       setItemIdForUpdate(index)
-                      navigateTo('edit?clientId=' + data.id)
                     }}
                   >
                     {data.name}
-                  </span>
+                  </Link>
                 </div>
               </td>
               <td className='text-center'>

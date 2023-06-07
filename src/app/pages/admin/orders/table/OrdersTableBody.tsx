@@ -2,7 +2,6 @@ import {useOrdersListView} from '../core/OrdersListViewProvider'
 import {Link} from 'react-router-dom'
 import {sendInvoiceApi} from '../../../../store/apis/admin'
 import {notification} from 'antd'
-import {useNavigate} from 'react-router-dom'
 import {RootState} from '../../../../store/reducers'
 import {useSelector} from 'react-redux'
 import dayjs from 'dayjs'
@@ -10,7 +9,6 @@ import {OrderActionList} from '../components/action'
 
 export const OrdersTableBody = (props: any) => {
   const {listData, setListData} = props
-  const navigateTo = useNavigate()
   const {setItemIdForUpdate, setClientIdForUpdate} = useOrdersListView()
   const products = useSelector((state: RootState) => state.admin.products)
   const materialItems = useSelector((state: RootState) => state.admin.ref.materialItems)
@@ -97,22 +95,22 @@ export const OrdersTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex align-items-center'>
-                  <span
+                  <Link
+                    to={'/admin/clients/edit?clientId=' + data.client.id}
                     className='text-blue fw-bold fs-6'
                     style={{cursor: 'pointer'}}
                     onClick={() => {
-                      navigateTo('/admin/clients/edit?clientId=' + data.client.id)
                       setClientIdForUpdate(index)
                     }}
                   >
                     {data.client?.name}
-                  </span>
+                  </Link>
                 </div>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
               </td>
-              <td>
+              <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.email}</span>
               </td>
               <td className='text-center'>
@@ -128,16 +126,16 @@ export const OrdersTableBody = (props: any) => {
               </td>
 
               <td className='text-center'>
-                <span
+                <Link
+                  to={'/admin/orders/edit?orderId=' + data.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                   onClick={() => {
-                    navigateTo('/admin/orders/edit?orderId=' + data.id)
                     setItemIdForUpdate(index)
                   }}
                 >
                   {data?.code}
-                </span>
+                </Link>
               </td>
               {products &&
                 products.length > 0 &&

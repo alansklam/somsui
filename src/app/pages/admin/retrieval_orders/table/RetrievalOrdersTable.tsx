@@ -55,10 +55,10 @@ const RetrievalOrdersTable = () => {
   }, [listData, setSelected])
 
   return (
-    <KTCardBody className='py-4'>
-      <div className='card-body py-3' style={{position: 'relative'}}>
+    <KTCardBody className='py-4 px-0'>
+      <div className='card-body py-3 px-0' style={{position: 'relative'}}>
         <div className='table-responsive min-h-300px'>
-          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gx-1 gy-3'>
             <thead>
               <tr className='fw-bold text-muted align-middle fs-6'>
                 <th className='w-25px'>
@@ -79,7 +79,7 @@ const RetrievalOrdersTable = () => {
                     />
                   </div>
                 </th>
-                <th className='min-w-125px'>
+                <th className=''>
                   <div
                     className={
                       pagination.orderBy === 'name'
@@ -96,7 +96,7 @@ const RetrievalOrdersTable = () => {
                     Name
                   </div>
                 </th>
-                <th className='min-w-100px text-center'>
+                <th className=' text-center'>
                   <div
                     className={
                       pagination.orderBy === 'student_id'
@@ -113,7 +113,7 @@ const RetrievalOrdersTable = () => {
                     Student ID
                   </div>
                 </th>
-                <th className='min-w-150px'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'email'
@@ -130,7 +130,7 @@ const RetrievalOrdersTable = () => {
                     Email
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'contact'
@@ -147,7 +147,7 @@ const RetrievalOrdersTable = () => {
                     Contact Number
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className=' text-center'>
                   <div
                     className={
                       pagination.orderBy === 'mobile_phone_cn'
@@ -164,7 +164,7 @@ const RetrievalOrdersTable = () => {
                     Phone CN
                   </div>
                 </th>
-                <th className='min-w-100px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'wechat'
@@ -182,7 +182,7 @@ const RetrievalOrdersTable = () => {
                   </div>
                 </th>
 
-                <th className='min-w-150px text-center'>
+                <th className='text-center min-w-70px'>
                   <div
                     className={
                       pagination.orderBy === 'code'
@@ -199,7 +199,7 @@ const RetrievalOrdersTable = () => {
                     Retrieval Order ID
                   </div>
                 </th>
-                <th className='min-w-150px text-center'>
+                <th className='text-center min-w-70px'>
                   <div
                     className={
                       pagination.orderBy === 'order_id'
@@ -259,7 +259,7 @@ const RetrievalOrdersTable = () => {
                     Storage period(month)
                   </div>
                 </th> */}
-                <th className='min-w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'walkup'
@@ -276,7 +276,7 @@ const RetrievalOrdersTable = () => {
                     Walk up
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className='text-center min-w-75px'>
                   <div
                     className={
                       pagination.orderBy === 'checkout_date_other'
@@ -293,7 +293,7 @@ const RetrievalOrdersTable = () => {
                     Pick-up date
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className='text-center min-w-75px'>
                   <div
                     className={
                       pagination.orderBy === 'checkout_date_other'
@@ -310,7 +310,7 @@ const RetrievalOrdersTable = () => {
                     Empty box Return Date
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'updated_at'
@@ -327,7 +327,7 @@ const RetrievalOrdersTable = () => {
                     Pick-up location
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'special_instruction'
@@ -344,7 +344,7 @@ const RetrievalOrdersTable = () => {
                     Special requirement
                   </div>
                 </th>
-                <th className='min-w-125px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'remark_qr_code'
@@ -361,7 +361,7 @@ const RetrievalOrdersTable = () => {
                     QR Code
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'total_fee'
@@ -378,7 +378,7 @@ const RetrievalOrdersTable = () => {
                     Lump sum
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'paid_fee'
@@ -395,7 +395,7 @@ const RetrievalOrdersTable = () => {
                     Paid amount
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'balance'

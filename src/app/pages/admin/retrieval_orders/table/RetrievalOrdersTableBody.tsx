@@ -1,13 +1,11 @@
 import {useRetrievalOrdersListView} from '../core/RetrievalOrdersListViewProvider'
 import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {useNavigate} from 'react-router-dom'
 import {RootState} from '../../../../store/reducers'
 import dayjs from 'dayjs'
 
 export const RetrievalOrdersTableBody = (props: any) => {
   const {listData, setListData} = props
-  const navigateTo = useNavigate()
   const {setClientIdForUpdate, setRetrievalOrderIdForUpdate} = useRetrievalOrdersListView()
   const products = useSelector((state: RootState) => state.admin.products)
 
@@ -66,22 +64,23 @@ export const RetrievalOrdersTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex align-items-center'>
-                  <span
+                  <Link
+                    to={'/admin/clients/edit?clientId=' + data.client.id}
                     className='text-blue fw-bold fs-6'
                     style={{cursor: 'pointer'}}
                     onClick={() => {
                       setClientIdForUpdate(index)
-                      navigateTo('/admin/clients/edit?clientId=' + data.client.id)
+                      // navigateTo('/admin/clients/edit?clientId=' + data.client.id)
                     }}
                   >
                     {data.client?.name}
-                  </span>
+                  </Link>
                 </div>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.student_id}</span>
               </td>
-              <td>
+              <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.client?.email}</span>
               </td>
               <td className='text-center'>
@@ -97,28 +96,28 @@ export const RetrievalOrdersTableBody = (props: any) => {
               </td>
 
               <td className='text-center'>
-                <span
+                <Link
+                  to={'edit?retrievalOrderId=' + data.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                   onClick={() => {
                     setRetrievalOrderIdForUpdate(index)
-                    navigateTo('edit?retrievalOrderId=' + data.id)
                   }}
                 >
                   {data.code}
-                </span>
+                </Link>
               </td>
               <td className='text-center'>
-                <span
+                <Link
+                  to={'/admin/orders/edit?orderId=' + data.order.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                   onClick={() => {
                     setRetrievalOrderIdForUpdate(index)
-                    navigateTo('/admin/orders/edit?orderId=' + data.order.id)
                   }}
                 >
                   {data.order?.code}
-                </span>
+                </Link>
               </td>
               {products &&
                 products.length > 0 &&

@@ -1,11 +1,10 @@
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {usePromotionsListView} from '../core/PromotionsListViewProvider'
-import {useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 
 export const PromotionsTableBody = (props: any) => {
   const {listData, setListData} = props
-  const navigateTo = useNavigate()
   const {setItemIdForUpdate, setItemIdForDelete} = usePromotionsListView()
 
   const selectHandler = (index: number, state: boolean) => {
@@ -34,16 +33,16 @@ export const PromotionsTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex align-items-center'>
-                  <span
+                  <Link
+                    to={'edit?promotionId=' + data.id}
                     className='text-blue fw-bold fs-6'
                     style={{cursor: 'pointer'}}
                     onClick={() => {
-                      navigateTo('edit?promotionId=' + data.id)
                       setItemIdForUpdate(index)
                     }}
                   >
                     {data.code}
-                  </span>
+                  </Link>
                 </div>
               </td>
               <td>

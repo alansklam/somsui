@@ -1,11 +1,10 @@
 import {KTSVG} from '../../../../../_metronic/helpers'
 import {useListView} from '../core/PeriodsListViewProvider'
-import {useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 
 export const PeriodsTableBody = (props: any) => {
   const {listData, setListData} = props
-  const navigateTo = useNavigate()
   const {setItemIdForUpdate, setItemIdForDelete, setItemIdForEdit} = useListView()
 
   const selectHandler = (index: number, state: boolean) => {
@@ -61,15 +60,15 @@ export const PeriodsTableBody = (props: any) => {
               </td>
               <td>
                 <div className='d-flex flex-end flex-shrink-0'>
-                  <span
+                  <Link
+                    to={'edit-item?period_id=' + data.id}
                     className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mx-1'
                     onClick={(e) => {
-                      navigateTo('edit-item?period_id=' + data.id)
                       setItemIdForEdit(index)
                     }}
                   >
                     <KTSVG path='/media/icons/duotune/general/gen055.svg' className='svg-icon-3' />
-                  </span>
+                  </Link>
                   <span
                     className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mx-1'
                     onClick={(e) => {

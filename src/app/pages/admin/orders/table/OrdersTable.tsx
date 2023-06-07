@@ -58,10 +58,10 @@ const OrdersTable = () => {
   }, [listData, setSelected])
 
   return (
-    <KTCardBody className='py-4'>
-      <div className='card-body py-3' style={{position: 'relative'}}>
+    <KTCardBody className='py-4 px-0'>
+      <div className='card-body py-3 px-0' style={{position: 'relative'}}>
         <div className='table-responsive min-h-300px'>
-          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-2 gx-2'>
+          <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-3 gx-1'>
             <thead>
               <tr className='fw-bold text-muted align-middle fs-6'>
                 <th className='w-25px'>
@@ -82,7 +82,7 @@ const OrdersTable = () => {
                     />
                   </div>
                 </th>
-                <th className='w-50px'>
+                <th className=''>
                   <div
                     className={
                       pagination.orderBy === 'name'
@@ -99,7 +99,7 @@ const OrdersTable = () => {
                     Name
                   </div>
                 </th>
-                <th className='w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'student_id'
@@ -116,7 +116,7 @@ const OrdersTable = () => {
                     Student ID
                   </div>
                 </th>
-                <th className='w-100px'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'email'
@@ -133,7 +133,7 @@ const OrdersTable = () => {
                     Email
                   </div>
                 </th>
-                <th className='w-75px text-center'>
+                <th className=' text-center'>
                   <div
                     className={
                       pagination.orderBy === 'contact'
@@ -150,7 +150,7 @@ const OrdersTable = () => {
                     Contact Number
                   </div>
                 </th>
-                <th className='w-50px text-center'>
+                <th className=' text-center'>
                   <div
                     className={
                       pagination.orderBy === 'mobile_phone_cn'
@@ -167,7 +167,7 @@ const OrdersTable = () => {
                     Phone CN
                   </div>
                 </th>
-                <th className='w-50px text-center'>
+                <th className=' text-center'>
                   <div
                     className={
                       pagination.orderBy === 'wechat'
@@ -185,7 +185,7 @@ const OrdersTable = () => {
                   </div>
                 </th>
 
-                <th className='w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'code'
@@ -206,7 +206,7 @@ const OrdersTable = () => {
                   products.length > 0 &&
                   products.map((item, index) =>
                     item.top_state === 1 ? (
-                      <th className='w-50px text-center' key={index}>
+                      <th className=' text-center' key={index}>
                         <div
                           className={
                             pagination.orderBy === 'paperBoxes'
@@ -231,7 +231,7 @@ const OrdersTable = () => {
                   materialItems.length > 0 &&
                   materialItems.map((item: any, index: number) =>
                     item.top_state === 1 ? (
-                      <th className='w-50px text-center' key={index}>
+                      <th className='text-center' key={index}>
                         <div
                           className={
                             pagination.orderBy === 'paperBoxes'
@@ -252,7 +252,7 @@ const OrdersTable = () => {
                       <th key={index} style={{padding: '0px'}}></th>
                     )
                   )}
-                <th className='w-50px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'storage_month'
@@ -269,7 +269,7 @@ const OrdersTable = () => {
                     Storage period (month)
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center min-w-60px'>
                   <div
                     className={
                       pagination.orderBy === 'emptyout_date_other'
@@ -286,7 +286,7 @@ const OrdersTable = () => {
                     Empty box date
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center min-w-60px'>
                   <div
                     className={
                       pagination.orderBy === 'checkin_date_other'
@@ -303,7 +303,7 @@ const OrdersTable = () => {
                     Storage date
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center min-w-60px'>
                   <div
                     className={
                       pagination.orderBy === 'checkout_date_other'
@@ -320,7 +320,7 @@ const OrdersTable = () => {
                     Pick-up date
                   </div>
                 </th>
-                <th className='min-w-75px text-center'>
+                <th className='text-center min-w-60px'>
                   <div
                     className={
                       pagination.orderBy === 'storage_expired_date'
@@ -337,7 +337,7 @@ const OrdersTable = () => {
                     Storage expire date
                   </div>
                 </th>
-                <th className='w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'updated_at'
@@ -354,7 +354,7 @@ const OrdersTable = () => {
                     Pick-up location
                   </div>
                 </th>
-                <th className='w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'special_instruction'
@@ -371,7 +371,7 @@ const OrdersTable = () => {
                     Special requirement
                   </div>
                 </th>
-                <th className='w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'remark_qrcode'
@@ -388,7 +388,7 @@ const OrdersTable = () => {
                     QR Code
                   </div>
                 </th>
-                <th className='w-50px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'total_fee'
@@ -405,7 +405,7 @@ const OrdersTable = () => {
                     Lump sum
                   </div>
                 </th>
-                <th className='w-50px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'paid_fee'
@@ -422,7 +422,7 @@ const OrdersTable = () => {
                     Paid amount
                   </div>
                 </th>
-                <th className='w-50px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'balance'
@@ -439,7 +439,7 @@ const OrdersTable = () => {
                     Outstanding amount
                   </div>
                 </th>
-                <th className='w-75px text-center'>
+                <th className='text-center'>
                   <div
                     className={
                       pagination.orderBy === 'order_status_id'
@@ -456,7 +456,7 @@ const OrdersTable = () => {
                     Order status
                   </div>
                 </th>
-                <th className='w-75px text-end'>Action</th>
+                <th className='text-end'>Action</th>
               </tr>
             </thead>
             <tbody>

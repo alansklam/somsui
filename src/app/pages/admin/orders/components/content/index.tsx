@@ -46,6 +46,7 @@ const ContentOrder = (props: propState) => {
   const [orderStatusId, setOrderStatusId] = useState('')
   const [specialInstruction, setSpecialInstruction] = useState('')
   const [lumpSum, setLumpSum] = useState('')
+  const [deliveryFee, setDeliveryFee] = useState('')
   const [storageMonth, setStorageMonth] = useState('')
   const [storageLocation, setStorageLocation] = useState('')
   // const [clients, setClients] = useState<any[]>([])
@@ -166,6 +167,7 @@ const ContentOrder = (props: propState) => {
           storage_month: storageMonth,
           product_total_fee: productTotalFee,
           total_fee: lumpSum,
+          delivery_service_fee: deliveryFee,
           remark_location: storageLocation,
           remark_qrcode: qrCode,
           storage_expired_date: storageExpireDate,
@@ -223,6 +225,7 @@ const ContentOrder = (props: propState) => {
     setPaymentStatusId(order.payment_status_id ? order.payment_status_id : '1')
     setSpecialInstruction(order.special_instruction ? order.special_instruction : '')
     setLumpSum(order.total_fee ? order.total_fee : '0')
+    setDeliveryFee(order.delivery_service_fee ? order.delivery_service_fee : '0.00')
     setQrCode(order.remark_qrcode ? order.remark_qrcode : '')
     setSelectedClient({
       value: order.client?.id ? order.client?.id : undefined,
@@ -293,13 +296,13 @@ const ContentOrder = (props: propState) => {
       __product_total_fee = 0
     }
     setProductTotalFee(__product_total_fee.toFixed(2))
-    let __totalFee = __subTotalFee * __months + __packageFee
+    let __totalFee = __subTotalFee * __months + __packageFee + parseFloat(deliveryFee)
     if (isNaN(__totalFee)) {
       __totalFee = 0
     }
     setLumpSum(__totalFee.toFixed(2))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formik.values, orderItems, storageExpireDate])
+  }, [formik.values, orderItems, storageExpireDate, deliveryFee])
 
   const defaultMaterialTheme = createTheme({})
 
@@ -857,6 +860,28 @@ const ContentOrder = (props: propState) => {
                                 </span>
                               </div>
                             </>
+
+                            <div className='row py-3 flex items-center'>
+                              <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                                <span className=''>Delivery fee</span>
+                              </label>
+                              <div className='col-lg-8 fv-row'>
+                                <input
+                                  type='string'
+                                  className='form-control form-control-lg form-control-solid'
+                                  placeholder='Delivery fee'
+                                  onChange={(e) => {
+                                    let __fee = parseFloat(e.target.value)
+                                    let __deliveryFee = '0.00'
+                                    if (!isNaN(__fee)) {
+                                      __deliveryFee = e.target.value
+                                    }
+                                    setDeliveryFee(__deliveryFee)
+                                  }}
+                                  value={deliveryFee}
+                                />
+                              </div>
+                            </div>
 
                             <div className='row py-3 flex items-center'>
                               <label className='col-lg-4 col-form-label fw-bold fs-6'>

@@ -18,8 +18,6 @@ const OrdersListPage = () => {
         <OrdersTable />
       </KTCard>
 
-      {clientIdForUpdate !== undefined && <OrdersClientEditModal />}
-      {itemIdForUpdate !== undefined && <OrdersAddModal />}
       {itemIdForDelete !== undefined && <OrdersDeleteModal />}
       {isLoading && <LoadingSpinner />}
     </div>

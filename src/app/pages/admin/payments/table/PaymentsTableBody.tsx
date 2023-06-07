@@ -1,11 +1,10 @@
 import {usePaymentsListView} from '../core/PaymentsListViewProvider'
 import {paymentPaidApi, paymentCancelledApi} from '../../../../store/apis/admin'
-import {useNavigate} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import dayjs from 'dayjs'
 
 export const PaymentsTableBody = (props: any) => {
   const {listData, setListData, paymentRemarkId} = props
-  const navigateTo = useNavigate()
   const {setClientIdForUpdate, setOrderIdForUpdate, fetchPaymentsFunc} = usePaymentsListView()
 
   const selectHandler = (index: number, state: boolean) => {
@@ -62,34 +61,34 @@ export const PaymentsTableBody = (props: any) => {
                 </div>
               </td>
               <td className='text-center'>
-                <span
+                <Link
+                  to={'/admin/clients/edit?clientId=' + data.order.client.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                   onClick={() => {
-                    navigateTo('/admin/clients/edit?clientId=' + data.order.client.id)
                     setClientIdForUpdate(index)
                   }}
                 >
                   {data.order?.client?.name}
-                </span>
+                </Link>
               </td>
               <td className='text-center'>
-                <span
+                <Link
+                  to={
+                    paymentRemarkId === 1
+                      ? '/admin/orders/edit?orderId=' + data.order_id
+                      : paymentRemarkId === 3
+                      ? '/admin/retrieval-order/edit?retrievalOrderId=' + data.retrieval_order_id
+                      : '#'
+                  }
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                   onClick={() => {
                     setOrderIdForUpdate(index)
-                    if (paymentRemarkId === 1) {
-                      navigateTo('/admin/orders/edit?orderId=' + data.order_id)
-                    } else if (paymentRemarkId === 3) {
-                      navigateTo(
-                        '/admin/retrieval-order/edit?retrievalOrderId=' + data.retrieval_order_id
-                      )
-                    }
                   }}
                 >
                   {paymentRemarkId === 1 ? data.order?.code : data.retrieval_order?.code}
-                </span>
+                </Link>
               </td>
               <td className='text-center'>
                 <span className='text-dark fw-bold d-block fs-6'>{data.amount}</span>
