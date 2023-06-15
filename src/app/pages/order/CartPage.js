@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {PlusOutlined} from '@ant-design/icons'
 import {Button, Input} from 'antd'
@@ -32,10 +32,6 @@ export default function CartPage(props) {
         setValidateStatus(true)
       })
   }
-
-  useEffect(() => {
-    console.log(props.carts)
-  }, [props.carts])
 
   return (
     <div className='cart-container'>

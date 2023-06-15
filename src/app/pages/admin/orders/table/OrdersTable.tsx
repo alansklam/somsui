@@ -41,6 +41,7 @@ const OrdersTable = () => {
 
   useEffect(() => {
     let __data = data
+    if(!__data) return;
     __data.length > 0 &&
       __data.forEach((element: any, index: number) => {
         element = {

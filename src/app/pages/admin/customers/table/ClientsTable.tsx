@@ -35,7 +35,8 @@ const ClientsTable = () => {
 
   useEffect(() => {
     let __data = data
-    __data.forEach((element: any, index: number) => {
+    if(!__data) return;
+    __data && __data.length > 0 && __data.forEach((element: any, index: number) => {
       element = {
         ...element,
         checked: false,

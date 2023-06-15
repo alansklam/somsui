@@ -1,4 +1,4 @@
-import { useState, FC, useEffect, useCallback } from "react";
+import { useState, FC} from "react";
 import { useTranslation } from "react-i18next";
 import { signup } from "../../../store/apis/auth";
 import CssTextField from "../../../components/custom-components/TextField";
@@ -111,20 +111,12 @@ const SignUp: FC<Props> = (props) => {
         });
     }
 
-    const keyEnter = useCallback((event:any) => {
-        if (event.key === "Enter") {
-          document.getElementById("submit_client_signup")?.click();
+    const keyEnter = (e: any) => {
+        let key = e.key;
+        if(key === "Enter") {
+            onSignUpFunc();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
-    
-    useEffect(() => {
-    document.addEventListener('keydown', keyEnter, false);
-    return () => {
-        document.removeEventListener('keydown', keyEnter, false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
         <>
@@ -139,6 +131,7 @@ const SignUp: FC<Props> = (props) => {
                         variant="standard"
                         value={email}
                         onChange={(e) => { setEmail(e.target.value) }}
+                        onKeyDown={(e) => {keyEnter(e)}}
                     />
                 </div>
                 <div className="mt-[10px] mb-[10px]">
@@ -154,6 +147,7 @@ const SignUp: FC<Props> = (props) => {
                          }}
                         value={password}
                         onChange={(e) => { setPassword(e.target.value) }}
+                        onKeyDown={(e) => {keyEnter(e)}}
                     />
                 </div>
                 <div className="mt-[10px] mb-[10px]">
@@ -165,6 +159,7 @@ const SignUp: FC<Props> = (props) => {
                         variant="standard"
                         value={name}
                         onChange={(e) => { setName(e.target.value) }}
+                        onKeyDown={(e) => {keyEnter(e)}}
                     />
                 </div>
                 <div className="mt-[10px] mb-[10px]">
@@ -176,6 +171,7 @@ const SignUp: FC<Props> = (props) => {
                         variant="standard"
                         value={contact}
                         onChange={(e) => { setContact(e.target.value) }}
+                        onKeyDown={(e) => {keyEnter(e)}}
                     />
                 </div>
             </div>

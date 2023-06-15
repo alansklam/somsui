@@ -12,7 +12,7 @@ import Quantity from '../../../components/quantity'
 import {useDispatch, useSelector} from 'react-redux'
 import {fetchRetrievalDates} from '../../../store/actions/client'
 import {fetchRetrievalLimitApi} from '../../../store/apis/client'
-import {showNotification} from '../../admin/components/notification'
+// import {showNotification} from '../../admin/components/notification'
 
 export default function RetrievalEdit(props) {
   const {
@@ -39,6 +39,7 @@ export default function RetrievalEdit(props) {
   const [needWalk, setNeedWalk] = useState(0)
   const [freeDates, setFreeDates] = useState([])
   const [freeDeliveryState, setFreeDeliveryState] = useState(false)
+  const [isMaxDate, setIsMaxDate] = useState(false)
   const allReturn = 1
 
   useEffect(() => {
@@ -139,17 +140,15 @@ export default function RetrievalEdit(props) {
           let __limit_retrieval = res.data.limit_retrieval
           if (__limit_retrieval && __limit_retrieval.available_state === 0) {
             setPermitRetrieve(true)
+            setIsMaxDate(false);
           } else {
             setPermitRetrieve(false)
-            showNotification(
-              'error',
-              'Error',
-              'Select the other date. The number of orders was over the max.'
-            )
+            setIsMaxDate(true);
           }
         })
         .catch((err) => {})
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [retrievalDate])
 
   const getQrcode = () => {
@@ -369,7 +368,7 @@ export default function RetrievalEdit(props) {
                     onChange={(e) => {
                       handleRetrievalDateChange(e.target.value)
                     }}
-                    className='mt-17'
+                    className='mt-17 relative'
                     helperText=''
                     variant='standard'
                   >
@@ -379,6 +378,9 @@ export default function RetrievalEdit(props) {
                       </MenuItem>
                     ))}
                   </CssTextField>
+                  {
+                    isMaxDate && <div className='absolute text-red pt-1'>Select the other date. The number of orders was over the max.</div>
+                  }
                 </Grid>
               ) : (
                 <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
@@ -402,6 +404,9 @@ export default function RetrievalEdit(props) {
                       />
                     )}
                   />
+                  {
+                    isMaxDate && <div className='absolute text-red pt-1'>The number of orders was over the max.</div>
+                  }
                 </Grid>
               )}
               {/* <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>

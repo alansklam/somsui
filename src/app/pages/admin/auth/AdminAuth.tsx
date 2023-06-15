@@ -33,6 +33,11 @@ export const AdminAuth = () => {
         })
           .then((res) => {
             localStorage.setItem('admin-user', JSON.stringify(res.data.user))
+            if(res.data.token) {
+              localStorage.setItem('admin-token', JSON.stringify(res.data.token))
+            } else {
+              localStorage.setItem('admin-token', JSON.stringify(""))
+            }
             window.location.href = '/admin'
           })
           .catch((err) => {

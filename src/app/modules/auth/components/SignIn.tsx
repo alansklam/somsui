@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {useState, FC, useEffect, useCallback} from 'react'
+import {useState, FC,} from 'react'
 import CssTextField from '../../../components/custom-components/TextField'
 import { ShowNotification } from '../../../components/notification'
 import { useTranslation } from 'react-i18next'
@@ -50,6 +50,11 @@ const SignIn: FC<Props> = (props) => {
     }).then((res) => {
         if (res.data.status === "success") {
             localStorage.setItem("ubox-user", JSON.stringify(res.data.user));
+            if(res.data.token) {
+              localStorage.setItem("client-token", JSON.stringify(res.data.token));
+            } else {
+              localStorage.setItem("client-token", JSON.stringify(""));
+            }
             localStorage.setItem("ubox-is-authenticated", '1');
 
             // navigate('/client/dashboard');
@@ -80,21 +85,6 @@ const SignIn: FC<Props> = (props) => {
     });
   }
 
-  const keyEnter = useCallback((event:any) => {
-    if (event.key === "Enter") {
-      document.getElementById("submit_client_sign")?.click();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    document.addEventListener('keydown', keyEnter, false);
-    return () => {
-      document.removeEventListener('keydown', keyEnter, false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <ShowNotification title={notify.title} message={notify.message} visible={notify.visible} status={notify.status} closeNotify={closeNotify} />
@@ -108,7 +98,12 @@ const SignIn: FC<Props> = (props) => {
             variant="standard"
             value={email}
             onChange={(e) => { setEmail(e.target.value) }}
-            onKeyDown={keyEnter}
+            onKeyDown={(e) => {
+              let key = e.key;
+              if(key === "Enter") {
+                onSignInFunc();
+              }
+            }}
           />
         </div>
         <div className="mt-[10px] mb-[10px]">
@@ -121,7 +116,12 @@ const SignIn: FC<Props> = (props) => {
             variant="standard"
             value={password}
             onChange={(e) => { setPassword(e.target.value) }}
-            onKeyDown={keyEnter}
+            onKeyDown={(e) => {
+              let key = e.key;
+              if(key === "Enter") {
+                onSignInFunc();
+              }
+            }}
           />
         </div>
       </div>

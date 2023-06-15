@@ -37,6 +37,7 @@ const RetrievalDateTable = () => {
 
   useEffect(() => {
     let __data = data
+    if(!__data) return;
     __data.forEach((element: any, index: number) => {
       element = {
         ...element,
