@@ -84,6 +84,11 @@ const SignUp: FC<Props> = (props) => {
             if (res.data.status === "success") {
                 localStorage.setItem("ubox-user", JSON.stringify(res.data.user));
                 localStorage.setItem("ubox-is-authenticated", '1');
+                if(res.data.token) {
+                    localStorage.setItem("client-token", JSON.stringify(res.data.token));
+                } else {
+                    localStorage.setItem("client-token", JSON.stringify(""));
+                };
                 // returnHandler(true);
                 setNotify({ title: 'success', message: "common.no-signup-success", visible: true, status: Math.floor(Math.random() * 100000) });
                 window.location.replace('/client/dashboard');

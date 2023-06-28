@@ -95,6 +95,11 @@ const SignUp = (props) => {
             if (res.data.status === "success") {
                 localStorage.setItem("ubox-user", JSON.stringify(res.data.user));
                 localStorage.setItem("ubox-is-authenticated", 1);
+                if(res.data.token) {
+                    localStorage.setItem("client-token", JSON.stringify(res.data.token));
+                } else {
+                    localStorage.setItem("client-token", JSON.stringify(""));
+                };
                 returnHandler(true);
                 setNotify({ title: 'error', message: "common.no-signup-success", visible: true, status: Math.floor(Math.random() * 100000) });
             } else {
@@ -127,6 +132,12 @@ const SignUp = (props) => {
                         variant="standard"
                         value={email}
                         onChange={(e) => { setEmail(e.target.value) }}
+                        onKeyDown={(e) => {
+                            let key = e.key;
+                            if(key === "Enter") {
+                                onSignUpFunc();
+                            }
+                        }}
                     />
                 </div>
                 <div className="mt-[10px] mb-[10px]">
@@ -139,6 +150,12 @@ const SignUp = (props) => {
                         variant="standard"
                         value={password}
                         onChange={(e) => { setPassword(e.target.value) }}
+                        onKeyDown={(e) => {
+                            let key = e.key;
+                            if(key === "Enter") {
+                                onSignUpFunc();
+                            }
+                        }}
                     />
                 </div>
                 <div className="mt-[10px] mb-[10px]">
@@ -150,6 +167,12 @@ const SignUp = (props) => {
                         variant="standard"
                         value={name}
                         onChange={(e) => { setName(e.target.value) }}
+                        onKeyDown={(e) => {
+                            let key = e.key;
+                            if(key === "Enter") {
+                                onSignUpFunc();
+                            }
+                        }}
                     />
                 </div>
                 <div className="mt-[10px] mb-[10px]">
@@ -161,6 +184,12 @@ const SignUp = (props) => {
                         variant="standard"
                         value={contact}
                         onChange={(e) => { setContact(e.target.value) }}
+                        onKeyDown={(e) => {
+                            let key = e.key;
+                            if(key === "Enter") {
+                                onSignUpFunc();
+                            }
+                        }}
                     />
                 </div>
             </div>
