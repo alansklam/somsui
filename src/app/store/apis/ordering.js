@@ -1,5 +1,5 @@
+import { getClientToken } from '../../constants/token';
 import axios from './index'
-import { client_token } from '../../constants/token'
 
 export function getProducts() {
   return axios.get(`/products`, {})
@@ -13,7 +13,7 @@ export function orderSubmit(params) {
   return axios.post(`/order`, params, {
     headers: {
       'content-type': 'text/json',
-      'Authorization' : `Bearer ${client_token}`,
+      'Authorization' : `Bearer ${getClientToken()}`,
     },
   })
 }
@@ -22,7 +22,7 @@ export function yedpayOrderSubmit(params) {
   return axios.post(`/yedpayOrder`, params, {
     headers: {
       'content-type': 'text/json',
-      'Authorization' : `Bearer ${client_token}`,
+      'Authorization' : `Bearer ${getClientToken()}`,
     },
   })
 }
@@ -39,7 +39,7 @@ export function payConfirm(params) {
   return axios.post(`/yedpay`, params, {
     headers: {
       'content-type': 'text/json',
-      'Authorization' : `Bearer ${client_token}`,
+      'Authorization' : `Bearer ${getClientToken()}`,
     },
   })
 }

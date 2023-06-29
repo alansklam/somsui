@@ -1,5 +1,5 @@
 import axios from './index'
-import {admin_token} from '../../constants/token'
+import {getAdminToken} from '../../constants/token'
 
 export function adminLoginApi(param) {
   return axios.post(`/admin/auth/login`, param, {
@@ -13,7 +13,7 @@ export function fetchUniversitiesApi() {
   return axios.get(`/admin/fetchUniversities`, {
     headers: {
       'content-type': 'text/json',
-      Authorization: `Bearer ${admin_token}`,
+      Authorization: `Bearer ${getAdminToken()}`,
     },
   })
 }
@@ -22,7 +22,7 @@ export function fetchDashboardDataApi() {
   return axios.get(`/admin/fetchDashboardData`, {
     headers: {
       'content-type': 'text/json',
-      Authorization: `Bearer ${admin_token}`,
+      Authorization: `Bearer ${getAdminToken()}`,
     },
   })
 }
@@ -31,7 +31,7 @@ export function fetchClientNameApi() {
   return axios.get(`/admin/fetchClientName`, {
     headers: {
       'content-type': 'text/json',
-      Authorization: `Bearer ${admin_token}`,
+      Authorization: `Bearer ${getAdminToken()}`,
     },
   })
 }
@@ -40,7 +40,7 @@ export function fetchProductsApi() {
   return axios.get(`/admin/fetchProducts`, {
     headers: {
       'content-type': 'text/json',
-      Authorization: `Bearer ${admin_token}`,
+      Authorization: `Bearer ${getAdminToken()}`,
     },
   })
 }
@@ -49,7 +49,7 @@ export function fetchRefApi() {
   return axios.get(`/admin/fetchRef`, {
     headers: {
       'content-type': 'text/json',
-      Authorization: `Bearer ${admin_token}`,
+      Authorization: `Bearer ${getAdminToken()}`,
     },
   })
 }
@@ -61,7 +61,7 @@ export function fetchClientsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -74,7 +74,7 @@ export function getClientApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -87,7 +87,7 @@ export function deleteClientApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -100,7 +100,7 @@ export function editClientApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -113,7 +113,7 @@ export function fetchItemsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -126,7 +126,7 @@ export function editItemsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -139,7 +139,7 @@ export function deleteItemsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -152,7 +152,7 @@ export function fetchPeriodsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -165,7 +165,7 @@ export function editPeriodsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -178,7 +178,7 @@ export function editPeriodItemApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -191,7 +191,7 @@ export function getPeriodItemApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -204,7 +204,7 @@ export function deletePeriodsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -217,7 +217,7 @@ export function fetchSettingsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -230,7 +230,7 @@ export function editSettingsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -243,7 +243,7 @@ export function deleteSettingsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -256,7 +256,7 @@ export function fetchPaymentsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -269,7 +269,7 @@ export function deletePaymentsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -282,7 +282,7 @@ export function editPaymentsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -295,7 +295,7 @@ export function paymentPaidApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -308,7 +308,7 @@ export function paymentCancelledApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -321,7 +321,7 @@ export function fetchPromotionsApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -334,7 +334,7 @@ export function editPromotionApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -347,7 +347,7 @@ export function editPromotionItemApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -360,7 +360,7 @@ export function getPromotionApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -373,7 +373,7 @@ export function deletePromotionApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -386,7 +386,7 @@ export function fetchOrdersApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -399,7 +399,7 @@ export function editOrderApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -412,7 +412,7 @@ export function getOrderApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -425,7 +425,7 @@ export function deleteOrderApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -438,7 +438,7 @@ export function fetchRetrievalOrdersApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -451,7 +451,7 @@ export function editRetrievalOrderApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -464,7 +464,7 @@ export function getRetrievalOrderApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -477,7 +477,7 @@ export function deleteRetrievalOrderApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -490,7 +490,7 @@ export function fetchRetrievalDatesApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -503,7 +503,7 @@ export function editRetrievalDateApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -516,7 +516,7 @@ export function deleteRetrievalDateApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -529,7 +529,7 @@ export function sendInvoiceApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
@@ -542,7 +542,7 @@ export function searchClientApi(params) {
     {
       headers: {
         'content-type': 'text/json',
-        Authorization: `Bearer ${admin_token}`,
+        Authorization: `Bearer ${getAdminToken()}`,
       },
     }
   )
