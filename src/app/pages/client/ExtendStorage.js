@@ -92,9 +92,18 @@ export const ExtendStorage = () => {
   }
 
   const getTotalOutstandingFee = () => {
-    let total = parseFloat(order?.balance) + parseFloat(order?.product_total_fee) * duration
+    let balance = parseFloat(order?.balance)
+    if (balance <= 0) balance = 0
+    let total = balance + parseFloat(order?.product_total_fee) * duration
     total = total.toFixed(2)
     setTotalFee(total)
+  }
+
+  const getBalance = (value) => {
+    let balance = parseFloat(value)
+    if (isNaN(balance)) balance = 0
+    if (balance <= 0) balance = 0
+    return balance.toFixed(2)
   }
 
   const handleSliderChange = (e) => {
@@ -382,7 +391,7 @@ export const ExtendStorage = () => {
                     <span className='text-header text-black'>
                       {t('customer-extend.wd-outstanding-fee')}
                     </span>
-                    <span className='text-normal text-black'>${order?.balance}</span>
+                    <span className='text-normal text-black'>${getBalance(order?.balance)}</span>
                   </div>
                   <div className='flex justify-content-between align-items-center width-[100%] pb-[10px]'>
                     <span className='text-header text-black'>

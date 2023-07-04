@@ -38,6 +38,13 @@ export const OrderDetailCart = (props) => {
     }
   }, [order])
 
+  const getBalance = (value) => {
+    let balance = parseFloat(value)
+    if (isNaN(balance)) balance = 0
+    if (balance <= 0) balance = 0
+    return balance.toFixed(2)
+  }
+
   return (
     <div className='content'>
       <div className='mb-[29px]'>
@@ -134,7 +141,7 @@ export const OrderDetailCart = (props) => {
         <span>
           <span className='text-header text-black'>{t('common.wd-outstanding')}</span>
         </span>
-        <span className='text-header text-black'>${order.balance ? order.balance : '0.00'}</span>
+        <span className='text-header text-black'>${getBalance(order.balance)}</span>
       </div>
       <div className='flex space-between my-[20px]' style={{position: 'relative'}}>
         <span>
