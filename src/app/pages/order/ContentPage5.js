@@ -13,6 +13,7 @@ import {PaymentType} from '../../constants/payment-type'
 import {getPaymentMethod} from '../../store/actions/order'
 import {useDispatch, useSelector} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import ReactGA from 'react-ga'
 
 export default function ContentPage5(props) {
   const {onNotification, cartInfo, setCartInfo, stuffInfo, accountInfo, order, setOrder} = props
@@ -47,6 +48,7 @@ export default function ContentPage5(props) {
   }
 
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search)
     setLang(JSON.parse(localStorage.getItem('ubox-lang')))
     setInitial(true)
   }, [])

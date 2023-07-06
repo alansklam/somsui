@@ -45,6 +45,20 @@ export const OrderDetailCart = (props) => {
     return balance.toFixed(2)
   }
 
+  const getPaidFee = (value) => {
+    let result = ''
+    let paid_fee = parseFloat(value?.paid_fee)
+    let total_fee = parseFloat(value?.total_fee)
+    if (isNaN(paid_fee)) paid_fee = 0
+    if (isNaN(total_fee)) total_fee = 0
+    if (total_fee - paid_fee >= 0) {
+      result = '$' + paid_fee.toFixed(2)
+    } else {
+      result = t('common.wd-paid-by', {name: ''})
+    }
+    return result
+  }
+
   return (
     <div className='content'>
       <div className='mb-[29px]'>
@@ -135,7 +149,7 @@ export const OrderDetailCart = (props) => {
             {t('common.wd-paid-by', {name: user.name ? user.name : ''})}
           </span>
         </span>
-        <span className='text-header text-black'>${order.paid_fee ? order.paid_fee : '0.00'}</span>
+        <span className='text-header text-black'>{getPaidFee(order)}</span>
       </div>
       <div className='flex space-between my-[20px]'>
         <span>

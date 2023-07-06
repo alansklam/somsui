@@ -3,13 +3,11 @@ import {OrdersListViewProvider, useOrdersListView} from './core/OrdersListViewPr
 import {OrdersListHeader} from './components/header/OrdersListHeader'
 import {KTCard} from '../../../../_metronic/helpers'
 import {OrdersTable} from './table/OrdersTable'
-import {OrdersAddModal} from './modals/add-modal/OrdersAddModal'
 import {OrdersDeleteModal} from './modals/delete-modal/OrdersDeleteModal'
 import {LoadingSpinner} from '../components/spinner/LoadingSpinner'
-import {OrdersClientEditModal} from './modals/edit-modal/OrdersClientEditModal'
 
 const OrdersListPage = () => {
-  const {itemIdForUpdate, itemIdForDelete, clientIdForUpdate, isLoading} = useOrdersListView()
+  const {itemIdForDelete, isLoading} = useOrdersListView()
 
   return (
     <div style={{marginTop: '-30px'}}>

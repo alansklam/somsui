@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal'
 import Quantity from '../../components/quantity'
 import NumberInput from '../../components/quantity/NumberInput'
 import {useTranslation} from 'react-i18next'
+import ReactGA from 'react-ga'
 
 export default function ContentPage1(props) {
   const [duration, setDuration] = useState(1)
@@ -103,6 +104,7 @@ export default function ContentPage1(props) {
   }
 
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search)
     setDuration(props.storage_month)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

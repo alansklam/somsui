@@ -1,50 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="ubox shopping cart" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"
+    />
+    <title>UBOX</title>
+    <link rel="shortcut icon" href="%PUBLIC_URL%/media/logos/favicon.ico" />
+    <link rel="stylesheet" id="layout-styles-anchor" href="%PUBLIC_URL%/splash-screen.css" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="ubox shopping cart" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
-  <title>UBOX</title>
-  <link rel="shortcut icon" href="%PUBLIC_URL%/media/logos/favicon.ico" />
-  <link rel="stylesheet" id="layout-styles-anchor" href="%PUBLIC_URL%/splash-screen.css" />
-</head>
-
-<body id="kt_body" class="page-loading splash-screen mat-typography">
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <!--begin::Theme mode setup on page load-->
-  <script>
-    if (document.documentElement) {
-      var defaultThemeMode = "system";
-
-      var themeMode = localStorage.getItem("kt_theme_mode_value");
-      if (!themeMode) {
-        if (defaultThemeMode === "system") {
-          themeMode =
-            window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        } else {
-          themeMode = defaultThemeMode;
-        }
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-873128244"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
       }
+      gtag('js', new Date())
 
-      document.documentElement.setAttribute("data-theme", themeMode);
-    }    
-  </script>
-  <!--end::Theme mode setup on page load-->
+      gtag('config', 'AW-873128244')
+    </script>
+  </head>
 
-  <div id="root"></div>
-  <!-- <div id="splash-screen" class="splash-screen">
+  <body id="kt_body" class="page-loading splash-screen mat-typography">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--begin::Theme mode setup on page load-->
+    <script>
+      if (document.documentElement) {
+        var defaultThemeMode = 'system'
+
+        var themeMode = localStorage.getItem('kt_theme_mode_value')
+        if (!themeMode) {
+          if (defaultThemeMode === 'system') {
+            themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          } else {
+            themeMode = defaultThemeMode
+          }
+        }
+
+        document.documentElement.setAttribute('data-theme', themeMode)
+      }
+    </script>
+    <!--end::Theme mode setup on page load-->
+
+    <div id="root"></div>
+    <!-- <div id="splash-screen" class="splash-screen">
     <img src="%PUBLIC_URL%/media/logos/default-small.svg" alt="Metronic logo" />
     <span>Loading ...</span>
   </div> -->
-  <div id="root-modals"></div>
-  <style>
-    body {
-      background-color: white !important;
-    }
-  </style>
-</body>
-
+    <div id="root-modals"></div>
+    <style>
+      body {
+        background-color: white !important;
+      }
+    </style>
+  </body>
 </html>

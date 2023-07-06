@@ -3,8 +3,8 @@ import {createRoot} from 'react-dom/client'
 import axios from 'axios'
 import {Chart, registerables} from 'chart.js'
 import {QueryClient, QueryClientProvider} from 'react-query'
-import { Provider } from 'react-redux'
-import { store } from './app/store'
+import {Provider} from 'react-redux'
+import {store} from './app/store'
 // import {ReactQueryDevtools} from 'react-query/devtools'
 // Apps
 import {MetronicI18nProvider} from './_metronic/i18n/Metronici18n'
@@ -23,6 +23,8 @@ import './app/lib/modules/i18n'
 
 import {AppRoutes} from './app/routing/AppRoutes'
 import {AuthProvider, setupAxios} from './app/modules/adminUser'
+
+import ReactGA from 'react-ga'
 /**
  * Creates `axios-mock-adapter` instance for provided `axios` instance, add
  * basic Metronic mocks and returns it.
@@ -39,6 +41,9 @@ Chart.register(...registerables)
 
 const queryClient = new QueryClient()
 const container = document.getElementById('root')
+
+ReactGA.initialize('AW-873128244')
+
 if (container) {
   createRoot(container).render(
     <Provider store={store}>
