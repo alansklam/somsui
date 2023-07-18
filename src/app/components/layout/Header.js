@@ -148,7 +148,7 @@ const Header = (props) => {
                   <>
                     <div className='pr-[20px] pl-[20px] py-[10px] min-w-[90] flex align-items-center'></div>
                     <div className='my-auto flex item-center py-[10px] min-w-[80px]'>
-                      <Link to='/client' className='text-header text-yellow contact'>
+                      <Link to='/client/login' className='text-header text-yellow contact'>
                         {t('common.wd-signin')}
                       </Link>
                     </div>

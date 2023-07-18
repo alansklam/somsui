@@ -30,7 +30,7 @@ const OrdersList = ({className}) => {
 
   useEffect(() => {
     if (initial) {
-      let userId = user.id
+      let userId = user?.id
       dispatch(
         fetchOrders({
           client_id: userId,
