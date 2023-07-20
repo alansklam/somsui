@@ -46,13 +46,6 @@ export default function Home() {
       localStorage.removeItem('ubox-user')
       setLoggedIn(0)
     }
-    // if (v === 1) {
-    //   setLoggedIn(1)
-    // } else {
-    //   localStorage.setItem('ubox-is-authenticated', 0)
-    //   localStorage.removeItem('ubox-user')
-    //   setLoggedIn(0)
-    // }
   }, [])
 
   // Fetch the price following the storage period.

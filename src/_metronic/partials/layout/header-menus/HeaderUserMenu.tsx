@@ -3,11 +3,12 @@ import {FC} from 'react'
 import {toAbsoluteUrl} from '../../../helpers'
 
 const HeaderUserMenu: FC = () => {
-  const admin: any = localStorage.getItem("admin-user");
-  const currentAdmin = JSON.parse(admin);
+  const admin: any = localStorage.getItem('admin-user')
+  const currentAdmin = JSON.parse(admin)
 
   const logout = () => {
-    localStorage.removeItem("admin-user");
+    localStorage.removeItem('admin-user')
+    localStorage.removeItem('admin-token')
     window.location.href = '/admin'
   }
 
@@ -24,7 +25,7 @@ const HeaderUserMenu: FC = () => {
 
           <div className='d-flex flex-column'>
             <div className='fw-bolder d-flex align-items-center fs-5'>
-              {currentAdmin?.name} 
+              {currentAdmin?.name}
               {/* <span className='badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2'>Pro</span> */}
             </div>
             <a href='#' className='fw-bold text-muted text-hover-primary fs-7'>
