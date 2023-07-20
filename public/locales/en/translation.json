@@ -81,7 +81,7 @@
   "common.wd-signup": "Sign Up",
   "common.wd-signin": "Sign In",
   "common.wd-submit": "Submit",
-  "common.wd-tentative-retrieval-note": "Please note that the tentaive retireval date provided is an estivated timeframe and not a guaranteed delivery date. To order your retrieval service, kindly access the client portal.",
+  "common.wd-tentative-retrieval-note": "Please note that the tentative retrieval date provided is an estimated timeframe and not a guaranteed delivery date. To request a retrieval service, kindly click on the Retrieval Now button below.",
   "common.wd-checkout-note": "For a successful payment process while using WeChat Pay & Alipay, you have to disable any pop-up blockers on your browser beforehand. This will  allow you to be redirected to the payment page, where you can scan the QR code for payment.",
   "common.wd-thank-you": "Thank you",
   "common.no-login-failed": "Email or Password is failed.",
