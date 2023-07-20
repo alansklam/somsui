@@ -32,14 +32,20 @@ export default function Home() {
   const minmum_count = process.env.REACT_APP_ORDER_ITEMS_LIMIT
 
   useEffect(() => {
-    // const v = JSON.parse(localStorage.getItem('ubox-is-authenticated'))
-    getIsLoggedIn()
-      .then(() => {
-        setLoggedIn(1)
-      })
-      .catch(() => {
-        setLoggedIn(0)
-      })
+    const v = JSON.parse(localStorage.getItem('ubox-is-authenticated'))
+    if (v === 1) {
+      getIsLoggedIn()
+        .then(() => {
+          setLoggedIn(1)
+        })
+        .catch(() => {
+          setLoggedIn(0)
+        })
+    } else {
+      localStorage.setItem('ubox-is-authenticated', 0)
+      localStorage.removeItem('ubox-user')
+      setLoggedIn(0)
+    }
     // if (v === 1) {
     //   setLoggedIn(1)
     // } else {
