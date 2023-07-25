@@ -104,7 +104,7 @@ export default function ContentPage1(props) {
   }
 
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+    ReactGA.pageview(window.location.pathname + window.location.search, 'Tracker 1', 'Main Page')
     setDuration(props.storage_month)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

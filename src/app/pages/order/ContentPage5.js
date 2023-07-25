@@ -48,7 +48,7 @@ export default function ContentPage5(props) {
   }
 
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+    ReactGA.pageview(window.location.pathname + window.location.search, 'Tracker 2', 'Payment Page')
     setLang(JSON.parse(localStorage.getItem('ubox-lang')))
     setInitial(true)
   }, [])

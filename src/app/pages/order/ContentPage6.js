@@ -7,7 +7,11 @@ export default function ContentPage6(props) {
   const {t} = useTranslation()
   const [email, setEmail] = useState('')
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+    ReactGA.pageview(
+      window.location.pathname + window.location.search,
+      'Tracker 3',
+      'Thank you Page'
+    )
     setEmail(JSON.parse(localStorage?.getItem('ubox-user')).email)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
