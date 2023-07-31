@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import RetrievalEdit from './components/RetrievalEdit'
 import RetrievalCart from './components/RetrievalCart'
 import PaymentMethod from './components/PaymentMethod'
+import {PaymentStatus} from '../../constants/payment-type'
 
 export default function RetrievalPage(props) {
   const {id} = useParams()
@@ -46,6 +47,7 @@ export default function RetrievalPage(props) {
   const [orderState, setOrderState] = useState(false)
   const [confirmOrder, setConfirmOrder] = useState({})
   const [permitRetrieve, setPermitRetrieve] = useState(true)
+  const [isPaidFee, setIsPaidFee] = useState(true)
 
   useEffect(() => {
     setInitial(true)
@@ -59,6 +61,17 @@ export default function RetrievalPage(props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initial])
+
+  useEffect(() => {
+    let payment_status = order.payment_status_id
+
+    if (payment_status !== PaymentStatus.PAID && payment_status !== undefined) {
+      setIsPaidFee(false)
+    } else {
+      setIsPaidFee(true)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order.payment_status_id])
 
   const onCartHandler = (item, value, isFree) => {
     let __delivery_items = cartInfo.delivery_items
@@ -95,9 +108,8 @@ export default function RetrievalPage(props) {
       __isFreeDeliveryFee = true
       __min_delivery_state = false
     } else {
-      if (isNaN(__per_delivery_fee)) __per_delivery_fee = 0;
+      if (isNaN(__per_delivery_fee)) __per_delivery_fee = 0
     }
-
 
     __total_fee = __total_fee + __delivery_fee + __next_day_fee + __floor_fee
 
@@ -127,6 +139,11 @@ export default function RetrievalPage(props) {
             {t('common.wd-new-boxes')}
           </Link>
         </div>
+        {!isPaidFee && (
+          <div className='border !border-red-400 rounded-lg bg-red-100 p-4 my-4'>
+            <span>You didn't pay the outstanding fee. Please pay the outstanding fee.</span>
+          </div>
+        )}
         <div className='text-normal text-black py-[20px]'>
           <span>
             {t('customer-retrieval.no-title', {
@@ -151,7 +168,7 @@ export default function RetrievalPage(props) {
                   onCartHandler={onCartHandler}
                   setPermitRetrieve={setPermitRetrieve}
                 />
-                {permitRetrieve && (
+                {permitRetrieve && isPaidFee && (
                   <PaymentMethod
                     cartInfo={cartInfo}
                     retrievalOrder={retrievalOrder}

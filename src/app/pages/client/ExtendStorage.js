@@ -34,6 +34,7 @@ export const ExtendStorage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [notify, setNotify] = useState({title: '', message: '', visible: false, status: 0})
   const [extendedDate, setExtendedDate] = useState('')
+  const [monthlyFee, setMonthlyFee] = useState(0)
   const [totalFee, setTotalFee] = useState()
   const [lang, setLang] = useState('')
 
@@ -94,7 +95,16 @@ export const ExtendStorage = () => {
   const getTotalOutstandingFee = () => {
     let balance = parseFloat(order?.balance)
     if (balance <= 0) balance = 0
-    let total = balance + parseFloat(order?.product_total_fee) * duration
+    let product_total_fee = 0
+    let items = order?.items
+    items?.forEach((item) => {
+      if (item.item_category !== 'bag') {
+        product_total_fee += parseInt(item.item_qty) * parseFloat(item.item_price)
+      }
+      if (isNaN(product_total_fee)) product_total_fee = 0
+    })
+    setMonthlyFee(product_total_fee)
+    let total = balance + parseFloat(product_total_fee) * duration
     total = total.toFixed(2)
     setTotalFee(total)
   }
@@ -262,6 +272,7 @@ export const ExtendStorage = () => {
       payment_code: paymentCode,
       payment_type: paymentType,
       months: duration,
+      monthlyFee: monthlyFee,
       total_fee: totalFee,
       extend_date: extendedDate,
       lang: lang,
@@ -339,7 +350,7 @@ export const ExtendStorage = () => {
                 {t('customer-extend.no-title', {
                   order: order.code ? order.code : '',
                   date: dateFormat(order.storage_expired_date ? order.storage_expired_date : '', 2),
-                  monthlyFee: order?.product_total_fee,
+                  monthlyFee: monthlyFee.toFixed(2),
                 })}
               </span>
             </div>
@@ -397,7 +408,7 @@ export const ExtendStorage = () => {
                     <span className='text-header text-black'>
                       {t('customer-extend.wd-storage-fee-per-month')}
                     </span>
-                    <span className='text-normal text-black'>${order?.product_total_fee}</span>
+                    <span className='text-normal text-black'>${monthlyFee.toFixed(2)}</span>
                   </div>
                   <div className='flex justify-content-between align-items-center width-[100%] pb-[10px]'>
                     <span className='text-header text-black'>

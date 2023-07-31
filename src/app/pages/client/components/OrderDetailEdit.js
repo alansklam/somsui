@@ -12,6 +12,7 @@ import LoadingSpinner from '../../../components/loading-spinner'
 import {ShowNotification} from '../../../components/notification'
 import {Link} from 'react-router-dom'
 import {setStoreExtendDate} from '../../../store/actions/client'
+import {PaymentStatus} from '../../../constants/payment-type'
 
 export const OrderDetailEdit = (props) => {
   const {order, id} = props
@@ -30,6 +31,7 @@ export const OrderDetailEdit = (props) => {
   const [extendDate, setExtendDate] = useState(dayjs())
   const [address, setAddress] = useState('')
   const [additionalDate, setAdditionalDate] = useState(0)
+  const [isPaidFee, setIsPaidFee] = useState(true)
 
   const [permitEdit, setPermitEdit] = useState({
     permitDelivery: true,
@@ -80,6 +82,13 @@ export const OrderDetailEdit = (props) => {
         setPermitRetrieve(true)
       } else {
         setPermitRetrieve(false)
+      }
+
+      let payment_status = order.payment_status_id
+      if (payment_status !== PaymentStatus.PAID && payment_status !== undefined) {
+        setIsPaidFee(false)
+      } else {
+        setIsPaidFee(true)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -283,9 +292,9 @@ export const OrderDetailEdit = (props) => {
               <DesktopDatePicker
                 label={t('common.wd-empty-box-delivery')}
                 inputFormat='DD/MM/YYYY'
-                minDate={
-                  dayjs().add(additionalDate + 1, 'day').format('YYYY-MM-DD')
-                }
+                minDate={dayjs()
+                  .add(additionalDate + 1, 'day')
+                  .format('YYYY-MM-DD')}
                 maxDate={order?.storage_expired_date}
                 value={deliveryDate}
                 onChange={handleDeliveryDateChange}
@@ -329,9 +338,9 @@ export const OrderDetailEdit = (props) => {
                 label={t('common.wd-laden-return-date')}
                 inputFormat='DD/MM/YYYY'
                 value={ladenReturnDate}
-                minDate={
-                  dayjs().add(additionalDate + 1, 'day').format('YYYY-MM-DD')
-                }
+                minDate={dayjs()
+                  .add(additionalDate + 1, 'day')
+                  .format('YYYY-MM-DD')}
                 maxDate={dayjs(deliveryDate).add(14, 'day')}
                 onChange={handleLadenReturnDateChange}
                 disabled={!permitEdit.permitLadenReturn}
@@ -470,7 +479,8 @@ export const OrderDetailEdit = (props) => {
                       to={
                         permitEdit.permitRetrieval &&
                         dayjs(retrievalDate) <= dayjs(order?.storage_expired_date) &&
-                        permitRetrieve
+                        permitRetrieve &&
+                        isPaidFee
                           ? '/client/order/retrieval/' + id
                           : '#'
                       }
@@ -481,6 +491,16 @@ export const OrderDetailEdit = (props) => {
                           ? 'custom-btn hand'
                           : 'custom-btn disabled-btn'
                       }
+                      onClick={() => {
+                        if (!isPaidFee) {
+                          onNotification({
+                            title: 'warning',
+                            message: 'common.no-pay-outstanding-fee',
+                            visible: true,
+                            status: Math.floor(Math.random() * 100000),
+                          })
+                        }
+                      }}
                     >
                       {t('common.wd-retrieval-now')}
                     </Link>
