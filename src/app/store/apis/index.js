@@ -21,6 +21,8 @@ instance.interceptors.response.use(
         localStorage.removeItem('ubox-user')
         localStorage.removeItem('client-token')
       }
+    } else if (error.response.status === 404) {
+      window.location.href = '/error/404'
     }
     return Promise.reject(error)
   }
