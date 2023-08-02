@@ -154,6 +154,18 @@ const ContentOrder = (props: propState) => {
         showNotification('error', 'Error', 'Please fix the errors.')
         return
       }
+
+      let paid_fee = parseFloat(formik.values.paid_fee)
+      let total_fee = parseFloat(lumpSum)
+      let payment_status_id = paymentStatusId
+      if (!isNaN(paid_fee) && !isNaN(total_fee)) {
+        if (total_fee > paid_fee) {
+          payment_status_id = '1'
+        } else {
+          payment_status_id = '2'
+        }
+      }
+
       setLoading(true)
       editOrderApi({
         data: {
@@ -162,7 +174,7 @@ const ContentOrder = (props: propState) => {
           items: orderItems,
           order_status_id: orderStatusId,
           payment_type_id: paymentMethodId,
-          payment_status_id: paymentStatusId,
+          payment_status_id: payment_status_id,
           special_instruction: specialInstruction,
           storage_month: storageMonth,
           product_total_fee: productTotalFee,
