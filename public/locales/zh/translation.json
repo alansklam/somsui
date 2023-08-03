@@ -178,5 +178,5 @@
   "common.no-need-help-password": "需要密碼方面的幫助嗎？",
   "common.no-forgot-password-email-msg": "輸入您用於 ubox 登記的電郵，我們將幫助您重置一個新密碼。",
   "common.no-forgot-password-code-msg": "我們向 ***{{emailLetter}}**.com 發送了一次性代碼。您可能需要檢查您的垃圾郵件文件夾。",
-  "common.no-pay-outstanding-fee": "您没有支付未付费用。 请支付未付费用。"
+  "common.no-pay-outstanding-fee": "你還有未結算的費用，請先結算後，才能下單取回物品。"
 }
