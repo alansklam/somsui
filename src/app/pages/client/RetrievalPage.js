@@ -9,7 +9,6 @@ import {useDispatch, useSelector} from 'react-redux'
 import RetrievalEdit from './components/RetrievalEdit'
 import RetrievalCart from './components/RetrievalCart'
 import PaymentMethod from './components/PaymentMethod'
-import {PaymentStatus} from '../../constants/payment-type'
 
 export default function RetrievalPage(props) {
   const {id} = useParams()
@@ -63,12 +62,15 @@ export default function RetrievalPage(props) {
   }, [initial])
 
   useEffect(() => {
-    let payment_status = order.payment_status_id
+    let paid_fee = parseFloat(order.paid_fee)
+    let total_fee = parseFloat(order.total_fee)
 
-    if (payment_status !== PaymentStatus.PAID && payment_status !== undefined) {
-      setIsPaidFee(false)
-    } else {
-      setIsPaidFee(true)
+    if (!isNaN(paid_fee) || !isNaN(total_fee)) {
+      if (paid_fee < total_fee) {
+        setIsPaidFee(false)
+      } else {
+        setIsPaidFee(true)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order.payment_status_id])

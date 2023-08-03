@@ -12,7 +12,6 @@ import LoadingSpinner from '../../../components/loading-spinner'
 import {ShowNotification} from '../../../components/notification'
 import {Link} from 'react-router-dom'
 import {setStoreExtendDate} from '../../../store/actions/client'
-import {PaymentStatus} from '../../../constants/payment-type'
 
 export const OrderDetailEdit = (props) => {
   const {order, id} = props
@@ -84,11 +83,15 @@ export const OrderDetailEdit = (props) => {
         setPermitRetrieve(false)
       }
 
-      let payment_status = order.payment_status_id
-      if (payment_status !== PaymentStatus.PAID && payment_status !== undefined) {
-        setIsPaidFee(false)
-      } else {
-        setIsPaidFee(true)
+      let paid_fee = parseFloat(order.paid_fee)
+      let total_fee = parseFloat(order.total_fee)
+
+      if (!isNaN(paid_fee) || !isNaN(total_fee)) {
+        if (paid_fee < total_fee) {
+          setIsPaidFee(false)
+        } else {
+          setIsPaidFee(true)
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
