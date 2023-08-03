@@ -91,12 +91,13 @@ export default function RetrievalEdit(props) {
   useEffect(() => {
     let __dates = []
     let __university_id = client.university_id
-    if (freeRetrievalDates.length > 0) {
+    let __expireDate = order.storage_expired_date
+    if (freeRetrievalDates.length > 0 && __expireDate) {
       let __retrievalDates = freeRetrievalDates.filter((item) => item.id === __university_id)
       if (__retrievalDates && __retrievalDates.length > 0) {
         __retrievalDates[0].retrieval_dates?.forEach((item) => {
           let __startDate = dayjs(item.retrieval_date).add(-item.day, 'day')
-          if (__startDate > dayjs()) {
+          if (__startDate > dayjs() && dayjs(__expireDate) >= dayjs(item.retrieval_date)) {
             __dates.push(dayjs(item.retrieval_date).format('YYYY-MM-DD'))
           }
         })
@@ -104,7 +105,7 @@ export default function RetrievalEdit(props) {
     }
     setFreeDates([...__dates])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [freeRetrievalDates, client])
+  }, [freeRetrievalDates, client, order.storage_expired_date])
 
   useEffect(() => {
     if (freeDeliveryState) {
@@ -140,10 +141,10 @@ export default function RetrievalEdit(props) {
           let __limit_retrieval = res.data.limit_retrieval
           if (__limit_retrieval && __limit_retrieval.available_state === 0) {
             setPermitRetrieve(true)
-            setIsMaxDate(false);
+            setIsMaxDate(false)
           } else {
             setPermitRetrieve(false)
-            setIsMaxDate(true);
+            setIsMaxDate(true)
           }
         })
         .catch((err) => {})
@@ -378,9 +379,11 @@ export default function RetrievalEdit(props) {
                       </MenuItem>
                     ))}
                   </CssTextField>
-                  {
-                    isMaxDate && <div className='absolute text-red pt-1'>Select the other date. The number of orders was over the max.</div>
-                  }
+                  {isMaxDate && (
+                    <div className='absolute text-red pt-1'>
+                      Select the other date. The number of orders was over the max.
+                    </div>
+                  )}
                 </Grid>
               ) : (
                 <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
@@ -404,9 +407,11 @@ export default function RetrievalEdit(props) {
                       />
                     )}
                   />
-                  {
-                    isMaxDate && <div className='absolute text-red pt-1'>The number of orders was over the max.</div>
-                  }
+                  {isMaxDate && (
+                    <div className='absolute text-red pt-1'>
+                      The number of orders was over the max.
+                    </div>
+                  )}
                 </Grid>
               )}
               {/* <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
