@@ -181,5 +181,5 @@
   "common.no-need-help-password": "Need help with your password?",
   "common.no-forgot-password-email-msg": "Enter the email you use for ubox, and we’ll help you create a new password.",
   "common.no-forgot-password-code-msg": "We sent a security code to ***{{emailLetter}}**.com. You may need to check your Junk or Spam folder",
-  "common.no-pay-outstanding-fee": "You didn't pay the outstanding fee. Please pay the outstanding fee."
+  "common.no-pay-outstanding-fee": "You have an outstanding payment that needs to be settled before you can place a retrieval order."
 }
