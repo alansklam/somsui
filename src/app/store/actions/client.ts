@@ -7,6 +7,8 @@ import {
   updateOrderApi,
   fetchCurrentOrderApi,
   fetchRetrievalDatesApi,
+  fetchRetrievalEmptyDatesApi,
+  fetchRetrievalAddressApi,
 } from '../apis/client'
 import {getProducts} from '../apis/ordering'
 
@@ -162,6 +164,44 @@ export const fetchRetrievalDates = () => {
     } catch {
       dispatch({
         type: ClientActionTypes.FETCH_RETRIEVAL_DATES,
+        payload: [],
+      })
+    }
+  }
+}
+
+export const fetchRetrievalEmptyDates = () => {
+  return async (dispatch: Dispatch<ClientAction>) => {
+    try {
+      dispatch({type: ClientActionTypes.FETCH_DATA})
+      const response = fetchRetrievalEmptyDatesApi()
+      const payloadData = (await response).data
+      dispatch({
+        type: ClientActionTypes.FETCH_RETRIEVAL_EMPTY_DATES,
+        payload: payloadData,
+      })
+    } catch {
+      dispatch({
+        type: ClientActionTypes.FETCH_RETRIEVAL_EMPTY_DATES,
+        payload: [],
+      })
+    }
+  }
+}
+
+export const fetchRetrievalAddress = () => {
+  return async (dispatch: Dispatch<ClientAction>) => {
+    try {
+      dispatch({type: ClientActionTypes.FETCH_DATA})
+      const response = fetchRetrievalAddressApi()
+      const payloadData = (await response).data
+      dispatch({
+        type: ClientActionTypes.FETCH_RETRIEVAL_ADDRESS,
+        payload: payloadData,
+      })
+    } catch {
+      dispatch({
+        type: ClientActionTypes.FETCH_RETRIEVAL_ADDRESS,
         payload: [],
       })
     }

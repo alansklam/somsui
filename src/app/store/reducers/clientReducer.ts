@@ -6,6 +6,8 @@ const initialState: ClientState = {
   products: [],
   currentOrder: {},
   retrievalDates: {},
+  retrievalEmptyDates: {},
+  retrievalAddress: {},
   extendDate: '',
   page: 1,
   total: 0,
@@ -35,6 +37,18 @@ export const clientReducer = (state = initialState, action: ClientAction): Clien
         ...state,
         loading: false,
         retrievalDates: action.payload,
+      }
+    case ClientActionTypes.FETCH_RETRIEVAL_EMPTY_DATES:
+      return {
+        ...state,
+        loading: false,
+        retrievalEmptyDates: action.payload,
+      }
+    case ClientActionTypes.FETCH_RETRIEVAL_ADDRESS:
+      return {
+        ...state,
+        loading: false,
+        retrievalAddress: action.payload,
       }
     case ClientActionTypes.UPDATE_ORDER:
       return {

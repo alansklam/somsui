@@ -1,5 +1,5 @@
 import axios from './index'
-import { getClientToken} from '../../constants/token'
+import {getClientToken} from '../../constants/token'
 
 export function updateAccountApi(params) {
   return axios.post(`/client/account/update`, params, {
@@ -100,6 +100,24 @@ export function extendDateApi(params) {
 
 export function fetchRetrievalDatesApi() {
   return axios.get('client/retrieval-dates', {
+    headers: {
+      'content-type': 'text/json',
+      Authorization: `Bearer ${getClientToken()}`,
+    },
+  })
+}
+
+export function fetchRetrievalEmptyDatesApi() {
+  return axios.get('client/retrieval-empty-dates', {
+    headers: {
+      'content-type': 'text/json',
+      Authorization: `Bearer ${getClientToken()}`,
+    },
+  })
+}
+
+export function fetchRetrievalAddressApi() {
+  return axios.get('client/retrieval-address', {
     headers: {
       'content-type': 'text/json',
       Authorization: `Bearer ${getClientToken()}`,

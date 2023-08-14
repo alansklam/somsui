@@ -4,6 +4,8 @@ export interface ClientState {
   products: any[]
   currentOrder: any
   retrievalDates: any
+  retrievalEmptyDates: any
+  retrievalAddress: any
   extendDate: string
   loading: boolean
   error: null | string
@@ -22,6 +24,8 @@ export enum ClientActionTypes {
   FETCH_CURRENT_ORDER = 'FETCH_CURRENT_ORDER',
   SET_EXTEND_DATE = 'SET_EXTEND_DATE',
   FETCH_RETRIEVAL_DATES = 'FETCH_RETRIEVAL_DATES',
+  FETCH_RETRIEVAL_EMPTY_DATES = 'FETCH_RETRIEVAL_EMPTY_DATES',
+  FETCH_RETRIEVAL_ADDRESS = 'FETCH_RETRIEVAL_ADDRESS',
 }
 interface FetchDataAction {
   type: ClientActionTypes.FETCH_DATA
@@ -58,6 +62,14 @@ interface FetchRetrievalDates {
   type: ClientActionTypes.FETCH_RETRIEVAL_DATES
   payload: any
 }
+interface FetchRetrievalEmptyDates {
+  type: ClientActionTypes.FETCH_RETRIEVAL_EMPTY_DATES
+  payload: any
+}
+interface FetchRetrievalAddress {
+  type: ClientActionTypes.FETCH_RETRIEVAL_ADDRESS
+  payload: any
+}
 
 export type ClientAction =
   | FetchDataAction
@@ -69,3 +81,5 @@ export type ClientAction =
   | FetchCurrentOrder
   | setStoreExtendDate
   | FetchRetrievalDates
+  | FetchRetrievalEmptyDates
+  | FetchRetrievalAddress

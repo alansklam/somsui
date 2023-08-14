@@ -10,7 +10,11 @@ import CustomColorRadio from '../../../components/custom-components/RadioButton'
 import CssTextField from '../../../components/custom-components/TextField'
 import Quantity from '../../../components/quantity'
 import {useDispatch, useSelector} from 'react-redux'
-import {fetchRetrievalDates} from '../../../store/actions/client'
+import {
+  fetchRetrievalAddress,
+  fetchRetrievalDates,
+  fetchRetrievalEmptyDates,
+} from '../../../store/actions/client'
 import {fetchRetrievalLimitApi} from '../../../store/apis/client'
 // import {showNotification} from '../../admin/components/notification'
 
@@ -28,6 +32,8 @@ export default function RetrievalEdit(props) {
   const {t} = useTranslation()
   const dispatch = useDispatch()
   const freeRetrievalDates = useSelector((state) => state.client.retrievalDates)
+  const retrievalEmptyDates = useSelector((state) => state.client.retrievalEmptyDates)
+  const retrievalAddresses = useSelector((state) => state.client.retrievalAddress)
   const client = useSelector((state) => state.client.client)
   const additionalDay = parseInt(process.env.REACT_APP_RETRIEVAL_ADDITIONAL_DATE)
 
@@ -35,15 +41,21 @@ export default function RetrievalEdit(props) {
   const [retrievalTimeIndex, setRetrievalTimeIndex] = useState(0)
   const [emptyBoxReturnDate, setEmptyBoxReturnDate] = useState(dayjs().add(additionalDay, 'day'))
   const [emptyBoxReturnTimeIndex, setEmptyBoxReturnTimeIndex] = useState(0)
+  const [retrievalAddress, setRetrievalAddress] = useState('')
   const [isSameDay, setIsSameDay] = useState(1)
+  const [isGroupReturnDay, setIsGroupReturnDay] = useState(0)
+  const [groupReturnAddress, setGroupReturnAddress] = useState([])
   const [needWalk, setNeedWalk] = useState(0)
   const [freeDates, setFreeDates] = useState([])
   const [freeDeliveryState, setFreeDeliveryState] = useState(false)
+  const [retrievalEmptyGroupDates, setRetrievalEmptyGroupDates] = useState([])
   const [isMaxDate, setIsMaxDate] = useState(false)
   const allReturn = 1
 
   useEffect(() => {
     dispatch(fetchRetrievalDates())
+    dispatch(fetchRetrievalAddress())
+    dispatch(fetchRetrievalEmptyDates())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -104,35 +116,81 @@ export default function RetrievalEdit(props) {
       }
     }
     setFreeDates([...__dates])
+    handleRetrievalAddress(client.address1 ? client.address1 : '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [freeRetrievalDates, client, order.storage_expired_date])
 
   useEffect(() => {
+    let __dates = []
+    let __university_id = client.university_id
+    let __expireDate = order.storage_expired_date
+    if (retrievalEmptyDates.length > 0 && __expireDate && retrievalDate) {
+      let __retrievalEmptyDates = retrievalEmptyDates.filter((item) => item.id === __university_id)
+      if (__retrievalEmptyDates && __retrievalEmptyDates.length > 0) {
+        __retrievalEmptyDates[0].retrieval_empty_dates?.forEach((item) => {
+          let __startDate = dayjs(item.retrieval_empty_date).add(-item.day, 'day')
+          if (
+            __startDate > dayjs() &&
+            dayjs(retrievalDate) <= dayjs(item.retrieval_empty_date) &&
+            dayjs(__expireDate) >= dayjs(item.retrieval_empty_date)
+          ) {
+            __dates.push(dayjs(item.retrieval_empty_date).format('YYYY-MM-DD'))
+          }
+        })
+      }
+    }
+    if (!__dates?.length > 0) {
+      setIsGroupReturnDay(0)
+    } else {
+      if (isGroupReturnDay) {
+        handleEmptyBoxReturnDateChange(__dates[0])
+      }
+    }
+    setRetrievalEmptyGroupDates([...__dates])
+    let __address = []
+    if (retrievalAddresses.length > 0 && __university_id) {
+      let __retrievalAddress = retrievalAddresses.filter((item) => item.id === __university_id)
+      if (__retrievalAddress && __retrievalAddress.length > 0) {
+        __retrievalAddress[0].retrieval_address?.forEach((item) => {
+          __address.push(item.retrieval_address)
+        })
+      }
+    }
+    setGroupReturnAddress(__address)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [retrievalEmptyDates, client, retrievalDate, order.storage_expired_date])
+
+  useEffect(() => {
     if (freeDeliveryState) {
-      // let __isFree = false
-      // let __university_id = client.university_id
-      // let __retrievalDates = freeRetrievalDates.filter((item) => item.id === __university_id)
-      // if (__retrievalDates && __retrievalDates.length > 0) {
-      //   __retrievalDates[0].retrieval_dates?.forEach((item) => {
-      //     let __startDate = dayjs(item.retrieval_date).add(-item.day, 'day')
-      //     if (__startDate > dayjs()) {
-      //       if (
-      //         dayjs(retrievalDate).format('YYYY-MM-DD') ===
-      //         dayjs(item.retrieval_date).format('YYYY-MM-DD')
-      //       ) {
-      //         __isFree = true
-      //       }
-      //     }
-      //   })
-      // }
       onCartHandler(null, null, true)
       handleRetrievalDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
+      handleEmptyBoxReturnDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
     } else {
       onCartHandler(null, null, false)
       handleRetrievalDateChange(dayjs().add(additionalDay, 'day'))
+      handleEmptyBoxReturnDateChange(dayjs().add(additionalDay, 'day'))
     }
+    setIsSameDay(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [freeDeliveryState])
+
+  useEffect(() => {
+    if (isSameDay) {
+      setIsGroupReturnDay(0)
+    } else {
+    }
+  }, [isSameDay])
+
+  useEffect(() => {
+    if (isGroupReturnDay) {
+      handleEmptyBoxReturnDateChange(dayjs(retrievalEmptyGroupDates[0]).format('YYYY-MM-DD'))
+      handleRetrievalAddress(groupReturnAddress[0]?.toString())
+    } else {
+      handleEmptyBoxReturnDateChange(dayjs(retrievalDate).format('YYYY-MM-DD'))
+      handleRetrievalAddress(client.address1 ? client.address1 : '')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGroupReturnDay])
 
   useEffect(() => {
     if (retrievalDate && typeof retrievalDate === 'string') {
@@ -223,6 +281,15 @@ export default function RetrievalEdit(props) {
     setRetrievalOrder({
       ...retrievalOrder,
       empty_box_return_time: getTime(e.target.value),
+    })
+  }
+
+  const handleRetrievalAddress = (address) => {
+    if (address === undefined) return
+    setRetrievalAddress(address)
+    setRetrievalOrder({
+      ...retrievalOrder,
+      retrieval_address: address,
     })
   }
 
@@ -478,33 +545,81 @@ export default function RetrievalEdit(props) {
           </div>
           {isSameDay !== 1 && (
             <div>
-              <Grid container className='mx-[-8px]'>
-                <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
-                  <DesktopDatePicker
-                    label={t('common.wd-empty-box-return-date')}
-                    inputFormat='DD/MM/YYYY'
-                    minDate={retrievalDate}
-                    maxDate={
-                      dayjs(order?.storage_expired_date) < dayjs(retrievalDate).add(14, 'day')
-                        ? order?.storage_expired_date
-                        : dayjs(retrievalDate).add(14, 'day')
-                    }
-                    value={emptyBoxReturnDate}
-                    onChange={handleEmptyBoxReturnDateChange}
-                    renderInput={(params) => (
-                      <CssTextField
-                        required
-                        fullWidth
-                        onKeyDown={(e) => e.preventDefault()}
-                        id='standard-required1'
-                        label={t('common.wd-empty-box-return-date')}
-                        variant='standard'
-                        {...params}
-                        sx={{svg: {color: '#FFBE3D'}, button: {fontSize: 16}}}
-                      />
-                    )}
-                  />
+              {retrievalEmptyGroupDates && retrievalEmptyGroupDates.length > 0 && (
+                <Grid container className=''>
+                  <Grid item xs={12} sm={8} md={8} className='align-items-center'>
+                    <span className='text-normal'>
+                      {t('customer-retrieval.an-do-you-group-empty')}
+                    </span>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={4}>
+                    <RadioGroup
+                      row
+                      aria-labelledby='demo-radio-buttons-group-label'
+                      name='radio-buttons-group'
+                      value={isGroupReturnDay}
+                      onChange={(e) => {
+                        setIsGroupReturnDay(Number(e.target.value))
+                      }}
+                    >
+                      <CssFormControlLabel value={1} control={<CustomColorRadio />} label='Yes' />
+                      <CssFormControlLabel value={0} control={<CustomColorRadio />} label='No' />
+                    </RadioGroup>
+                  </Grid>
                 </Grid>
+              )}
+              <Grid container className='mx-[-8px]'>
+                {isGroupReturnDay === 1 ? (
+                  <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
+                    <CssTextField
+                      id='standard-select-currency2'
+                      select
+                      fullWidth
+                      label=''
+                      value={dayjs(emptyBoxReturnDate).format('YYYY-MM-DD')}
+                      onChange={(e) => {
+                        let newValue = dayjs(e.target.value)
+                        handleEmptyBoxReturnDateChange(newValue.format('YYYY-MM-DD'))
+                      }}
+                      className='mt-17 relative'
+                      helperText=''
+                      variant='standard'
+                    >
+                      {retrievalEmptyGroupDates.map((date, index) => (
+                        <MenuItem key={index} value={date} style={{fontSize: '16px'}}>
+                          {dayjs(date).format('DD/MM/YYYY')}
+                        </MenuItem>
+                      ))}
+                    </CssTextField>
+                  </Grid>
+                ) : (
+                  <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
+                    <DesktopDatePicker
+                      label={t('common.wd-empty-box-return-date')}
+                      inputFormat='DD/MM/YYYY'
+                      minDate={retrievalDate}
+                      maxDate={
+                        dayjs(order?.storage_expired_date) < dayjs(retrievalDate).add(14, 'day')
+                          ? order?.storage_expired_date
+                          : dayjs(retrievalDate).add(14, 'day')
+                      }
+                      value={dayjs(emptyBoxReturnDate).format('YYYY-MM-DD')}
+                      onChange={handleEmptyBoxReturnDateChange}
+                      renderInput={(params) => (
+                        <CssTextField
+                          required
+                          fullWidth
+                          onKeyDown={(e) => e.preventDefault()}
+                          id='standard-required1'
+                          label={t('common.wd-empty-box-return-date')}
+                          variant='standard'
+                          {...params}
+                          sx={{svg: {color: '#FFBE3D'}, button: {fontSize: 16}}}
+                        />
+                      )}
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={12} sm={6} md={5} className='px-[8px] py-[15px]'>
                   <CssTextField
                     id='standard-select-currency1'
@@ -518,8 +633,12 @@ export default function RetrievalEdit(props) {
                     variant='standard'
                   >
                     {timelist.map((option) => (
-                      <MenuItem key={option.value} value={option.value} style={{fontSize: '16px'}}>
-                        {option.label}
+                      <MenuItem
+                        key={option.value}
+                        value={option.value.toString()}
+                        style={{fontSize: '16px'}}
+                      >
+                        {option.label.toString()}
                       </MenuItem>
                     ))}
                   </CssTextField>
@@ -529,19 +648,39 @@ export default function RetrievalEdit(props) {
           )}
           <div className='mt-[10px]'>
             <Grid item xs={12} sm={12} md={12} className='pr-[16px]'>
-              <CssTextField
-                fullWidth
-                id='retrievalAddress'
-                label={t('customer-retrieval.wd-retrieval-address')}
-                variant='standard'
-                value={retrievalOrder.retrieval_address ? retrievalOrder.retrieval_address : ''}
-                onChange={(e) => {
-                  setRetrievalOrder({
-                    ...retrievalOrder,
-                    retrieval_address: e.target.value,
-                  })
-                }}
-              />
+              {isGroupReturnDay === 1 ? (
+                <CssTextField
+                  id='standard-select-currency2'
+                  select
+                  fullWidth
+                  label={t('customer-retrieval.wd-retrieval-address')}
+                  value={retrievalAddress}
+                  onChange={(e) => {
+                    handleRetrievalAddress(e.target.value)
+                  }}
+                  className='mt-17 relative'
+                  helperText=''
+                  variant='standard'
+                >
+                  {groupReturnAddress?.map((address, index) => (
+                    <MenuItem key={index} value={address.toString()} style={{fontSize: '16px'}}>
+                      {address.toString()}
+                    </MenuItem>
+                  ))}
+                </CssTextField>
+              ) : (
+                <CssTextField
+                  fullWidth
+                  id='retrievalAddress'
+                  label={t('customer-retrieval.wd-retrieval-address')}
+                  variant='standard'
+                  // value={retrievalOrder.retrieval_address ? retrievalOrder.retrieval_address : ''}
+                  value={retrievalAddress}
+                  onChange={(e) => {
+                    handleRetrievalAddress(e.target.value)
+                  }}
+                />
+              )}
             </Grid>
           </div>
           <div className='mt-[25px]'>
