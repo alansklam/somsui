@@ -109,6 +109,7 @@ export default function RetrievalPage(props) {
       __per_delivery_fee = 0
       __isFreeDeliveryFee = true
       __min_delivery_state = false
+      __floor_fee = 0
     } else {
       if (isNaN(__per_delivery_fee)) __per_delivery_fee = 0
     }

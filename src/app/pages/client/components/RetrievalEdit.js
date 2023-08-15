@@ -165,10 +165,12 @@ export default function RetrievalEdit(props) {
       onCartHandler(null, null, true)
       handleRetrievalDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
       handleEmptyBoxReturnDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
+      handleRetrievalAddress(groupReturnAddress[0]?.toString())
     } else {
       onCartHandler(null, null, false)
       handleRetrievalDateChange(dayjs().add(additionalDay, 'day'))
       handleEmptyBoxReturnDateChange(dayjs().add(additionalDay, 'day'))
+      handleRetrievalAddress(client.address1 ? client.address1 : '')
     }
     setIsSameDay(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,17 +179,25 @@ export default function RetrievalEdit(props) {
   useEffect(() => {
     if (isSameDay) {
       setIsGroupReturnDay(0)
+      handleNextDayFeeChange(true)
     } else {
+      handleNextDayFeeChange(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSameDay])
 
   useEffect(() => {
     if (isGroupReturnDay) {
+      handleNextDayFeeChange(true)
       handleEmptyBoxReturnDateChange(dayjs(retrievalEmptyGroupDates[0]).format('YYYY-MM-DD'))
       handleRetrievalAddress(groupReturnAddress[0]?.toString())
     } else {
       handleEmptyBoxReturnDateChange(dayjs(retrievalDate).format('YYYY-MM-DD'))
-      handleRetrievalAddress(client.address1 ? client.address1 : '')
+      if (freeDeliveryState) {
+        handleRetrievalAddress(groupReturnAddress[0]?.toString())
+      } else {
+        handleRetrievalAddress(client.address1 ? client.address1 : '')
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGroupReturnDay])
@@ -295,7 +305,10 @@ export default function RetrievalEdit(props) {
 
   const handleIsSameDayRadioChange = (e) => {
     setIsSameDay(Number(e.target.value))
-    if (Number(e.target.value)) {
+  }
+
+  const handleNextDayFeeChange = (value) => {
+    if (value) {
       setCartInfo({
         ...cartInfo,
         retrieval_next_day: false,
@@ -390,7 +403,7 @@ export default function RetrievalEdit(props) {
             <div className='text-normal text-black'>
               {t('customer-retrieval.wd-indicate-retrieval')}
             </div>
-            {freeDates && freeDates.length > 0 && (
+            {freeDates && freeDates.length > 0 && groupReturnAddress?.length > 0 && (
               <div className='mt-[10px]'>
                 <Grid container>
                   <Grid item xs={12} sm={8} md={8} className='align-items-center'>
@@ -545,29 +558,31 @@ export default function RetrievalEdit(props) {
           </div>
           {isSameDay !== 1 && (
             <div>
-              {retrievalEmptyGroupDates && retrievalEmptyGroupDates.length > 0 && (
-                <Grid container className=''>
-                  <Grid item xs={12} sm={8} md={8} className='align-items-center'>
-                    <span className='text-normal'>
-                      {t('customer-retrieval.an-do-you-group-empty')}
-                    </span>
+              {retrievalEmptyGroupDates &&
+                retrievalEmptyGroupDates.length > 0 &&
+                groupReturnAddress?.length > 0 && (
+                  <Grid container className=''>
+                    <Grid item xs={12} sm={8} md={8} className='align-items-center'>
+                      <span className='text-normal'>
+                        {t('customer-retrieval.an-do-you-group-empty')}
+                      </span>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={4}>
+                      <RadioGroup
+                        row
+                        aria-labelledby='demo-radio-buttons-group-label'
+                        name='radio-buttons-group'
+                        value={isGroupReturnDay}
+                        onChange={(e) => {
+                          setIsGroupReturnDay(Number(e.target.value))
+                        }}
+                      >
+                        <CssFormControlLabel value={1} control={<CustomColorRadio />} label='Yes' />
+                        <CssFormControlLabel value={0} control={<CustomColorRadio />} label='No' />
+                      </RadioGroup>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={4} md={4}>
-                    <RadioGroup
-                      row
-                      aria-labelledby='demo-radio-buttons-group-label'
-                      name='radio-buttons-group'
-                      value={isGroupReturnDay}
-                      onChange={(e) => {
-                        setIsGroupReturnDay(Number(e.target.value))
-                      }}
-                    >
-                      <CssFormControlLabel value={1} control={<CustomColorRadio />} label='Yes' />
-                      <CssFormControlLabel value={0} control={<CustomColorRadio />} label='No' />
-                    </RadioGroup>
-                  </Grid>
-                </Grid>
-              )}
+                )}
               <Grid container className='mx-[-8px]'>
                 {isGroupReturnDay === 1 ? (
                   <Grid item xs={12} sm={6} md={7} className='px-[8px] py-[15px]'>
@@ -648,7 +663,7 @@ export default function RetrievalEdit(props) {
           )}
           <div className='mt-[10px]'>
             <Grid item xs={12} sm={12} md={12} className='pr-[16px]'>
-              {isGroupReturnDay === 1 ? (
+              {freeDeliveryState || isGroupReturnDay === 1 ? (
                 <CssTextField
                   id='standard-select-currency2'
                   select

@@ -28,7 +28,7 @@ export const RetrievalDateAddModalFormWrapper = () => {
         let __retrieval_date = data[itemIdForUpdate].retrieval_date
           ? data[itemIdForUpdate].retrieval_date
           : ''
-        setRetrievalDate(__retrieval_date ? __retrieval_date : '')
+        setRetrievalDate(__retrieval_date ? dayjs(__retrieval_date).format('YYYY-MM-DD') : '')
         // let __universityId = data[itemIdForUpdate].university_id
         //   ? data[itemIdForUpdate].university_id?.toString()
         //   : 'default'

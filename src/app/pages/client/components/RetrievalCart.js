@@ -87,7 +87,9 @@ export default function RetrievalCart(props) {
               </div>
             </div>
             <div className='my-auto'>
-              <span className='text-normal text-black'>${cartInfo.floor_fee}</span>
+              <span className='text-normal text-black'>
+                ${cartInfo.free_delivery_state ? 0 : cartInfo.floor_fee}
+              </span>
             </div>
           </div>
         </div>
