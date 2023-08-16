@@ -37,9 +37,14 @@ export default function RetrievalEdit(props) {
   const client = useSelector((state) => state.client.client)
   const additionalDay = parseInt(process.env.REACT_APP_RETRIEVAL_ADDITIONAL_DATE)
 
-  const [retrievalDate, setRetrievalDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [initState, setInitState] = useState(false)
+  const [retrievalDate, setRetrievalDate] = useState(
+    dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+  )
   const [retrievalTimeIndex, setRetrievalTimeIndex] = useState(0)
-  const [emptyBoxReturnDate, setEmptyBoxReturnDate] = useState(dayjs().add(additionalDay, 'day'))
+  const [emptyBoxReturnDate, setEmptyBoxReturnDate] = useState(
+    dayjs().add(additionalDay, 'day').format('YYYY-MM-DD')
+  )
   const [emptyBoxReturnTimeIndex, setEmptyBoxReturnTimeIndex] = useState(0)
   const [retrievalAddress, setRetrievalAddress] = useState('')
   const [isSameDay, setIsSameDay] = useState(1)
@@ -53,11 +58,18 @@ export default function RetrievalEdit(props) {
   const allReturn = 1
 
   useEffect(() => {
-    dispatch(fetchRetrievalDates())
-    dispatch(fetchRetrievalAddress())
-    dispatch(fetchRetrievalEmptyDates())
+    setInitState(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (initState) {
+      dispatch(fetchRetrievalDates())
+      dispatch(fetchRetrievalAddress())
+      dispatch(fetchRetrievalEmptyDates())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initState])
 
   useEffect(() => {
     if (order.emptyout_date_other) {
@@ -83,19 +95,20 @@ export default function RetrievalEdit(props) {
           special_instruction: order.special_instruction,
           qr_code: getQrcode(),
         })
+      } else {
+        setRetrievalOrder({
+          ...retrievalOrder,
+          storage_month: parseInt(__storage_month),
+          retrieval_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
+          retrieval_time: getTime(0),
+          empty_box_return_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
+          empty_box_return_time: getTime(0),
+          retrieval_address: order.emptyout_location_other,
+          special_instruction: order.special_instruction,
+          qr_code: getQrcode(),
+        })
       }
-
-      setRetrievalOrder({
-        ...retrievalOrder,
-        storage_month: parseInt(__storage_month),
-        retrieval_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
-        retrieval_time: getTime(0),
-        empty_box_return_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
-        empty_box_return_time: getTime(0),
-        retrieval_address: order.emptyout_location_other,
-        special_instruction: order.special_instruction,
-        qr_code: getQrcode(),
-      })
+      setRetrievalAddress(order.emptyout_location_other)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
@@ -116,7 +129,6 @@ export default function RetrievalEdit(props) {
       }
     }
     setFreeDates([...__dates])
-    handleRetrievalAddress(client.address1 ? client.address1 : '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [freeRetrievalDates, client, order.storage_expired_date])
 
@@ -139,13 +151,13 @@ export default function RetrievalEdit(props) {
         })
       }
     }
-    if (!__dates?.length > 0) {
-      setIsGroupReturnDay(0)
-    } else {
-      if (isGroupReturnDay) {
-        handleEmptyBoxReturnDateChange(__dates[0])
-      }
-    }
+    // if (!__dates?.length > 0) {
+    //   setIsGroupReturnDay(0)
+    // } else {
+    //   if (isGroupReturnDay) {
+    //     handleEmptyBoxReturnDateChange(__dates[0])
+    //   }
+    // }
     setRetrievalEmptyGroupDates([...__dates])
     let __address = []
     if (retrievalAddresses.length > 0 && __university_id) {
@@ -161,44 +173,58 @@ export default function RetrievalEdit(props) {
   }, [retrievalEmptyDates, client, retrievalDate, order.storage_expired_date])
 
   useEffect(() => {
+    setIsSameDay(1)
     if (freeDeliveryState) {
       onCartHandler(null, null, true)
       handleRetrievalDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
-      handleEmptyBoxReturnDateChange(dayjs(freeDates[0]).format('YYYY-MM-DD'))
-      handleRetrievalAddress(groupReturnAddress[0]?.toString())
     } else {
       onCartHandler(null, null, false)
       handleRetrievalDateChange(dayjs().add(additionalDay, 'day'))
-      handleEmptyBoxReturnDateChange(dayjs().add(additionalDay, 'day'))
-      handleRetrievalAddress(client.address1 ? client.address1 : '')
     }
-    setIsSameDay(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [freeDeliveryState])
 
   useEffect(() => {
+    let __emptyBoxReturnDate = dayjs(retrievalDate).format('YYYY-MM-DD')
     if (isSameDay) {
       setIsGroupReturnDay(0)
       handleNextDayFeeChange(true)
     } else {
       handleNextDayFeeChange(false)
+      if (isGroupReturnDay) {
+        __emptyBoxReturnDate = dayjs(retrievalEmptyGroupDates[0]).format('YYYY-MM-DD')
+      }
     }
+    setRetrievalOrder({
+      ...retrievalOrder,
+      empty_box_return_date: __emptyBoxReturnDate,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSameDay])
 
   useEffect(() => {
+    let __emptyBoxReturnDate = ''
+    let __retrievalAddress = ''
     if (isGroupReturnDay) {
       handleNextDayFeeChange(true)
-      handleEmptyBoxReturnDateChange(dayjs(retrievalEmptyGroupDates[0]).format('YYYY-MM-DD'))
-      handleRetrievalAddress(groupReturnAddress[0]?.toString())
+      __emptyBoxReturnDate = dayjs(retrievalEmptyGroupDates[0]).format('YYYY-MM-DD')
+      __retrievalAddress = groupReturnAddress[0]?.toString()
     } else {
-      handleEmptyBoxReturnDateChange(dayjs(retrievalDate).format('YYYY-MM-DD'))
+      handleNextDayFeeChange(false)
+      __emptyBoxReturnDate = dayjs(retrievalDate).format('YYYY-MM-DD')
       if (freeDeliveryState) {
-        handleRetrievalAddress(groupReturnAddress[0]?.toString())
+        __retrievalAddress = groupReturnAddress[0]?.toString()
       } else {
-        handleRetrievalAddress(client.address1 ? client.address1 : '')
+        __retrievalAddress = client.address1 ? client.address1 : ''
       }
     }
+    setEmptyBoxReturnDate(__emptyBoxReturnDate)
+    setRetrievalAddress(__retrievalAddress)
+    setRetrievalOrder({
+      ...retrievalOrder,
+      empty_box_return_date: __emptyBoxReturnDate,
+      retrieval_address: __retrievalAddress,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isGroupReturnDay])
 
@@ -230,13 +256,21 @@ export default function RetrievalEdit(props) {
     let newValue = dayjs(value).format('YYYY-MM-DD')
     let __storage_month = dayjs(newValue) - dayjs(order.emptyout_date_other)
     __storage_month = dayjs(__storage_month).format('MM')
+
+    let __retrievalAddress = groupReturnAddress[0]?.toString()
+    if (!freeDeliveryState) {
+      __retrievalAddress = client.address1 ? client.address1 : ''
+    }
+    setRetrievalAddress(__retrievalAddress)
     setRetrievalDate(newValue)
+
     if (isSameDay === 1) {
       setRetrievalOrder({
         ...retrievalOrder,
         retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
         empty_box_return_date: dayjs(newValue).format('YYYY-MM-DD'),
         storage_month: parseInt(__storage_month),
+        retrieval_address: __retrievalAddress,
       })
       setEmptyBoxReturnDate(newValue)
     } else {
@@ -249,6 +283,7 @@ export default function RetrievalEdit(props) {
           retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
           empty_box_return_date: dayjs(newValue).format('YYYY-MM-DD'),
           storage_month: parseInt(__storage_month),
+          retrieval_address: __retrievalAddress,
         })
         setEmptyBoxReturnDate(newValue)
       } else {
@@ -256,24 +291,26 @@ export default function RetrievalEdit(props) {
           ...retrievalOrder,
           retrieval_date: dayjs(newValue).format('YYYY-MM-DD'),
           storage_month: parseInt(__storage_month),
+          retrieval_address: __retrievalAddress,
         })
       }
     }
   }
 
   const handleRetrievalTimeChange = (e) => {
-    setRetrievalTimeIndex(e.target.value)
+    let __index = parseInt(e.target.value)
+    setRetrievalTimeIndex(__index)
     if (isSameDay) {
       setRetrievalOrder({
         ...retrievalOrder,
-        retrieval_time: getTime(e.target.value),
-        empty_box_return_time: getTime(e.target.value),
+        retrieval_time: getTime(__index),
+        empty_box_return_time: getTime(__index),
       })
-      setEmptyBoxReturnTimeIndex(e.target.value)
+      setEmptyBoxReturnTimeIndex(__index)
     } else {
       setRetrievalOrder({
         ...retrievalOrder,
-        retrieval_time: getTime(e.target.value),
+        retrieval_time: getTime(__index),
       })
     }
   }
@@ -287,10 +324,11 @@ export default function RetrievalEdit(props) {
   }
 
   const handleEmptyBoxReturnTimeChange = (e) => {
-    setEmptyBoxReturnTimeIndex(e.target.value)
+    let __index = parseInt(e.target.value)
+    setEmptyBoxReturnTimeIndex(__index)
     setRetrievalOrder({
       ...retrievalOrder,
-      empty_box_return_time: getTime(e.target.value),
+      empty_box_return_time: getTime(__index),
     })
   }
 
@@ -308,27 +346,27 @@ export default function RetrievalEdit(props) {
   }
 
   const handleNextDayFeeChange = (value) => {
+    let __floor_fee = freeDeliveryState ? 0 : cartInfo.floor_fee
     if (value) {
-      setCartInfo({
-        ...cartInfo,
-        retrieval_next_day: false,
-        next_day_fee: 0,
-        total_fee: cartInfo.delivery_fee + 0 + cartInfo.floor_fee,
-      })
-      setRetrievalOrder({
-        ...retrievalOrder,
-        empty_box_return_date: retrievalOrder.retrieval_date,
-        empty_box_return_time: retrievalOrder.retrieval_time,
-      })
+      if (initState) {
+        setCartInfo({
+          ...cartInfo,
+          retrieval_next_day: false,
+          next_day_fee: 0,
+          total_fee: cartInfo.delivery_fee + 0 + __floor_fee,
+        })
+      }
       setEmptyBoxReturnDate(dayjs(retrievalDate))
       setEmptyBoxReturnTimeIndex(retrievalTimeIndex)
     } else {
-      setCartInfo({
-        ...cartInfo,
-        retrieval_next_day: true,
-        next_day_fee: cartInfo.min_delivery_fee,
-        total_fee: cartInfo.delivery_fee + cartInfo.min_delivery_fee + cartInfo.floor_fee,
-      })
+      if (initState) {
+        setCartInfo({
+          ...cartInfo,
+          retrieval_next_day: true,
+          next_day_fee: cartInfo.min_delivery_fee,
+          total_fee: cartInfo.delivery_fee + cartInfo.min_delivery_fee + __floor_fee,
+        })
+      }
     }
   }
 
@@ -347,6 +385,9 @@ export default function RetrievalEdit(props) {
         __floor_fee = __floor_fee + item.count * __floors * cartInfo.per_floor_fee
       })
       let __total_fee = cartInfo.delivery_fee + cartInfo.next_day_fee + __floor_fee
+      if (freeDeliveryState) {
+        __total_fee = cartInfo.delivery_fee + cartInfo.next_day_fee + 0
+      }
       setCartInfo({
         ...cartInfo,
         floor_fee: __floor_fee,
@@ -354,10 +395,6 @@ export default function RetrievalEdit(props) {
       })
     }
   }
-
-  // const handleIsAllReturnRadioChange = (e) => {
-  //   setAllReturn(Number(e.target.value))
-  // }
 
   const timelist = [
     {
@@ -373,7 +410,7 @@ export default function RetrievalEdit(props) {
   const getTime = (index) => {
     switch (index) {
       case 0:
-        return '09:00 - 12:00'
+        return '09:00 - 13:00'
       case 1:
         return '13:00 - 18:00'
       default:
@@ -738,6 +775,9 @@ export default function RetrievalEdit(props) {
                         __floor_fee = __floor_fee + item.count * __floors * cartInfo.per_floor_fee
                       })
                       let __total_fee = cartInfo.delivery_fee + cartInfo.next_day_fee + __floor_fee
+                      if (freeDeliveryState) {
+                        __total_fee = cartInfo.delivery_fee + cartInfo.next_day_fee + 0
+                      }
                       setCartInfo({
                         ...cartInfo,
                         floors: __floors,
