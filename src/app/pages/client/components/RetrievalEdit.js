@@ -91,7 +91,7 @@ export default function RetrievalEdit(props) {
           retrieval_time: getTime(0),
           empty_box_return_date: dayjs(order?.checkin_date_other).format('YYYY-MM-DD'),
           empty_box_return_time: getTime(0),
-          retrieval_address: order.emptyout_location_other,
+          retrieval_address: order.checkout_location_other,
           special_instruction: order.special_instruction,
           qr_code: getQrcode(),
         })
@@ -103,12 +103,12 @@ export default function RetrievalEdit(props) {
           retrieval_time: getTime(0),
           empty_box_return_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
           empty_box_return_time: getTime(0),
-          retrieval_address: order.emptyout_location_other,
+          retrieval_address: order.checkout_location_other,
           special_instruction: order.special_instruction,
           qr_code: getQrcode(),
         })
       }
-      setRetrievalAddress(order.emptyout_location_other)
+      setRetrievalAddress(order.checkout_location_other)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
