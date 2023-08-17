@@ -29,7 +29,7 @@ export default function AccountSidebar(props) {
     <div className='cart-container min-w-[270px]'>
       <div className='content'>
         <div className='my-[25px]'>
-          <span className='text-header text-black'>{t('common.wd-account-infomation')}</span>
+          <span className='text-header text-black'>{t('common.wd-account-information')}</span>
         </div>
         <AccountTextField title={t('common.wd-name')} content={user.name} />
         <AccountTextField title={t('common.wd-email-address')} content={user.email} />
