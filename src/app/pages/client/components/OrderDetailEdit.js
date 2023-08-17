@@ -73,7 +73,7 @@ export const OrderDetailEdit = (props) => {
       setTentativeTimeIndex(getTimeIndex(order?.checkout_time_other))
       setRetrievalDate(order?.checkout_date_other)
       setExtendDate(order?.storage_expired_date)
-      setAddress(order.emptyout_location_other)
+      setAddress(order.checkout_location_other)
       getPermitEdit()
       dispatch(setStoreExtendDate(order?.storage_expired_date))
 
