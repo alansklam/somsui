@@ -20,13 +20,22 @@ export const OrdersTableBody = (props: any) => {
   }
   const onSendInvoiceHandler = (id: number) => {
     sendInvoiceApi({id: id})
-      .then(() => {
-        notification.success({
-          message: 'Success',
-          description: 'Send Invoice successfully',
-          placement: 'topRight',
-          duration: 2,
-        })
+      .then((res) => {
+        if (res.data.status == 'paid') {
+          notification.success({
+            message: 'Warning',
+            description: 'This order was paid before',
+            placement: 'topRight',
+            duration: 2,
+          })
+        } else if (res.data.status == 'success') {
+          notification.success({
+            message: 'Success',
+            description: 'Send Invoice successfully',
+            placement: 'topRight',
+            duration: 2,
+          })
+        }
       })
       .catch(() => {
         notification.error({
