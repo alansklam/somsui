@@ -93,13 +93,16 @@ export default function RetrievalPage(props) {
     Object.keys(__delivery_items).forEach((iter, index) => {
       __delivery_fee =
         __delivery_fee +
-        __per_delivery_fee +
         Number.parseFloat(__delivery_items[iter].delivery_fee).valueOf() *
           __delivery_items[iter].count
     })
+    __delivery_fee = __delivery_fee + __per_delivery_fee
     if (__delivery_fee < __min_delivery_fee) {
       __delivery_fee = __min_delivery_fee
       __min_delivery_state = true
+    }
+    if (isNaN(__delivery_fee)) {
+      __delivery_fee = 0
     }
 
     __delivery_fee = Math.round(__delivery_fee * 100) / 100
