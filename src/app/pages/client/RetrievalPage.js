@@ -147,7 +147,7 @@ export default function RetrievalPage(props) {
         </div>
         {!isPaidFee && (
           <div className='border !border-red-400 rounded-lg bg-red-100 p-4 my-4'>
-            <span>You didn't pay the outstanding fee. Please pay the outstanding fee.</span>
+            <span>It appears that you have outstanding fee has not been paid. Please kindly proceed with the payment before placing on retrieval order.</span>
           </div>
         )}
         <div className='text-normal text-black py-[20px]'>
