@@ -109,7 +109,7 @@ export const RetrievalOrdersTableBody = (props: any) => {
               </td>
               <td className='text-center'>
                 <Link
-                  to={'/admin/orders/edit?orderId=' + data.order.id}
+                  to={'/admin/orders/edit?orderId=' + data.order?.id}
                   className='text-blue fw-bold d-block fs-6'
                   style={{cursor: 'pointer'}}
                   onClick={() => {

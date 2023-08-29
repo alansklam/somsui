@@ -143,57 +143,67 @@ export default function PaymentMethod(props) {
 
   const onNextHandler = (e) => {
     clearInterval()
-    if (paymentType === PaymentType.CREDITCARD) {
-      document.querySelector('form').requestSubmit()
-      setIsLoading(true)
-    } else if (paymentType === PaymentType.CASH) {
-      setIsLoading(true)
-      let stripeToken = ''
-      orderSubmitHandler(stripeToken)
-    } else {
-      setIsLoading(true)
-      retrievalPayApi({
-        stripeToken: '',
-        client_id: user.id,
-        order_id: orderId,
-        order_code: confirmOrder.code ? confirmOrder.code : null,
-        payment_code: paymentCode,
-        payment_type: paymentType,
-        cart_info: cartInfo,
-        retrieval_order: retrievalOrder,
-        lang: lang,
-      })
-        .then((res) => {
-          if (res.data.success === true) {
-            openCheckoutUrl(res.data.data)
-            setPaymentCode(res.data.code)
-            setConfirmOrder(res.data.retrieval_order)
-          } else {
-            setPaymentCode('')
-            console.log('responseError', res.data)
+    try {
+      if (paymentType === PaymentType.CREDITCARD) {
+        document.querySelector('form').requestSubmit()
+        setIsLoading(true)
+      } else if (paymentType === PaymentType.CASH) {
+        setIsLoading(true)
+        let stripeToken = ''
+        orderSubmitHandler(stripeToken)
+      } else {
+        setIsLoading(true)
+        retrievalPayApi({
+          stripeToken: '',
+          client_id: user.id,
+          order_id: orderId,
+          order_code: confirmOrder.code ? confirmOrder.code : null,
+          payment_code: paymentCode,
+          payment_type: paymentType,
+          cart_info: cartInfo,
+          retrieval_order: retrievalOrder,
+          lang: lang,
+        })
+          .then((res) => {
+            if (res.data.success === true) {
+              openCheckoutUrl(res.data.data)
+              setPaymentCode(res.data.code)
+              setConfirmOrder(res.data.retrieval_order)
+            } else {
+              setPaymentCode('')
+              console.log('responseError', res.data)
+              showNotification({
+                title: 'warning',
+                message: 'No connect.',
+                visible: true,
+                status: Math.floor(Math.random() * 100000),
+              })
+              setTimeout(() => {
+                navigateTo('/client/dashboard')
+              }, 3000)
+            }
+          })
+          .catch((err) => {
+            console.log('errors_message', err)
             showNotification({
-              title: 'warning',
-              message: 'No connect.',
+              title: 'error',
+              message: err.data.message,
               visible: true,
               status: Math.floor(Math.random() * 100000),
             })
             setTimeout(() => {
               navigateTo('/client/dashboard')
             }, 3000)
-          }
-        })
-        .catch((err) => {
-          console.log('errors_message', err)
-          showNotification({
-            title: 'error',
-            message: err.data.message,
-            visible: true,
-            status: Math.floor(Math.random() * 100000),
           })
-          setTimeout(() => {
-            navigateTo('/client/dashboard')
-          }, 3000)
-        })
+      }
+    } catch (err) {
+      console.log('errors_message', err)
+      showNotification({
+        title: 'error',
+        message: err,
+        visible: true,
+        status: Math.floor(Math.random() * 100000),
+      })
     }
   }
 
@@ -221,7 +231,7 @@ export default function PaymentMethod(props) {
           setConfirmOrder(res.data.retrieval_order)
           setOrderState(true)
           setPayStatus(true)
-        } else if (res.data.code === 'error') {
+        } else {
           console.log('responseError', res.data)
           showNotification({
             title: 'warning',
