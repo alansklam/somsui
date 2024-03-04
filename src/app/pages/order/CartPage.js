@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useTranslation} from 'react-i18next'
 import {PlusOutlined} from '@ant-design/icons'
 import {Button, Input} from 'antd'
@@ -11,8 +11,11 @@ export default function CartPage(props) {
   const {t, i18n} = useTranslation()
   const [promoStatus, setPromoStatus] = useState(false)
   const [promoCorrectStatus, setPromoCorrectStatus] = useState(false)
-  const [validateStatus, setValidateStatus] = useState(false)
+  const [validateStatus, setValidateStatus] = useState({
+    status: 'success',
+  })
   const [showMessage, setShowMessage] = useState(false)
+  const [promoCode, setPromoCode] = useState()
 
   const onPromoHandler = () => {
     if (step !== StepType.SUCCESS) {
@@ -20,16 +23,37 @@ export default function CartPage(props) {
     }
   }
 
+  useEffect(() => {
+    if (promoCode) validateCode(promoCode)
+  }, [props.carts.storage_month])
+
   const onPromoCodeHandler = (e) => {
-    promoCodeValidate({promotion_code: e.target.value})
+    setPromoCode(e.target.value)
+    if (e.target.value) validateCode(e.target.value)
+  }
+
+  const validateCode = (code) => {
+    promoCodeValidate({storage_month: props.carts.storage_month, promotion_code: code})
       .then((res) => {
-        setPromoCorrectStatus(true)
-        setValidateStatus(false)
-        setPromotionPrice(res.data.data.items, res.data.data.id)
+        console.log(res.data)
+        if (res.data.message && res.data.message === 'invalid months') {
+          setPromoCorrectStatus(false)
+          setValidateStatus(res.data)
+          setPromotionPrice(false, [], 0)
+        } else {
+          setPromoCorrectStatus(true)
+          setValidateStatus({
+            status: 'success',
+          })
+          setPromotionPrice(true, res.data.data.items, res.data.data.id)
+        }
       })
       .catch((err) => {
         setPromoCorrectStatus(false)
-        setValidateStatus(true)
+        setValidateStatus({
+          status: 'error',
+          message: 'invalid code',
+        })
       })
   }
 
@@ -98,9 +122,13 @@ export default function CartPage(props) {
                   }
                 />
               </div>
-              {validateStatus && (
+              {validateStatus.status === 'error' && (
                 <div className='flex justify-content-end align-items-center my-[10px]'>
-                  <span className='text-red'>{t('common.wd-promo-validate')}</span>
+                  <span className='text-red'>
+                    {validateStatus.message === 'invalid months'
+                      ? t('common.wd-promo-validate-months', {month: validateStatus.month})
+                      : t('common.wd-promo-validate')}
+                  </span>
                 </div>
               )}
             </div>

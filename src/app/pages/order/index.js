@@ -8,6 +8,7 @@ import Sign from '../../components/auth'
 import {getIsLoggedIn, getStoragePeriodItem} from '../../store/apis/ordering'
 import dayjs from 'dayjs'
 import {StepType} from '../../constants/step-type'
+import {initialQueryResponse} from '../../../_metronic/helpers'
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -28,8 +29,10 @@ export default function Home() {
   const [accountInfo, setAccountInfo] = useState({})
   const [products, setProducts] = useState([])
   const [materials, setMaterials] = useState([])
+  const [originProducts, setOriginProducts] = useState([])
+  const [originMaterials, setOriginMaterials] = useState([])
   const [order, setOrder] = useState({})
-  const minmum_count = process.env.REACT_APP_ORDER_ITEMS_LIMIT
+  const min_count = process.env.REACT_APP_ORDER_ITEMS_LIMIT
 
   useEffect(() => {
     const v = JSON.parse(localStorage.getItem('ubox-is-authenticated'))
@@ -50,6 +53,7 @@ export default function Home() {
 
   // Fetch the price following the storage period.
   const getStoragePeriodPrice = (month, initProducts, initMaterials) => {
+
     if (stuffInfo.tentativeDate) {
       let __tentativeDate = dayjs(stuffInfo.deliveryDate).add(month, 'month').format('YYYY-MM-DD')
       setStuffInfo({
@@ -62,6 +66,8 @@ export default function Home() {
       let __newPrice = res.data
       let __products
       let __materials
+      let __originProducts = initProducts ?? originProducts
+      let __originMaterials = initMaterials ?? originMaterials
 
       materials.length > 0 ? (__materials = materials) : (__materials = initMaterials)
       products.length > 0 ? (__products = products) : (__products = initProducts)
@@ -84,6 +90,30 @@ export default function Home() {
           }
         })
       })
+
+      // Update the price
+      __originMaterials.forEach((item, index) => {
+        __originMaterials[index].price = item.default_price.toFixed(2)
+        __newPrice.forEach((element) => {
+          if (element.item_id === item.id) {
+            __originMaterials[index].price = element.price
+          }
+        })
+      })
+
+      __originProducts.forEach((item, index) => {
+        __originProducts[index].price = item.default_price.toFixed(2)
+        __newPrice.forEach((element) => {
+          if (element.item_id === item.id) {
+            __originProducts[index].price = element.price
+          }
+        })
+      })
+
+      console.log('origin', originProducts)
+      console.log('update', __originProducts)
+      setOriginProducts(JSON.parse(JSON.stringify(__originProducts)))
+      setOriginMaterials(JSON.parse(JSON.stringify(__originMaterials)))
 
       if (cartInfo.promotions.length > 0) {
         let __items = cartInfo.promotions
@@ -134,33 +164,37 @@ export default function Home() {
     })
   }
 
-  const setPromotionPrice = (promotions, promotion_id) => {
+  const setPromotionPrice = (isValid, promotions, promotion_id) => {
+    console.log(isValid, 'isValid')
+    console.log(originProducts)
     let __items = promotions
-    let __materials = materials
-    let __products = products
+    let __materials = isValid ? materials : JSON.parse(JSON.stringify(originMaterials))
+    let __products = isValid ? products : JSON.parse(JSON.stringify(originProducts))
 
-    __materials.forEach((material, index) => {
-      __items.forEach((item) => {
-        if (item.item_id === material.id) {
-          if (__materials[index].price > item.price) {
-            __materials[index].price = item.price
+    if (isValid) {
+      __materials.forEach((material, index) => {
+        __items.forEach((item) => {
+          if (item.item_id === material.id) {
+            if (__materials[index].price > item.price) {
+              __materials[index].price = item.price
+            }
           }
-        }
+        })
       })
-    })
 
-    __products.forEach((product, index) => {
-      __items.forEach((item) => {
-        if (item.item_id === product.id) {
-          if (__products[index].price > item.price) {
-            __products[index].price = item.price
+      __products.forEach((product, index) => {
+        __items.forEach((item) => {
+          if (item.item_id === product.id) {
+            if (__products[index].price > item.price) {
+              __products[index].price = item.price
+            }
           }
-        }
+        })
       })
-    })
+    }
 
-    setProducts(__products)
-    setMaterials(__materials)
+    setProducts(isValid ? __products : JSON.parse(JSON.stringify(originProducts)))
+    setMaterials(isValid ? __materials : JSON.parse(JSON.stringify(originMaterials)))
 
     let __cartInfo = cartInfo
     __cartInfo.stores.forEach((item, index) => {
@@ -282,7 +316,7 @@ export default function Home() {
           __count_packages += parseInt(__stores[iter].count)
         }
       })
-    if (__count_items < minmum_count) {
+    if (__count_items < min_count) {
       if (!__count_packages > 0) {
         return StepType.STOREITEM // step=1
       }

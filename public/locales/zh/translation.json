@@ -69,6 +69,7 @@
   "common.wd-enter-promo": "請輸入優惠碼",
   "common.wd-used-promo": "已使用的優惠碼",
   "common.wd-promo-validate": "您輸入的優惠碼無效. 請再試一次。",
+  "common.wd-promo-validate-months": "此優惠碼只限於 {{month}} 月份或以上的訂單",
   "common.wd-empty-box-delivery": "領取空箱日期",
   "common.wd-laden-return-date": "預計存箱日期",
   "common.wd-tentative-retrieval-date": "預計取箱日期",
