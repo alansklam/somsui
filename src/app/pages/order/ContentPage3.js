@@ -266,7 +266,7 @@ export default function ContentPage3(props) {
     if (
       dayjs(deliveryDate) < dayjs(deliveryMinDate) ||
       dayjs(ladenReturnDate) < dayjs(deliveryDate) ||
-      dayjs(ladenReturnDate) > dayjs(deliveryDate).add(14, 'day') ||
+      dayjs(ladenReturnDate) > dayjs(deliveryDate).add(1, 'month') ||
       dayjs(tentativeDate) < dayjs(ladenReturnDate) ||
       dayjs(tentativeDate) > dayjs(expirationDate)
     ) {
@@ -515,7 +515,7 @@ export default function ContentPage3(props) {
                     inputFormat='DD/MM/YYYY'
                     value={ladenReturnDate}
                     minDate={deliveryDate}
-                    maxDate={dayjs(deliveryDate).add(14, 'day')}
+                    maxDate={dayjs(deliveryDate).add(1, 'month')}
                     onChange={handleLadenReturnDateChange}
                     renderInput={(params) => (
                       <CssTextField

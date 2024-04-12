@@ -360,7 +360,7 @@ export default function Home() {
     if (
       dayjs(stuff_info.deliveryDate) < dayjs(stuff_info.deliveryMinDate) ||
       dayjs(stuff_info.ladenReturnDate) < dayjs(stuff_info.deliveryDate) ||
-      dayjs(stuff_info.ladenReturnDate) > dayjs(stuff_info.deliveryDate).add(14, 'day') ||
+      dayjs(stuff_info.ladenReturnDate) > dayjs(stuff_info.deliveryDate).add(1, 'month') ||
       dayjs(stuff_info.tentativeDate) < dayjs(stuff_info.ladenReturnDate) ||
       dayjs(stuff_info.tentativeDate) > dayjs(stuff_info.expirationDate)
     ) {

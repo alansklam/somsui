@@ -251,7 +251,7 @@ export const OrderDetailEdit = (props) => {
   const updateOrderHandler = () => {
     if (
       dayjs(ladenReturnDate) < dayjs(deliveryDate) ||
-      dayjs(ladenReturnDate) > dayjs(deliveryDate).add(14, 'day') ||
+      dayjs(ladenReturnDate) > dayjs(deliveryDate).add(1, 'month') ||
       dayjs(tentativeDate) < dayjs(ladenReturnDate) ||
       dayjs(tentativeDate) > dayjs(extendDate)
     ) {
@@ -344,7 +344,7 @@ export const OrderDetailEdit = (props) => {
                 minDate={dayjs()
                   .add(additionalDate + 1, 'day')
                   .format('YYYY-MM-DD')}
-                maxDate={dayjs(deliveryDate).add(14, 'day')}
+                maxDate={dayjs(deliveryDate).add(1, 'month')}
                 onChange={handleLadenReturnDateChange}
                 disabled={!permitEdit.permitLadenReturn}
                 renderInput={(params) => (
