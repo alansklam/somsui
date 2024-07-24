@@ -69,7 +69,7 @@ export default function RetrievalEdit(props) {
       dispatch(fetchRetrievalEmptyDates())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initState])
+  }, [initState, dispatch])
 
   useEffect(() => {
     if (order.emptyout_date_other) {
@@ -77,40 +77,28 @@ export default function RetrievalEdit(props) {
         window.location.href = '/client/order'
       }
 
-      let __storage_month = dayjs() - dayjs(order.emptyout_date_other)
-      __storage_month = dayjs(__storage_month).format('MM')
+      let __storage_month = dayjs().diff(dayjs(order.emptyout_date_other), 'month')
 
-      if (dayjs().add(2, 'day') <= dayjs(order?.checkin_date_other)) {
-        setRetrievalDate(order?.checkin_date_other)
-        setEmptyBoxReturnDate(order?.checkin_date_other)
+      const newDate = dayjs().add(2, 'day').isBefore(dayjs(order?.checkin_date_other))
+        ? dayjs(order?.checkin_date_other)
+        : dayjs().add(additionalDay, 'day')
 
-        setRetrievalOrder({
-          ...retrievalOrder,
-          storage_month: parseInt(__storage_month),
-          retrieval_date: dayjs(order?.checkin_date_other).format('YYYY-MM-DD'),
-          retrieval_time: getTime(0),
-          empty_box_return_date: dayjs(order?.checkin_date_other).format('YYYY-MM-DD'),
-          empty_box_return_time: getTime(0),
-          retrieval_address: order.checkout_location_other,
-          special_instruction: order.special_instruction,
-          qr_code: getQrcode(),
-        })
-      } else {
-        setRetrievalOrder({
-          ...retrievalOrder,
-          storage_month: parseInt(__storage_month),
-          retrieval_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
-          retrieval_time: getTime(0),
-          empty_box_return_date: dayjs().add(additionalDay, 'day').format('YYYY-MM-DD'),
-          empty_box_return_time: getTime(0),
-          retrieval_address: order.checkout_location_other,
-          special_instruction: order.special_instruction,
-          qr_code: getQrcode(),
-        })
-      }
+      setRetrievalDate(newDate.format('YYYY-MM-DD'))
+      setEmptyBoxReturnDate(newDate.format('YYYY-MM-DD'))
+
+      setRetrievalOrder({
+        ...retrievalOrder,
+        storage_month: __storage_month,
+        retrieval_date: newDate.format('YYYY-MM-DD'),
+        retrieval_time: getTime(0),
+        empty_box_return_date: newDate.format('YYYY-MM-DD'),
+        empty_box_return_time: getTime(0),
+        retrieval_address: order.checkout_location_other,
+        special_instruction: order.special_instruction,
+        qr_code: getQrcode(),
+      })
       setRetrievalAddress(order.checkout_location_other)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order])
 
   useEffect(() => {
@@ -130,7 +118,22 @@ export default function RetrievalEdit(props) {
     }
     setFreeDates([...__dates])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [freeRetrievalDates, client, order.storage_expired_date])
+  }, [freeRetrievalDates, client.university_id, order.storage_expired_date])
+
+  useEffect(() => {
+    let __university_id = client.university_id
+    let __address = []
+    if (retrievalAddresses.length > 0 && __university_id) {
+      let __retrievalAddress = retrievalAddresses.filter((item) => item.id === __university_id)
+      if (__retrievalAddress && __retrievalAddress.length > 0) {
+        __retrievalAddress[0].retrieval_address?.forEach((item) => {
+          __address.push(item.retrieval_address)
+        })
+      }
+    }
+    setGroupReturnAddress(__address)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [retrievalAddresses, client.university_id])
 
   useEffect(() => {
     let __dates = []
@@ -159,18 +162,8 @@ export default function RetrievalEdit(props) {
     //   }
     // }
     setRetrievalEmptyGroupDates([...__dates])
-    let __address = []
-    if (retrievalAddresses.length > 0 && __university_id) {
-      let __retrievalAddress = retrievalAddresses.filter((item) => item.id === __university_id)
-      if (__retrievalAddress && __retrievalAddress.length > 0) {
-        __retrievalAddress[0].retrieval_address?.forEach((item) => {
-          __address.push(item.retrieval_address)
-        })
-      }
-    }
-    setGroupReturnAddress(__address)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [retrievalEmptyDates, client, retrievalDate, order.storage_expired_date])
+  }, [retrievalEmptyDates, client.university_id, retrievalDate, order.storage_expired_date])
 
   useEffect(() => {
     setIsSameDay(1)

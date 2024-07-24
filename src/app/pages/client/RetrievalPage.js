@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import RetrievalEdit from './components/RetrievalEdit'
 import RetrievalCart from './components/RetrievalCart'
 import PaymentMethod from './components/PaymentMethod'
+import LoadingSpinner from '../../components/loading-spinner'
 
 export default function RetrievalPage(props) {
   const {id} = useParams()
@@ -17,6 +18,7 @@ export default function RetrievalPage(props) {
   const dispatch = useDispatch()
   const order = useSelector((state) => state.client.currentOrder)
   const products = useSelector((state) => state.client.products)
+  const isLoading = useSelector((state) => state.client.loading);
   const [initial, setInitial] = useState(false)
   const [cartInfo, setCartInfo] = useState({
     delivery_items: [],
@@ -133,7 +135,7 @@ export default function RetrievalPage(props) {
     })
   }
 
-  const onOderStatusHandler = (e) => {
+  const onOrderStatusHandler = (e) => {
     window.location.href = '/client/order/' + order.id
   }
 
@@ -199,7 +201,7 @@ export default function RetrievalPage(props) {
                   <div className='text-normal text-black mt-[36px]'>
                     <Trans i18nKey='page6.no-paragraph2'>
                       Click for your{' '}
-                      <span className='hand text-blue' onClick={onOderStatusHandler}>
+                      <span className='hand text-blue' onClick={onOrderStatusHandler}>
                         order status.
                       </span>
                     </Trans>
@@ -212,6 +214,7 @@ export default function RetrievalPage(props) {
             <RetrievalCart cartInfo={cartInfo} retrievalOrder={retrievalOrder} />
           </Grid>
         </Grid>
+        <LoadingSpinner isLoading={isLoading} />
       </div>
     </>
   )
